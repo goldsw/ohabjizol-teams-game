@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,8 +9,10 @@ using UnityEngine.UI;
 namespace Ohabjizol.Presentation
 {
     /// <summary>
-    /// Main-menu PLAY button. The first click locks input and loads the loading scene.
-    /// Later clicks are ignored. This does not touch the game managers.
+    /// Main-menu PLAY button on the monitor. The first press invokes <see cref="onPlay"/>,
+    /// which centers the drifted camera. LoadingScene opens only after that move finishes
+    /// and the camera is locked. This click path does not zoom. Later presses are ignored.
+    /// This does not touch the game managers.
     /// </summary>
     public sealed class MainMenuController : MonoBehaviour
     {
@@ -17,6 +20,13 @@ namespace Ohabjizol.Presentation
         [SerializeField] Transform viewRoot;
         [SerializeField] MainMenuCameraController cameraController;
         [SerializeField] Button playButton;
+        [SerializeField] Vector2 playButtonAnchoredPosition = new Vector2(0f, -260f);
+
+        /// <summary>
+        /// Registered play callback. PLAY invokes this once to center the camera.
+        /// The loading scene is not opened when this returns.
+        /// </summary>
+        public Action onPlay;
 
         bool _accepted;
         static Sprite _whiteSprite;
@@ -35,6 +45,8 @@ namespace Ohabjizol.Presentation
             EnsureEventSystem();
             if (playButton == null)
                 playButton = CreatePlayButton();
+            BindCanvasCamera();
+            onPlay = AlignCenter;
             playButton.onClick.AddListener(Play);
         }
 
@@ -48,7 +60,7 @@ namespace Ohabjizol.Presentation
             var rect = playButton.transform as RectTransform;
             if (rect == null)
                 return;
-            if (!RectTransformUtility.RectangleContainsScreenPoint(rect, Mouse.current.position.ReadValue(), null))
+            if (!RectTransformUtility.RectangleContainsScreenPoint(rect, Mouse.current.position.ReadValue(), EventCamera()))
                 return;
 
             Play();
@@ -66,16 +78,58 @@ namespace Ohabjizol.Presentation
                 playButton.interactable = false;
             }
 
+            if (onPlay != null)
+                onPlay.Invoke();
+            else
+                OpenAfterCenter();
+        }
+
+        void AlignCenter()
+        {
             if (cameraController != null)
-                cameraController.LockLook();
+                cameraController.AlignToCenter(OpenAfterCenter);
+            else
+                OpenAfterCenter();
+        }
 
-            if (viewRoot != null)
-            {
-                viewRoot.SetParent(null, true);
-                DontDestroyOnLoad(viewRoot.gameObject);
-            }
+        void OpenAfterCenter()
+        {
+            var camera = cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
+            ComputerTransitionController.RememberPose(camera);
+            OpenLoadingScene();
+        }
 
-            SceneManager.LoadSceneAsync(loadingSceneName, LoadSceneMode.Single);
+        public Button EnsureWorldPlayButton(ComputerScreen screen)
+        {
+            if (playButton != null)
+                return playButton;
+
+            playButton = CreatePlayButton(screen);
+            return playButton;
+        }
+
+        void OpenLoadingScene()
+        {
+            SceneManager.LoadScene(loadingSceneName, LoadSceneMode.Single);
+        }
+
+        Camera EventCamera()
+        {
+            var canvas = playButton != null ? playButton.GetComponentInParent<Canvas>() : null;
+            if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+                return canvas.worldCamera != null ? canvas.worldCamera : Camera.main;
+            return null;
+        }
+
+        void BindCanvasCamera()
+        {
+            var canvas = playButton != null ? playButton.GetComponentInParent<Canvas>() : null;
+            if (canvas == null || canvas.renderMode != RenderMode.WorldSpace)
+                return;
+
+            var camera = cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
+            if (camera != null)
+                canvas.worldCamera = camera;
         }
 
         static void EnsureEventSystem()
@@ -91,28 +145,39 @@ namespace Ohabjizol.Presentation
 
         Button CreatePlayButton()
         {
-            var canvasObject = new GameObject("MainMenuCanvas");
+            return CreatePlayButton(FindScreen());
+        }
+
+        Button CreatePlayButton(ComputerScreen screen)
+        {
+            var canvasObject = new GameObject("MenuScreenCanvas");
             var canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvasObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            canvas.renderMode = RenderMode.WorldSpace;
             canvasObject.AddComponent<GraphicRaycaster>();
 
-            var title = CreateText(canvasObject.transform, "Title", "MAIN MENU", 42, FontStyle.Bold);
+            var root = canvasObject.GetComponent<RectTransform>();
+            var camera = cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
+            if (screen != null)
+                screen.PlaceWorldCanvas(root, camera);
+            else
+                Debug.LogError("Menu UI needs a ComputerScreen so the canvas can sit on the monitor.");
+
+            var title = CreateText(canvasObject.transform, "Title", "MAIN MENU", 220, FontStyle.Bold);
             var titleRect = title.rectTransform;
             titleRect.anchorMin = new Vector2(0.5f, 0.5f);
             titleRect.anchorMax = new Vector2(0.5f, 0.5f);
-            titleRect.anchoredPosition = new Vector2(0f, 160f);
-            titleRect.sizeDelta = new Vector2(800f, 80f);
+            titleRect.anchoredPosition = new Vector2(0f, 190f);
+            titleRect.sizeDelta = new Vector2(1500f, 280f);
+            title.horizontalOverflow = HorizontalWrapMode.Overflow;
+            title.verticalOverflow = VerticalWrapMode.Overflow;
 
             var buttonObject = new GameObject("PlayButton");
             buttonObject.transform.SetParent(canvasObject.transform, false);
             var buttonRect = buttonObject.AddComponent<RectTransform>();
             buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
             buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
-            buttonRect.anchoredPosition = new Vector2(0f, 40f);
-            buttonRect.sizeDelta = new Vector2(320f, 76f);
+            buttonRect.anchoredPosition = playButtonAnchoredPosition;
+            buttonRect.sizeDelta = new Vector2(1100f, 220f);
 
             var image = buttonObject.AddComponent<Image>();
             image.sprite = WhiteSprite();
@@ -120,9 +185,23 @@ namespace Ohabjizol.Presentation
             var button = buttonObject.AddComponent<Button>();
             button.targetGraphic = image;
 
-            var label = CreateText(buttonObject.transform, "Label", "PLAY", 32, FontStyle.Bold);
+            var label = CreateText(buttonObject.transform, "Label", "PLAY", 120, FontStyle.Bold);
+            label.horizontalOverflow = HorizontalWrapMode.Overflow;
+            label.verticalOverflow = VerticalWrapMode.Overflow;
             Stretch(label.rectTransform);
             return button;
+        }
+
+        ComputerScreen FindScreen()
+        {
+            if (viewRoot != null)
+            {
+                var onView = viewRoot.GetComponentInChildren<ComputerScreen>(true);
+                if (onView != null)
+                    return onView;
+            }
+
+            return FindFirstObjectByType<ComputerScreen>();
         }
 
         static Text CreateText(Transform parent, string name, string value, int size, FontStyle style)

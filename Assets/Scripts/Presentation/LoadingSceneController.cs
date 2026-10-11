@@ -5,9 +5,12 @@ using UnityEngine.UI;
 namespace Ohabjizol.Presentation
 {
     /// <summary>
-    /// Draws a replaceable boot UI on the monitor and async-loads the interview scene.
+    /// Draws the boot UI on this scene's monitor and async-loads the next scene.
+    /// The camera stays on the centered pose PLAY already locked. This scene does not
+    /// center again. When loading finishes, the screen shows <see cref="completeText"/>,
+    /// then the camera zooms in, then the next scene opens.
     /// The displayed gauge is not <see cref="AsyncOperation.progress"/>, which stops at 0.9
-    /// until activation. The interview scene stays inactive until the camera close-up finishes.
+    /// until activation.
     /// </summary>
     public sealed class LoadingSceneController : MonoBehaviour
     {
@@ -18,13 +21,17 @@ namespace Ohabjizol.Presentation
         [SerializeField] RectTransform loadingUiOverride;
         [SerializeField] string bootText = "SYSTEM BOOTING…";
         [SerializeField] string waitText = "PLEASE WAIT…";
+        [SerializeField] string completeText = "LOADING COMPLETE";
+        [SerializeField] float completeHoldDuration = 0.75f;
         [SerializeField] bool showPercent = true;
         [SerializeField] float labelPulseSpeed = 2.2f;
 
         AsyncOperation _operation;
         float _elapsed;
         float _displayedProgress;
-        bool _approachStarted;
+        bool _completeShown;
+        float _completeElapsed;
+        bool _zoomStarted;
         bool _activated;
         Text _bootLabel;
         Text _waitLabel;
@@ -43,16 +50,12 @@ namespace Ohabjizol.Presentation
 
         void Awake()
         {
-            if (transition == null)
-                transition = FindFirstObjectByType<ComputerTransitionController>();
+            if (transition == null || !transition.IsRunning)
+                ApplyFixedCameraPose();
         }
 
         void Start()
         {
-            var look = FindFirstObjectByType<MainMenuCameraController>();
-            if (look != null)
-                look.LockLook();
-
             BuildLoadingUi();
             _operation = SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
             if (_operation == null)
@@ -66,32 +69,92 @@ namespace Ohabjizol.Presentation
 
         void Update()
         {
-            if (_operation == null || _activated)
+            if (_operation == null || _activated || _zoomStarted)
                 return;
 
-            _elapsed += Time.deltaTime;
-            bool loadReady = _operation.progress >= 0.9f;
-            bool timeReady = _elapsed >= minimumLoadingDuration;
-            float asyncPortion = Mathf.Clamp01(_operation.progress / 0.9f);
-            float visualTarget = loadReady ? 0.92f : asyncPortion * 0.92f;
-            if (loadReady && timeReady)
-                visualTarget = 1f;
+            if (!_completeShown)
+            {
+                _elapsed += Time.deltaTime;
+                bool loadReady = _operation.progress >= 0.9f;
+                bool timeReady = _elapsed >= minimumLoadingDuration;
+                float asyncPortion = Mathf.Clamp01(_operation.progress / 0.9f);
+                float visualTarget = loadReady ? 0.92f : asyncPortion * 0.92f;
+                if (loadReady && timeReady)
+                    visualTarget = 1f;
 
-            if (loadingProgressSpeed <= 0f)
-                _displayedProgress = visualTarget;
-            else
-                _displayedProgress = Mathf.MoveTowards(_displayedProgress, visualTarget, loadingProgressSpeed * Time.deltaTime);
+                if (loadingProgressSpeed <= 0f)
+                    _displayedProgress = visualTarget;
+                else
+                    _displayedProgress = Mathf.MoveTowards(_displayedProgress, visualTarget, loadingProgressSpeed * Time.deltaTime);
 
-            UpdateLoadingUi();
+                UpdateLoadingUi();
+                if (!loadReady || !timeReady || _displayedProgress < 0.999f)
+                    return;
 
-            if (_approachStarted || !loadReady || !timeReady || _displayedProgress < 0.999f)
+                ShowComplete();
+                return;
+            }
+
+            _completeElapsed += Time.deltaTime;
+            if (completeHoldDuration > 0f && _completeElapsed < completeHoldDuration)
                 return;
 
-            _approachStarted = true;
+            _zoomStarted = true;
+            if (transition == null)
+                transition = FindFirstObjectByType<ComputerTransitionController>();
             if (transition != null)
                 transition.Begin(ActivateInterview);
             else
                 ActivateInterview();
+        }
+
+        void ShowComplete()
+        {
+            _completeShown = true;
+            _displayedProgress = 1f;
+            if (_progressFill != null)
+                _progressFill.fillAmount = 1f;
+            if (_percentLabel != null && showPercent)
+                _percentLabel.text = "100%";
+            if (_bootLabel != null)
+            {
+                _bootLabel.text = completeText;
+                var color = _bootLabel.color;
+                color.a = 1f;
+                _bootLabel.color = color;
+            }
+
+            if (_waitLabel != null)
+                _waitLabel.text = string.Empty;
+        }
+
+        public RectTransform CreateLoadingCanvas(ComputerScreen screen)
+        {
+            if (screen == null)
+                return loadingUiOverride;
+
+            if (loadingUiOverride == null)
+                loadingUiOverride = CreateDefaultUi(screen.transform);
+            else
+                screen.PlaceWorldCanvas(loadingUiOverride, null);
+            return loadingUiOverride;
+        }
+
+        void ApplyFixedCameraPose()
+        {
+            var camera = Camera.main;
+            if (camera == null || camera.gameObject.scene != gameObject.scene)
+            {
+                camera = null;
+                foreach (var root in gameObject.scene.GetRootGameObjects())
+                {
+                    camera = root.GetComponentInChildren<Camera>(true);
+                    if (camera != null)
+                        break;
+                }
+            }
+
+            ComputerTransitionController.ApplyFixedPose(camera);
         }
 
         void OnDestroy()
@@ -126,10 +189,10 @@ namespace Ohabjizol.Presentation
 
         void BuildLoadingUi()
         {
-            var screen = FindFirstObjectByType<ComputerScreen>();
+            var screen = FindScreen();
             if (screen == null)
             {
-                Debug.LogError("Loading UI needs a ComputerScreen in the persisted menu view.");
+                Debug.LogError("Loading UI needs a ComputerScreen on this scene's monitor.");
                 return;
             }
 
@@ -185,28 +248,41 @@ namespace Ohabjizol.Presentation
             }
         }
 
+        ComputerScreen FindScreen()
+        {
+            foreach (var root in gameObject.scene.GetRootGameObjects())
+            {
+                var screen = root.GetComponentInChildren<ComputerScreen>(true);
+                if (screen != null)
+                    return screen;
+            }
+
+            return FindFirstObjectByType<ComputerScreen>();
+        }
+
         static RectTransform CreateDefaultUi(Transform screen)
         {
             var rootObject = new GameObject("LoadingUI");
             var root = rootObject.AddComponent<RectTransform>();
             var canvas = rootObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
+            rootObject.AddComponent<GraphicRaycaster>();
             PlaceOnScreen(root, screen);
 
             var background = CreateImage(root, "Background", new Color(0.01f, 0.04f, 0.035f, 1f));
             Stretch(background.rectTransform);
 
-            var boot = CreateLabel(root, "BootText", "SYSTEM BOOTING…", 64);
-            boot.rectTransform.anchoredPosition = new Vector2(0f, 90f);
-            boot.rectTransform.sizeDelta = new Vector2(1400f, 90f);
+            var boot = CreateLabel(root, "BootText", "SYSTEM BOOTING…", 150);
+            boot.rectTransform.anchoredPosition = new Vector2(0f, 230f);
+            boot.rectTransform.sizeDelta = new Vector2(1580f, 240f);
 
-            var wait = CreateLabel(root, "WaitText", "PLEASE WAIT…", 36);
-            wait.rectTransform.anchoredPosition = new Vector2(0f, 10f);
-            wait.rectTransform.sizeDelta = new Vector2(1400f, 60f);
+            var wait = CreateLabel(root, "WaitText", "PLEASE WAIT…", 72);
+            wait.rectTransform.anchoredPosition = new Vector2(0f, 0f);
+            wait.rectTransform.sizeDelta = new Vector2(1500f, 120f);
 
             var bar = CreateImage(root, "ProgressBar", new Color(0.05f, 0.12f, 0.09f, 1f));
-            bar.rectTransform.anchoredPosition = new Vector2(0f, -90f);
-            bar.rectTransform.sizeDelta = new Vector2(980f, 28f);
+            bar.rectTransform.anchoredPosition = new Vector2(0f, -155f);
+            bar.rectTransform.sizeDelta = new Vector2(1460f, 84f);
 
             var fill = CreateImage(bar.transform, "ProgressFill", new Color(0.35f, 0.95f, 0.62f, 1f));
             Stretch(fill.rectTransform);
@@ -215,25 +291,37 @@ namespace Ohabjizol.Presentation
             fill.fillOrigin = (int)Image.OriginHorizontal.Left;
             fill.fillAmount = 0f;
 
-            var percent = CreateLabel(root, "PercentText", "0%", 28);
-            percent.rectTransform.anchoredPosition = new Vector2(0f, -150f);
-            percent.rectTransform.sizeDelta = new Vector2(400f, 50f);
+            var percent = CreateLabel(root, "PercentText", "0%", 64);
+            percent.rectTransform.anchoredPosition = new Vector2(0f, -310f);
+            percent.rectTransform.sizeDelta = new Vector2(800f, 110f);
 
             var scan = CreateImage(root, "ScanLine", new Color(0.5f, 1f, 0.75f, 0.18f));
-            scan.rectTransform.sizeDelta = new Vector2(1500f, 8f);
+            scan.rectTransform.sizeDelta = new Vector2(1580f, 20f);
             return root;
         }
 
         static void PlaceOnScreen(RectTransform root, Transform screen)
         {
+            var marker = screen.GetComponent<ComputerScreen>();
+            if (marker != null)
+            {
+                marker.PlaceWorldCanvas(root, Camera.main);
+                return;
+            }
+
             root.SetParent(screen, false);
             root.localRotation = Quaternion.Euler(0f, 180f, 0f);
-            root.localPosition = new Vector3(0f, 0f, 0.01f);
-            root.sizeDelta = new Vector2(1600f, 900f);
-            root.localScale = new Vector3(1f / 1600f, 1f / 900f, 1f / 1600f);
+            root.localPosition = Vector3.zero;
+            root.sizeDelta = new Vector2(5000f, 3000f);
+            root.localScale = new Vector3(1f / 5000f, 1f / 3000f, 1f / 5000f);
             var canvas = root.GetComponent<Canvas>();
             if (canvas != null)
+            {
+                canvas.renderMode = RenderMode.WorldSpace;
+                canvas.pixelPerfect = false;
+                canvas.updateRectTransformForStandalone = StandaloneRenderResize.Disabled;
                 canvas.worldCamera = Camera.main;
+            }
         }
 
         static Text FindText(Transform root, string name)
