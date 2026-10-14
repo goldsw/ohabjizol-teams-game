@@ -13,10 +13,16 @@ namespace Ohabjizol.Interview
             int verificationSuccessCount,
             int verificationFailureCount,
             int fraudCount,
-            ResultGrade grade)
+            ResultGrade grade,
+            StageId stage,
+            SkillSet requiredSkills,
+            int accuracyPercent,
+            bool isCleared)
         {
             if (actualSkills == null)
                 throw new ArgumentNullException(nameof(actualSkills));
+            if (requiredSkills == null)
+                throw new ArgumentNullException(nameof(requiredSkills));
 
             ActualSkills = actualSkills;
             FulfillmentPercent = fulfillmentPercent;
@@ -24,6 +30,10 @@ namespace Ohabjizol.Interview
             VerificationFailureCount = verificationFailureCount;
             FraudCount = fraudCount;
             Grade = grade;
+            Stage = stage;
+            RequiredSkills = requiredSkills;
+            AccuracyPercent = accuracyPercent;
+            IsCleared = isCleared;
         }
 
         public SkillSet ActualSkills { get; }
@@ -37,5 +47,13 @@ namespace Ohabjizol.Interview
         public int FraudCount { get; }
 
         public ResultGrade Grade { get; }
+
+        public StageId Stage { get; }
+
+        public SkillSet RequiredSkills { get; }
+
+        public int AccuracyPercent { get; }
+
+        public bool IsCleared { get; }
     }
 }

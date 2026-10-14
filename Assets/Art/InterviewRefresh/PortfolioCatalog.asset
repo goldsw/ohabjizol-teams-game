@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0ebd3752715c444191dbb2455319555, type: 3}
+  m_Name: PortfolioCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::Ohabjizol.Interview.PortfolioSpriteCatalog
+  entries:
+  - Role: 0
+    State: 0
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 2191145281309698273, guid: 00995de3c25036e4bae8662df888d8d6, type: 3}
+  - Role: 0
+    State: 1
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 1576822731367068638, guid: dd4e7452d46e2234a9c53765ce85a86c, type: 3}
+  - Role: 0
+    State: 2
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 7327753489485023279, guid: 22cf799600a9f2c42bb58b278527e7de, type: 3}
+  - Role: 1
+    State: 0
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 7069254333032917839, guid: 6de6ea399553efd438d66efab559d6d2, type: 3}
+  - Role: 1
+    State: 1
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 1198709026928490741, guid: 229017aa8bc7d2645b247f4f8a004b96, type: 3}
+  - Role: 1
+    State: 2
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 6934845506844272358, guid: 2c6b8b0b3396a9a4cb4ae9ff92366c3d, type: 3}
+  - Role: 2
+    State: 0
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 4106011856228368665, guid: c49d941c4ecc901498df5b3ca3b869f5, type: 3}
+  - Role: 2
+    State: 1
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 4539801378572899499, guid: 530ad7cbd9a7b4b4282d21ae2c5f338a, type: 3}
+  - Role: 2
+    State: 2
+    Sprite: {fileID: 0}
+    CardPrefab: {fileID: 1563171193155870782, guid: 550f577b1ac310f4ba929854fa633cba, type: 3}

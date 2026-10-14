@@ -17,10 +17,21 @@ namespace Ohabjizol.Interview
         int _verificationFailureCount;
 
         public InterviewSession(GameJamTheme theme, IReadOnlyList<Applicant> applicants)
+            : this(StageId.EntranceGameJam, theme, applicants)
+        {
+        }
+
+        public InterviewSession(StageDefinition stage)
+            : this(Require(stage).Id, Require(stage).Theme, Require(stage).Applicants)
+        {
+        }
+
+        InterviewSession(StageId stage, GameJamTheme theme, IReadOnlyList<Applicant> applicants)
         {
             if (theme == null)
                 throw new ArgumentNullException(nameof(theme));
 
+            Stage = stage;
             Theme = theme;
             _applicants = CopyApplicants(applicants);
             if (_applicants.Length == 0)
@@ -29,6 +40,8 @@ namespace Ohabjizol.Interview
                 BuildResult();
             }
         }
+
+        public StageId Stage { get; }
 
         public GameJamTheme Theme { get; }
 
@@ -139,13 +152,25 @@ namespace Ohabjizol.Interview
         {
             SkillSet actual = _team.ActualSum;
             SkillSet required = Theme.RequiredSkills;
+            int accuracyPercent = StageAccuracyRule.Percent(actual, required);
             Result = new InterviewResult(
                 actual,
                 FulfillmentRate.Percent(actual, required),
                 _verificationSuccessCount,
                 _verificationFailureCount,
                 _team.FraudCount,
-                ResultGradeRule.Evaluate(actual, required, Theme.CoreRole, _team.FraudCount));
+                ResultGradeRule.Evaluate(actual, required, Theme.CoreRole, _team.FraudCount),
+                Stage,
+                required,
+                accuracyPercent,
+                StageAccuracyRule.IsClear(accuracyPercent));
+        }
+
+        static StageDefinition Require(StageDefinition stage)
+        {
+            if (stage == null)
+                throw new ArgumentNullException(nameof(stage));
+            return stage;
         }
 
         static Applicant[] CopyApplicants(IReadOnlyList<Applicant> applicants)

@@ -1,530 +1,173 @@
-using System.Collections.Generic;
+using System;
+using Ohabjizol.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace Ohabjizol.Interview
 {
-    /// <summary>
-    /// Screen-space interview board. Decision buttons call <see cref="InterviewSession"/> only.
-    /// Team faces read displayed skills from the session roster.
-    /// When the session ends, <see cref="Result"/> reads that session result. This screen does not open another scene.
-    /// </summary>
-    public sealed class InterviewScreen : MonoBehaviour
+    public sealed partial class InterviewScreen : MonoBehaviour
     {
         public const string ResultSceneName = "ResultScene";
-        const int SlotCount = 4;
-        const int LineSlotCount = 2;
+        [Header("Authored view")]
+        [SerializeField] RectTransform _discordViewRoot;
+        [SerializeField] Button _discordButton;
+        [SerializeField] Button _acceptButton;
+        [SerializeField] Button _rejectButton;
+        [SerializeField] Button _chatButton;
+        [SerializeField] GameObject _unreadMark;
+        [SerializeField] Text _notification;
+        [SerializeField] Text _response;
+        [SerializeField] Text _titleLabel;
+        [SerializeField] Text _stageLabel;
+        [SerializeField] Text _finishedLabel;
+        [SerializeField] Text _currentLabel;
+        [SerializeField] Text _requiredLabel;
+        [SerializeField] Text[] _slotLabels = new Text[4];
+        [SerializeField] InterviewQuestionView[] _questions = new InterviewQuestionView[5];
+        [SerializeField] InterviewCallView _call;
+        [SerializeField] RadialQuestionView _radialQuestions;
+        [SerializeField] DownloadPanelView _downloadPanel;
+        [Header("Document workspace")]
+        [SerializeField] DocumentWorkspace _workspace;
+        [SerializeField] RectTransform _itemParent;
+        [SerializeField] RectTransform _windowParent;
+        [SerializeField] DocumentTaskbarItem _itemPrefab;
+        [SerializeField] PdfDocumentViewer _viewerPrefab;
+        [SerializeField] PortfolioSpriteCatalog _portfolioCatalog;
+        [SerializeField] AuthoredQuestionCatalog _questionCatalog;
+        [Header("Stage calendar")]
+        [SerializeField] StageCalendarWindow _calendarWindow;
+        [SerializeField] StageScheduleConfig _scheduleConfig;
+        [SerializeField] Button _calendarButton;
+        [SerializeField, Range(0f, 1f)] float fakePortfolioAnswerChance = .5f;
+        public float FakePortfolioAnswerChance => fakePortfolioAnswerChance;
+        [SerializeField, HideInInspector] bool discordVisible = true;
+        InterviewRuntime _runtime;
+        readonly UnityEngine.Events.UnityAction[] _questionHandlers = new UnityEngine.Events.UnityAction[5];
+        bool _inputsSubscribed;
+        public event Action<int> QuestionRequested;
+        public event Action<bool> DecisionRequested;
+        public event Action DocumentPanelRequested;
+        public event Action CompletionRetryRequested;
 
-        static readonly Color ApplicationColor = new Color(0.22f, 0.40f, 0.78f, 1f);
-        static readonly Color PortfolioColor = new Color(0.82f, 0.45f, 0.14f, 1f);
-        static readonly Color ScheduleColor = new Color(0.12f, 0.55f, 0.50f, 1f);
-        static readonly Color InterviewRecordColor = new Color(0.48f, 0.30f, 0.68f, 1f);
-        static readonly Color SuspicionColor = new Color(0.75f, 0.62f, 0.16f, 1f);
-        static readonly Color SuspicionSelectedColor = new Color(0.98f, 0.86f, 0.22f, 1f);
-        static readonly Color AcceptColor = new Color(0.16f, 0.58f, 0.28f, 1f);
-        static readonly Color RejectColor = new Color(0.62f, 0.16f, 0.20f, 1f);
-        static readonly Color PaperColor = new Color(0.93f, 0.95f, 0.92f, 1f);
-
-        static Font _font;
-        static Sprite _whiteSprite;
-
-        InterviewSession _session;
-        int _documentIndex;
-        readonly string[] _lineIds = new string[LineSlotCount];
-
-        Text _themeLabel;
-        Text _finishedLabel;
-        Text _applicantLabel;
-        Text _suspicionLabel;
-        Text _sumLabel;
-        Text _requiredLabel;
-        readonly Button[] _documentButtons = new Button[4];
-        readonly Text[] _documentLabels = new Text[4];
-        readonly Button[] _lineButtons = new Button[LineSlotCount];
-        readonly Text[] _lineLabels = new Text[LineSlotCount];
-        readonly Text[] _slotLabels = new Text[SlotCount];
-        Button _acceptButton;
-        Button _rejectButton;
-
-        public string HandoffSceneName
+        public string ApplicantKey => _runtime?.ApplicantKey;
+        public PortfolioDisplayState DisplayedPortfolioState => _runtime == null ? default(PortfolioDisplayState) : _runtime.DisplayedPortfolioState;
+        public bool IsAnswering => _runtime != null && _runtime.IsAnswering;
+        public int UsedQuestionCount => _runtime == null ? 0 : _runtime.UsedQuestionCount;
+        public DocumentWorkspace Documents => _workspace;
+        public bool InboxUnread => _runtime != null && _runtime.InboxUnread;
+        public void AskQuestion(int index) { if (isActiveAndEnabled) QuestionRequested?.Invoke(index); }
+        public void AcceptApplicant() { if (isActiveAndEnabled) DecisionRequested?.Invoke(true); }
+        public void RejectApplicant() { if (isActiveAndEnabled) DecisionRequested?.Invoke(false); }
+        public void OpenDocumentPanel() { if (isActiveAndEnabled) DocumentPanelRequested?.Invoke(); }
+        public void RetryCompletion() { if (isActiveAndEnabled) CompletionRetryRequested?.Invoke(); }
+        public string HandoffSceneName => Result != null ? ResultSceneName : null;
+        public InterviewResult Result => _runtime?.Result;
+        public bool HasAuthoredUi
         {
             get
             {
-                if (_session == null || !_session.IsFinished)
-                    return null;
-                return ResultSceneName;
+                if (!_discordViewRoot || !_discordButton || !_acceptButton || !_rejectButton || !_chatButton
+                    || !_unreadMark || !_notification || !_response || !_titleLabel || !_stageLabel || !_finishedLabel
+                    || !_currentLabel || !_requiredLabel || !_call || !_call.HasAuthoredUi
+                    || !_downloadPanel || !_downloadPanel.HasAuthoredUi || !_workspace || !_itemParent
+                    || !_windowParent || !_itemPrefab || !_viewerPrefab || !_portfolioCatalog || !_questionCatalog
+                    || !_workspace.HasAuthoredLibrary || !_calendarWindow || !_scheduleConfig || !_calendarButton
+                    || _questions == null || _questions.Length != 5 || _slotLabels == null || _slotLabels.Length != 4)
+                    return false;
+                foreach (var question in _questions) if (!question || !question.HasAuthoredUi) return false;
+                foreach (var slot in _slotLabels) if (!slot) return false;
+                return true;
             }
         }
-
-        public InterviewResult Result
-        {
-            get
-            {
-                if (_session == null || !_session.IsFinished)
-                    return null;
-                return _session.Result;
-            }
-        }
-
         void Awake()
         {
-            _session = new InterviewSession(PrototypeCatalog.Theme, PrototypeCatalog.Applicants);
-            EnsureEventSystem();
-            BuildOverlay();
-            Refresh();
-        }
-
-        void OnDocument(int index)
-        {
-            _documentIndex = index;
-            Refresh();
-        }
-
-        void OnLine(int index)
-        {
-            if (_session == null || index < 0 || index >= _lineIds.Length)
-                return;
-
-            string lineId = _lineIds[index];
-            if (string.IsNullOrEmpty(lineId))
-                return;
-
-            _session.SelectLine(lineId);
-            Refresh();
-        }
-
-        void OnAccept()
-        {
-            if (_session == null)
-                return;
-
-            _session.Accept();
-            Refresh();
-        }
-
-        void OnReject()
-        {
-            if (_session == null)
-                return;
-
-            _session.Reject();
-            Refresh();
-        }
-
-        void Refresh()
-        {
-            if (_session == null)
-                return;
-
-            GameJamTheme theme = _session.Theme;
-            _themeLabel.text = "주제  " + theme.DisplayName
-                + "    핵심  " + JobRoleText.Korean(theme.CoreRole);
-            _finishedLabel.gameObject.SetActive(_session.IsFinished);
-
-            Applicant current = _session.Current;
-            bool open = !_session.IsFinished && current != null;
-            WriteApplicant(current);
-            WriteDocuments(current);
-            WriteLines(current, open);
-            WriteSlots();
-            WriteTotals(theme);
-            _suspicionLabel.text = SuspicionText(current);
-            _acceptButton.interactable = open;
-            _rejectButton.interactable = open;
-        }
-
-        void WriteApplicant(Applicant current)
-        {
-            if (current == null || current.DisplayedSkills == null)
+            if (!HasAuthoredUi)
             {
-                _applicantLabel.text = "지원자\n없음";
+                Debug.LogError("InterviewScreen: authored UI references/templates missing. Run BakeAuthoredUi in EditMode and save the prefab/scene.", this);
+                enabled = false;
                 return;
             }
-
-            SkillSet shown = current.DisplayedSkills;
-            _applicantLabel.text = "지원자\n" + current.Name
-                + "\n주 직군  " + JobRoleText.Korean(current.PrimaryRole)
-                + "\n" + SkillLine("표시 능력", shown.Planning, shown.Programming, shown.Graphics);
-        }
-
-        void WriteDocuments(Applicant current)
-        {
-            int documentCount = current == null ? 0 : current.Documents.Count;
-            if (documentCount == 0)
-                _documentIndex = 0;
-            else if (_documentIndex < 0 || _documentIndex >= documentCount)
-                _documentIndex = 0;
-
-            for (int i = 0; i < _documentButtons.Length; i++)
+            try
             {
-                bool visible = current != null && i < documentCount;
-                _documentButtons[i].gameObject.SetActive(visible);
-                if (!visible)
-                    continue;
-
-                DocumentKind kind = current.Documents[i].Kind;
-                _documentLabels[i].text = DocumentLabel(kind);
-                Color color = DocumentColor(kind);
-                if (i == _documentIndex)
-                    color = Color.Lerp(color, Color.white, 0.35f);
-                Paint(_documentButtons[i], color);
-            }
-        }
-
-        void WriteLines(Applicant current, bool interactive)
-        {
-            for (int i = 0; i < LineSlotCount; i++)
-            {
-                _lineIds[i] = null;
-                _lineButtons[i].gameObject.SetActive(false);
-            }
-
-            if (current == null || current.Documents.Count == 0)
-                return;
-
-            IReadOnlyList<DocumentLine> lines = current.Documents[_documentIndex].Lines;
-            int count = lines.Count < LineSlotCount ? lines.Count : LineSlotCount;
-            string selected = _session.SelectedLineId;
-            for (int i = 0; i < count; i++)
-            {
-                DocumentLine line = lines[i];
-                if (line == null)
-                    continue;
-
-                bool chosen = !string.IsNullOrEmpty(selected) && line.Id == selected;
-                _lineIds[i] = line.Id;
-                _lineLabels[i].text = chosen ? "의심  " + line.Sentence : line.Sentence;
-                _lineLabels[i].color = Color.black;
-                Paint(_lineButtons[i], chosen ? SuspicionSelectedColor : SuspicionColor);
-                _lineButtons[i].interactable = interactive;
-                _lineButtons[i].gameObject.SetActive(true);
-            }
-        }
-
-        void WriteSlots()
-        {
-            IReadOnlyList<TeamMember> members = _session.Team.Members;
-            int count = members == null ? 0 : members.Count;
-            for (int i = 0; i < SlotCount; i++)
-            {
-                TeamMember member = i < count ? members[i] : null;
-                Applicant applicant = member == null ? null : member.Applicant;
-                SkillSet shown = applicant == null ? null : applicant.DisplayedSkills;
-                if (applicant == null || shown == null || string.IsNullOrEmpty(applicant.Name))
+                var views = new InterviewViewReferences(_call, _questions, _questionCatalog, _response,
+                    _workspace, _itemParent, _windowParent, _itemPrefab, _viewerPrefab, _portfolioCatalog, _downloadPanel,
+                    _notification, _unreadMark, _titleLabel, _stageLabel, _finishedLabel, _currentLabel,
+                    _requiredLabel, _slotLabels, _acceptButton, _rejectButton, _chatButton,
+                    _calendarWindow, _scheduleConfig, _calendarButton, _radialQuestions);
+                _runtime = InterviewRuntime.Create(this, views);
+                discordVisible = _discordViewRoot.gameObject.activeSelf;
+                for (int i = 0; i < _questionHandlers.Length; i++)
                 {
-                    _slotLabels[i].text = (i + 1) + "  빈 자리";
-                    continue;
-                }
-
-                _slotLabels[i].text = (i + 1) + "  " + applicant.Name
-                    + "  " + JobRoleText.Korean(applicant.PrimaryRole)
-                    + "\n" + SkillLine("표시", shown.Planning, shown.Programming, shown.Graphics);
-            }
-        }
-
-        void WriteTotals(GameJamTheme theme)
-        {
-            SkillSet shown = _session.Team.DisplayedSum;
-            SkillSet required = theme != null ? theme.RequiredSkills : null;
-            if (shown == null)
-                _sumLabel.text = SkillLine("표시 합", 0, 0, 0);
-            else
-                _sumLabel.text = SkillLine("표시 합", shown.Planning, shown.Programming, shown.Graphics);
-
-            if (required == null)
-                _requiredLabel.text = SkillLine("요구", 0, 0, 0);
-            else
-                _requiredLabel.text = SkillLine("요구", required.Planning, required.Programming, required.Graphics);
-        }
-
-        string SuspicionText(Applicant current)
-        {
-            string selected = _session.SelectedLineId;
-            if (current == null || string.IsNullOrEmpty(selected))
-                return "의심  없음";
-
-            IReadOnlyList<ApplicantDocument> documents = current.Documents;
-            for (int i = 0; i < documents.Count; i++)
-            {
-                IReadOnlyList<DocumentLine> lines = documents[i].Lines;
-                for (int j = 0; j < lines.Count; j++)
-                {
-                    DocumentLine line = lines[j];
-                    if (line != null && line.Id == selected)
-                        return "의심  " + line.Sentence;
+                    int index = i;
+                    _questionHandlers[i] = () => AskQuestion(index);
                 }
             }
-
-            return "의심  없음";
-        }
-
-        void BuildOverlay()
-        {
-            Font font = UiFont();
-            var canvasObject = new GameObject("InterviewOverlay");
-            canvasObject.transform.SetParent(transform, false);
-            var canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.pixelPerfect = false;
-            canvas.sortingOrder = 100;
-            canvasObject.AddComponent<GraphicRaycaster>();
-
-            var scaler = canvasObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.matchWidthOrHeight = 0.5f;
-
-            var root = canvasObject.GetComponent<RectTransform>();
-            var background = CreateImage(root, "Background", new Color(0.05f, 0.06f, 0.07f, 1f));
-            Stretch(background.rectTransform, 0f);
-
-            _themeLabel = CreateText(root, "Theme", 34, FontStyle.Bold, TextAnchor.MiddleLeft);
-            Place(_themeLabel.rectTransform, 0.03f, 0.90f, 0.72f, 0.98f);
-
-            _finishedLabel = CreateText(root, "Finished", 32, FontStyle.Bold, TextAnchor.MiddleRight);
-            _finishedLabel.text = "면접 종료";
-            _finishedLabel.color = new Color(1f, 0.84f, 0.35f, 1f);
-            Place(_finishedLabel.rectTransform, 0.70f, 0.90f, 0.97f, 0.98f);
-            _finishedLabel.gameObject.SetActive(false);
-
-            var applicantPanel = CreateImage(root, "ApplicantPanel", new Color(0.10f, 0.12f, 0.14f, 1f));
-            Place(applicantPanel.rectTransform, 0.02f, 0.20f, 0.26f, 0.88f);
-            _applicantLabel = CreateText(applicantPanel.transform, "Applicant", 26, FontStyle.Normal, TextAnchor.UpperLeft);
-            Stretch(_applicantLabel.rectTransform, 16f);
-
-            var documentPanel = CreateImage(root, "DocumentPanel", new Color(0.10f, 0.12f, 0.14f, 1f));
-            Place(documentPanel.rectTransform, 0.28f, 0.20f, 0.70f, 0.88f);
-            BuildDocumentButtons(documentPanel.transform, font);
-            BuildLineButtons(documentPanel.transform, font);
-
-            var teamPanel = CreateImage(root, "TeamPanel", new Color(0.10f, 0.12f, 0.14f, 1f));
-            Place(teamPanel.rectTransform, 0.72f, 0.20f, 0.98f, 0.88f);
-            BuildTeamReadout(teamPanel.transform);
-
-            var suspicionPanel = CreateImage(root, "Suspicion", SuspicionColor);
-            Place(suspicionPanel.rectTransform, 0.02f, 0.03f, 0.50f, 0.17f);
-            _suspicionLabel = CreateText(suspicionPanel.transform, "SuspicionText", 26, FontStyle.Bold, TextAnchor.MiddleLeft);
-            _suspicionLabel.color = Color.black;
-            Stretch(_suspicionLabel.rectTransform, 16f);
-
-            _acceptButton = CreateButton(root, "Accept", "합격", AcceptColor, font, 32);
-            Place(_acceptButton.GetComponent<RectTransform>(), 0.52f, 0.03f, 0.74f, 0.17f);
-            _acceptButton.onClick.AddListener(OnAccept);
-
-            _rejectButton = CreateButton(root, "Reject", "불합격", RejectColor, font, 32);
-            Place(_rejectButton.GetComponent<RectTransform>(), 0.76f, 0.03f, 0.98f, 0.17f);
-            _rejectButton.onClick.AddListener(OnReject);
-        }
-
-        void BuildDocumentButtons(Transform parent, Font font)
-        {
-            for (int i = 0; i < _documentButtons.Length; i++)
+            catch (Exception error)
             {
-                int index = i;
-                float minX = 0.02f + i * 0.245f;
-                Button button = CreateButton(parent, "Document" + i, string.Empty, ApplicationColor, font, 22);
-                Place(button.GetComponent<RectTransform>(), minX, 0.80f, minX + 0.225f, 0.96f);
-                button.onClick.AddListener(() => OnDocument(index));
-                _documentButtons[i] = button;
-                _documentLabels[i] = button.GetComponentInChildren<Text>();
+                Debug.LogError("InterviewScreen entry failed: " + error, this);
+                enabled = false;
             }
         }
 
-        void BuildLineButtons(Transform parent, Font font)
+        void OnEnable()
         {
-            for (int i = 0; i < LineSlotCount; i++)
+            if (_runtime == null) return;
+            try
             {
-                int index = i;
-                float maxY = 0.74f - i * 0.36f;
-                Button button = CreateButton(parent, "Line" + i, string.Empty, SuspicionColor, font, 24);
-                Place(button.GetComponent<RectTransform>(), 0.04f, maxY - 0.30f, 0.96f, maxY);
-                button.onClick.AddListener(() => OnLine(index));
-                _lineButtons[i] = button;
-                _lineLabels[i] = button.GetComponentInChildren<Text>();
+                _runtime.Enable();
+                SubscribeInputs();
+            }
+            catch (Exception error)
+            {
+                Debug.LogError("InterviewScreen activation failed: " + error, this);
+                enabled = false;
             }
         }
 
-        void BuildTeamReadout(Transform parent)
+        void OnDisable()
         {
-            for (int i = 0; i < SlotCount; i++)
-            {
-                float maxY = 0.96f - i * 0.16f;
-                Text slot = CreateText(parent, "Slot" + i, 20, FontStyle.Normal, TextAnchor.UpperLeft);
-                Place(slot.rectTransform, 0.04f, maxY - 0.15f, 0.96f, maxY);
-                _slotLabels[i] = slot;
-            }
-
-            _sumLabel = CreateText(parent, "DisplayedSum", 20, FontStyle.Bold, TextAnchor.MiddleLeft);
-            Place(_sumLabel.rectTransform, 0.04f, 0.16f, 0.96f, 0.30f);
-            _requiredLabel = CreateText(parent, "Required", 20, FontStyle.Normal, TextAnchor.MiddleLeft);
-            Place(_requiredLabel.rectTransform, 0.04f, 0.02f, 0.96f, 0.15f);
+            UnsubscribeInputs();
+            _runtime?.Disable();
         }
 
-        static void EnsureEventSystem()
+        void OnDestroy()
         {
-            if (FindFirstObjectByType<EventSystem>() != null)
-                return;
-
-            var eventObject = new GameObject("EventSystem");
-            eventObject.AddComponent<EventSystem>();
-            var module = eventObject.AddComponent<InputSystemUIInputModule>();
-            module.AssignDefaultActions();
+            UnsubscribeInputs();
+            _runtime?.Dispose();
+            _runtime = null;
         }
 
-        static string SkillLine(string title, int planning, int programming, int graphics)
+        void SubscribeInputs()
         {
-            return title
-                + "  기획 " + planning
-                + "  프로그래밍 " + programming
-                + "  그래픽 " + graphics;
+            if (_inputsSubscribed) return;
+            _inputsSubscribed = true;
+            _acceptButton.onClick.AddListener(AcceptApplicant);
+            _rejectButton.onClick.AddListener(RejectApplicant);
+            _chatButton.onClick.AddListener(OpenDocumentPanel);
+            _discordButton.onClick.AddListener(ToggleDiscord);
+            for (int i = 0; i < _questions.Length; i++)
+                _questions[i].Button.onClick.AddListener(_questionHandlers[i]);
         }
 
-        static string DocumentLabel(DocumentKind kind)
+        void UnsubscribeInputs()
         {
-            switch (kind)
-            {
-                case DocumentKind.Application:
-                    return "지원서";
-                case DocumentKind.Portfolio:
-                    return "포트폴리오";
-                case DocumentKind.Schedule:
-                    return "일정표";
-                case DocumentKind.InterviewRecord:
-                    return "면접 기록";
-                default:
-                    return string.Empty;
-            }
+            if (!_inputsSubscribed) return;
+            _inputsSubscribed = false;
+            if (_acceptButton) _acceptButton.onClick.RemoveListener(AcceptApplicant);
+            if (_rejectButton) _rejectButton.onClick.RemoveListener(RejectApplicant);
+            if (_chatButton) _chatButton.onClick.RemoveListener(OpenDocumentPanel);
+            if (_discordButton) _discordButton.onClick.RemoveListener(ToggleDiscord);
+            for (int i = 0; i < _questionHandlers.Length; i++)
+                if (_questions != null && i < _questions.Length && _questions[i] && _questionHandlers[i] != null)
+                    _questions[i].Button.onClick.RemoveListener(_questionHandlers[i]);
         }
 
-        static Color DocumentColor(DocumentKind kind)
+        void ToggleDiscord() => SetDiscordVisible(!discordVisible);
+        public void SetDiscordVisible(bool visible)
         {
-            switch (kind)
-            {
-                case DocumentKind.Application:
-                    return ApplicationColor;
-                case DocumentKind.Portfolio:
-                    return PortfolioColor;
-                case DocumentKind.Schedule:
-                    return ScheduleColor;
-                case DocumentKind.InterviewRecord:
-                    return InterviewRecordColor;
-                default:
-                    return Color.gray;
-            }
-        }
-
-        static Button CreateButton(Transform parent, string name, string caption, Color color, Font font, int size)
-        {
-            var buttonObject = new GameObject(name);
-            buttonObject.transform.SetParent(parent, false);
-            var rect = buttonObject.AddComponent<RectTransform>();
-            rect.localScale = Vector3.one;
-            var image = buttonObject.AddComponent<Image>();
-            image.sprite = WhiteSprite();
-            image.color = Color.white;
-            image.raycastTarget = true;
-            var button = buttonObject.AddComponent<Button>();
-            button.targetGraphic = image;
-            Paint(button, color);
-            Navigation navigation = button.navigation;
-            navigation.mode = Navigation.Mode.None;
-            button.navigation = navigation;
-
-            Text label = CreateText(buttonObject.transform, "Label", size, FontStyle.Bold, TextAnchor.MiddleCenter);
-            label.font = font;
-            label.text = caption;
-            label.color = PaperColor;
-            Stretch(label.rectTransform, 8f);
-            return button;
-        }
-
-        static void Paint(Button button, Color color)
-        {
-            ColorBlock block = button.colors;
-            block.normalColor = color;
-            block.highlightedColor = Color.Lerp(color, Color.white, 0.22f);
-            block.pressedColor = Color.Lerp(color, Color.black, 0.18f);
-            block.selectedColor = color;
-            block.disabledColor = new Color(color.r * 0.4f, color.g * 0.4f, color.b * 0.4f, 0.65f);
-            block.colorMultiplier = 1f;
-            block.fadeDuration = 0.05f;
-            button.colors = block;
-        }
-
-        static Text CreateText(Transform parent, string name, int size, FontStyle style, TextAnchor alignment)
-        {
-            var textObject = new GameObject(name);
-            textObject.transform.SetParent(parent, false);
-            var rect = textObject.AddComponent<RectTransform>();
-            rect.localScale = Vector3.one;
-            var text = textObject.AddComponent<Text>();
-            text.font = UiFont();
-            text.fontSize = size;
-            text.fontStyle = style;
-            text.alignment = alignment;
-            text.color = PaperColor;
-            text.raycastTarget = false;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Truncate;
-            text.supportRichText = false;
-            return text;
-        }
-
-        static Image CreateImage(Transform parent, string name, Color color)
-        {
-            var imageObject = new GameObject(name);
-            imageObject.transform.SetParent(parent, false);
-            var rect = imageObject.AddComponent<RectTransform>();
-            rect.localScale = Vector3.one;
-            var image = imageObject.AddComponent<Image>();
-            image.sprite = WhiteSprite();
-            image.color = color;
-            image.raycastTarget = false;
-            return image;
-        }
-
-        static void Place(RectTransform rect, float minX, float minY, float maxX, float maxY)
-        {
-            rect.anchorMin = new Vector2(minX, minY);
-            rect.anchorMax = new Vector2(maxX, maxY);
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-            rect.pivot = new Vector2(0.5f, 0.5f);
-        }
-
-        static void Stretch(RectTransform rect, float padding)
-        {
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(padding, padding);
-            rect.offsetMax = new Vector2(-padding, -padding);
-        }
-
-        static Font UiFont()
-        {
-            if (_font != null)
-                return _font;
-
-            _font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "맑은 고딕", "Gulim" }, 40);
-            if (_font == null)
-                _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            return _font;
-        }
-
-        static Sprite WhiteSprite()
-        {
-            if (_whiteSprite != null)
-                return _whiteSprite;
-
-            Texture2D texture = Texture2D.whiteTexture;
-            _whiteSprite = Sprite.Create(
-                texture,
-                new Rect(0f, 0f, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f),
-                100f);
-            return _whiteSprite;
+            discordVisible = visible;
+            if (_discordViewRoot) _discordViewRoot.gameObject.SetActive(visible);
         }
     }
 }

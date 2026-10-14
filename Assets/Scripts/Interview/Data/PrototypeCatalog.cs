@@ -34,7 +34,7 @@ namespace Ohabjizol.Interview
                 new[] { "게임 로직 구현 샘플", "프로그래밍 숙련 : 12" },
                 new[] { "오전 : 시스템 구현", "오후 : 버그 수정" },
                 "프로그래밍 중심으로 지원",
-                programming: 12),
+                programming: 12, truePortfolioQuality: PortfolioDisplayState.Normal),
             Person(
                 "이서연",
                 JobRole.Graphics,
@@ -44,7 +44,7 @@ namespace Ohabjizol.Interview
                 new[] { "미연시 일러스트 샘플", "그래픽 숙련 : 14" },
                 new[] { "오전 : 캐릭터 작화", "오후 : 화면 장식" },
                 "그래픽 중심으로 지원",
-                graphics: 14),
+                graphics: 14, truePortfolioQuality: PortfolioDisplayState.Good),
             Person(
                 "박준호",
                 JobRole.Planning,
@@ -54,7 +54,7 @@ namespace Ohabjizol.Interview
                 new[] { "선택지 분기 기획서", "기획 숙련 : 11" },
                 new[] { "오전 : 대사 구성", "오후 : 선택지 정리" },
                 "기획 중심으로 지원",
-                planning: 11),
+                planning: 11, truePortfolioQuality: PortfolioDisplayState.Good),
             FraudArtist(),
             Person(
                 "정태식",
@@ -66,7 +66,7 @@ namespace Ohabjizol.Interview
                 new[] { "오전 : 도구 기능 구현", "오후 : 도구 동작 확인" },
                 "도구 작업으로 지원",
                 programming: 15,
-                interviewAnswer: "비주얼 노벨 제작은 하지 않음"),
+                interviewAnswer: "비주얼 노벨 제작은 하지 않음", truePortfolioQuality: PortfolioDisplayState.Normal),
             Person(
                 "한소율",
                 JobRole.Planning,
@@ -76,7 +76,7 @@ namespace Ohabjizol.Interview
                 new[] { "짧은 시나리오 샘플", "선택지 초안 하나" },
                 new[] { "오전 : 설정 정리", "오후 : 흐름 검토" },
                 "기획 중심으로 지원",
-                planning: 7)
+                planning: 7, truePortfolioQuality: PortfolioDisplayState.Bad)
         };
 
         static Applicant FraudArtist()
@@ -95,7 +95,7 @@ namespace Ohabjizol.Interview
                     Doc("4", DocumentKind.Schedule, "오전 : 메인 비주얼", "오후 : 표정 작화"),
                     Doc("4", DocumentKind.InterviewRecord, "그래픽 중심으로 지원", SkillAnswerText.Phrase(displayed.Graphics))
                 },
-                ApplicantKind.Fraud);
+                ApplicantKind.Fraud, PortfolioDisplayState.Bad, PortfolioDisplayState.Good);
         }
 
         static Applicant Person(
@@ -110,7 +110,8 @@ namespace Ohabjizol.Interview
             int planning = 0,
             int programming = 0,
             int graphics = 0,
-            string interviewAnswer = null)
+            string interviewAnswer = null,
+            PortfolioDisplayState truePortfolioQuality = PortfolioDisplayState.Normal)
         {
             var skills = new SkillSet(planning, programming, graphics);
             if (interviewAnswer == null)
@@ -127,7 +128,7 @@ namespace Ohabjizol.Interview
                     Doc(key, DocumentKind.Schedule, schedule[0], schedule[1]),
                     Doc(key, DocumentKind.InterviewRecord, interviewIntro, interviewAnswer)
                 },
-                kind);
+                kind, truePortfolioQuality);
         }
 
         static ApplicantDocument Doc(string key, DocumentKind kind, string first, string second, string correctLineId = null)

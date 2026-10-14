@@ -23,5 +23,10 @@ namespace Ohabjizol.Interview
             _result = null;
             return result;
         }
+
+        internal static void Clear()
+        {
+            _result = null;
+        }
     }
 }
