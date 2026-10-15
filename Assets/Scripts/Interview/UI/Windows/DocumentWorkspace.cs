@@ -55,8 +55,10 @@ namespace Ohabjizol.Interview
             if (kind != DocumentKind.Application && kind != DocumentKind.Portfolio)
                 throw new ArgumentOutOfRangeException(nameof(kind));
             if (packet == null) return;
+            DocumentKey key = new DocumentKey(packet.ApplicantKey, kind);
             store.AddOrGet(packet, kind);
             RefreshLibrary();
+            OpenDocument(key);
         }
         void RefreshLibrary() { if (library != null) library.Bind(store.Documents, OpenDocument); }
         public void OpenLibrary()

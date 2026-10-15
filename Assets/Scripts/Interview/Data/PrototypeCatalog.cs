@@ -95,7 +95,7 @@ namespace Ohabjizol.Interview
                     Doc("4", DocumentKind.Schedule, "오전 : 메인 비주얼", "오후 : 표정 작화"),
                     Doc("4", DocumentKind.InterviewRecord, "그래픽 중심으로 지원", SkillAnswerText.Phrase(displayed.Graphics))
                 },
-                ApplicantKind.Fraud, PortfolioDisplayState.Bad, PortfolioDisplayState.Good);
+                ApplicantKind.Fraud, PortfolioDisplayState.Bad);
         }
 
         static Applicant Person(

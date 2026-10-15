@@ -17,7 +17,8 @@ namespace Ohabjizol.Interview
             StageId stage,
             SkillSet requiredSkills,
             int accuracyPercent,
-            bool isCleared)
+            bool isCleared,
+            InterviewScheduleResult scheduleResult = null)
         {
             if (actualSkills == null)
                 throw new ArgumentNullException(nameof(actualSkills));
@@ -34,6 +35,7 @@ namespace Ohabjizol.Interview
             RequiredSkills = requiredSkills;
             AccuracyPercent = accuracyPercent;
             IsCleared = isCleared;
+            ScheduleResult = scheduleResult ?? new InterviewScheduleResult(default(MonthlySchedule), Array.Empty<ParticipantScheduleResult>());
         }
 
         public SkillSet ActualSkills { get; }
@@ -55,5 +57,7 @@ namespace Ohabjizol.Interview
         public int AccuracyPercent { get; }
 
         public bool IsCleared { get; }
+
+        public InterviewScheduleResult ScheduleResult { get; }
     }
 }

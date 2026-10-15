@@ -11,10 +11,13 @@ namespace Ohabjizol.Interview
         bool _completing;
 
         public StageManager(StageContext context, Action<string, InterviewResult> complete)
+            : this(context, complete, 15, null) { }
+
+        public StageManager(StageContext context, Action<string, InterviewResult> complete, int productionDays, Random random = null)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             _complete = complete ?? throw new ArgumentNullException(nameof(complete));
-            Session = new InterviewSession(context.StageDefinition);
+            Session = new InterviewSession(context.StageDefinition, productionDays, random);
         }
 
         public StageContext Context { get; }

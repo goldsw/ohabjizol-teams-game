@@ -12,6 +12,8 @@ namespace Ohabjizol.Interview
         [SerializeField] float _startAngle = 90f;
         [SerializeField, Min(0f)] float _radius = 180f;
         [SerializeField] float _rotationDegreesPerSecond = 100f;
+        [SerializeField] RadialQuestionWindow _window;
+        [SerializeField] RadialQuestionLauncher _fixedLauncher;
         float _phase;
         bool _expanded;
         bool _available;
@@ -29,10 +31,20 @@ namespace Ohabjizol.Interview
             SetAvailable(false);
         }
 
+        public void ConfigureWindowEditor(RadialQuestionWindow window, RadialQuestionLauncher fixedLauncher)
+        {
+            _window = window;
+            _fixedLauncher = fixedLauncher;
+        }
+
         void OnEnable()
         {
             ResetCollapsed();
-            if (_launcher) _launcher.onClick.AddListener(ToggleExpanded);
+            if (_launcher)
+            {
+                _launcher.onClick.RemoveListener(ToggleExpanded);
+                _launcher.onClick.AddListener(ToggleExpanded);
+            }
         }
 
         void OnDisable()
@@ -43,6 +55,12 @@ namespace Ohabjizol.Interview
 
         public void ResetCollapsed()
         {
+            CollapseContent();
+            if (_window && (_window.IsOpen || _window.IsMinimized)) _window.Close();
+        }
+
+        public void CollapseContent()
+        {
             _expanded = false;
             _phase = Mathf.Repeat(_startAngle, 360f);
             if (_optionsRoot) _optionsRoot.gameObject.SetActive(false);
@@ -51,12 +69,32 @@ namespace Ohabjizol.Interview
         public void SetAvailable(bool available)
         {
             _available = available;
-            if (_launcher) _launcher.interactable = available;
+            if (_launcher) _launcher.interactable = _window || available;
             if (!available) ResetCollapsed();
+        }
+
+        public void ShowQuestions()
+        {
+            if (!_available || !_optionsRoot || !_portrait) return;
+            _expanded = true;
+            PositionQuestions();
+            _optionsRoot.gameObject.SetActive(true);
         }
 
         public void ToggleExpanded()
         {
+            if (_fixedLauncher)
+            {
+                _fixedLauncher.Invoke();
+                return;
+            }
+            if (_window)
+            {
+                _window.InitializeAuthored();
+                if (_window.IsOpen) _window.Minimize();
+                else _window.Restore();
+                return;
+            }
             if (!_available || !_optionsRoot || !_portrait) return;
             _expanded = !_expanded;
             if (_expanded) PositionQuestions();

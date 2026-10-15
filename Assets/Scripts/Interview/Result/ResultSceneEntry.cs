@@ -1,23 +1,18 @@
 using UnityEngine;
-
 namespace Ohabjizol.Interview
 {
-    /// <summary>
-    /// Takes the carried result and asks <see cref="ResultBoard"/> to draw it.
-    /// </summary>
     public sealed class ResultSceneEntry : MonoBehaviour
     {
         void Start()
         {
             InterviewResult result = ResultCarry.Take();
-            if (result == null)
-                return;
-
             ResultBoard board = GetComponent<ResultBoard>();
-            if (board == null)
+            if (result == null)
+            {
+                if (board != null) board.ShowPending();
                 return;
-
-            board.Show(result);
+            }
+            if (board != null) board.Show(result);
         }
     }
 }

@@ -15,10 +15,15 @@ namespace Ohabjizol.Interview
             internal int Version { get; }
         }
 
-        readonly Random _random = new Random();
+        readonly Random _random;
+        readonly Dictionary<Applicant, string[]> _responses = new Dictionary<Applicant, string[]>();
         readonly float _fakeAnswerChance;
         public QuestionController(float fakeAnswerChance = 0.5f)
+            : this(fakeAnswerChance, null) { }
+
+        public QuestionController(float fakeAnswerChance, Random random)
         {
+            _random = random ?? new Random();
             if (float.IsNaN(fakeAnswerChance) || fakeAnswerChance < 0f || fakeAnswerChance > 1f)
                 throw new ArgumentOutOfRangeException(nameof(fakeAnswerChance));
             _fakeAnswerChance = fakeAnswerChance;
@@ -58,15 +63,32 @@ namespace Ohabjizol.Interview
         public AnswerRequest TryBegin(int index)
         {
             if (!CanAsk(index)) return null;
-            string responseText = InterviewQuestionCatalog.ScheduleResponse;
-            if (index == 0)
+            if (!_responses.TryGetValue(Applicant, out var responses))
+            {
+                responses = new string[_used.Length];
+                _responses.Add(Applicant, responses);
+            }
+            string responseText = responses[index];
+            if (responseText == null)
+            {
+                responseText = string.Empty;
+                if (index == 0)
             {
                 var quality = Applicant.TruePortfolioQuality;
                 if (Applicant.FakePortfolioQuality.HasValue && _random.NextDouble() < _fakeAnswerChance)
                     quality = Applicant.FakePortfolioQuality.Value;
                 responseText = PortfolioResponseCatalog.Pick(quality, _random);
             }
-            else if (index != 1) responseText = string.Empty;
+            else if (index == 1)
+                {
+                    var days = Applicant.UnavailableSchedule.GetMarkedDays();
+                    var labels = new string[days.Length];
+                    for (int i = 0; i < days.Length; i++) labels[i] = days[i] + "일";
+                    responseText = days.Length == 0 ? "일정이 안되는 날은 없다고 하였다."
+                        : string.Join(", ", labels) + "은 일정이 안된다고 하였다.";
+                }
+                responses[index] = responseText;
+            }
             _used[index] = true; // Pending answers reserve their slot.
             _pendingIndex = index;
             Response = "";

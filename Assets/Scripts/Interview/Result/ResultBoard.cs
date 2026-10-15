@@ -1,155 +1,116 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 namespace Ohabjizol.Interview
 {
-    /// <summary>
-    /// Writes one session <see cref="InterviewResult"/> into the result color panels.
-    /// Grade, fulfillment, and team fraud are read from that result.
-    /// Skill cells also show the theme requirement. A zero skill stays on screen.
-    /// </summary>
-    public sealed class ResultBoard : MonoBehaviour
+    public sealed partial class ResultBoard : MonoBehaviour
     {
-        const int FontSize = 28;
-
-        InterviewResult _result;
-        Font _font;
-        bool _ownsFont;
-
-        public InterviewResult Result
+        [SerializeField] RectTransform authoredRoot;
+        [SerializeField] Text titleText;
+        [SerializeField] Text completionText;
+        [SerializeField] Text totalStarsText;
+        [SerializeField] Text continueText;
+        [SerializeField] Button continueButton;
+        [SerializeField] Text[] emptyStars = new Text[5];
+        [SerializeField] Text[] fullStars = new Text[5];
+        [SerializeField] RectTransform[] starSlots = new RectTransform[5];
+        [SerializeField] RectTransform[] starMasks = new RectTransform[5];
+        InterviewResult result;
+        public InterviewResult Result => result;
+        public bool HasAuthoredUi => authoredRoot != null && titleText != null && completionText != null
+            && totalStarsText != null && continueText != null && continueButton != null && StarsValid();
+        bool StarsValid()
         {
-            get { return _result; }
+            if (emptyStars == null || fullStars == null || starSlots == null || starMasks == null
+                || emptyStars.Length != 5 || fullStars.Length != 5 || starSlots.Length != 5 || starMasks.Length != 5) return false;
+            for (int i = 0; i < 5; i++)
+                if (emptyStars[i] == null || fullStars[i] == null || starSlots[i] == null || starMasks[i] == null) return false;
+            return true;
         }
-
-        public void Show(InterviewResult result)
+        void Awake()
         {
-            if (result == null)
-                throw new ArgumentNullException(nameof(result));
-
-            _result = result;
-            Paint(result);
+            if (!HasAuthoredUi) return;
+            continueButton.onClick.AddListener(Continue);
+            ShowPending();
         }
-
         void OnDestroy()
         {
-            if (_ownsFont && _font != null)
-                Destroy(_font);
+            if (continueButton != null) continueButton.onClick.RemoveListener(Continue);
         }
-
-        void Paint(InterviewResult result)
+        public void ShowPending()
         {
-            SkillSet actual = result.ActualSkills;
-            SkillSet required = PrototypeCatalog.Theme.RequiredSkills;
-            WriteSkill(JobRole.Planning, actual, required);
-            WriteSkill(JobRole.Programming, actual, required);
-            WriteSkill(JobRole.Graphics, actual, required);
-            WritePanel("FulfillmentPanel", "충족률 " + result.FulfillmentPercent + "%");
-            WritePanel("VerificationSuccessPanel", "검증 성공 " + result.VerificationSuccessCount);
-            WritePanel("VerificationFailurePanel", "검증 실패 " + result.VerificationFailureCount);
-            WritePanel("FraudPanel", "허위 인원 " + result.FraudCount);
-            WritePanel("GradePanel", "임시 등급 " + result.Grade);
+            result = null;
+            ShowSchedule(null);
+            if (!HasAuthoredUi) return;
+            titleText.text = "결과 준비중";
+            completionText.text = string.Empty;
+            totalStarsText.text = string.Empty;
+            continueText.text = "메인으로";
+            SetStars(0);
         }
-
-        void WriteSkill(JobRole role, SkillSet actual, SkillSet required)
+        public void Show(InterviewResult value)
         {
-            int actualValue = actual == null ? 0 : actual.Read(role);
-            int requiredValue = required == null ? 0 : required.Read(role);
-            string caption = JobRoleText.Korean(role)
-                + "\n실제 능력 " + actualValue
-                + "\n요구 능력 " + requiredValue;
-            WritePanel(PanelName(role), caption);
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            result = value;
+            ShowSchedule(value);
+            if (!HasAuthoredUi) return;
+            var run = CampaignRunStore.Load();
+            titleText.text = StageCatalog.Get(value.Stage).DisplayName;
+            completionText.text = value.IsCleared ? "완료 · 클리어" : "완료";
+            totalStarsText.text = "이번 단계 " + Stars(StarRatingRule.HalfUnits(value.AccuracyPercent))
+                + "별\n누적 " + Stars(run.TotalHalfStars) + " / 20별";
+            continueText.text = run.IsComplete ? "엔딩 보기" : "메인으로";
+            SetStars(StarRatingRule.HalfUnits(value.AccuracyPercent));
         }
-
-        static string PanelName(JobRole role)
+        static string Stars(int halves) => (halves / 2).ToString() + (halves % 2 == 0 ? "" : ".5");
+        void SetStars(int halves)
         {
-            switch (role)
+            for (int i = 0; i < 5; i++)
             {
-                case JobRole.Planning:
-                    return "PlanningPanel";
-                case JobRole.Programming:
-                    return "ProgrammingPanel";
-                case JobRole.Graphics:
-                    return "GraphicsPanel";
-                default:
-                    return string.Empty;
+                float fill = Mathf.Clamp01((halves - i * 2) / 2f);
+                starMasks[i].anchorMax = new Vector2(fill, 1f);
+                starMasks[i].gameObject.SetActive(fill > 0f);
             }
+            ResizeStarGlyphs();
         }
-
-        void WritePanel(string panelName, string caption)
+        // Keep the full glyph at the authored slot width while only the mask is clipped.
+        void LateUpdate() { if (HasAuthoredUi) ResizeStarGlyphs(); }
+        void ResizeStarGlyphs()
         {
-            if (string.IsNullOrEmpty(panelName))
-                return;
-
-            GameObject panel = FindPanel(panelName);
-            if (panel == null)
-                return;
-
-            panel.SetActive(true);
-            Text label = LabelOn(panel);
-            label.text = caption;
-            Image image = panel.GetComponent<Image>();
-            label.color = LabelColor(image != null ? image.color : Color.black);
+            for (int i = 0; i < 5; i++)
+                fullStars[i].rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, starSlots[i].rect.width);
         }
-
-        static GameObject FindPanel(string panelName)
+        void Continue()
         {
-            Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            for (int i = 0; i < transforms.Length; i++)
+            bool complete = result != null && CampaignRunStore.Load().IsComplete;
+            SceneManager.LoadScene(complete ? "EndingScene" : "MainMenuScene", LoadSceneMode.Single);
+        }
+        public void BakeAuthoredUi()
+        {
+#if UNITY_EDITOR
+            if (authoredRoot != null) return;
+            authoredRoot = ResultAuthoredUi.Canvas(transform);
+            titleText = ResultAuthoredUi.Label(authoredRoot, "StageTitle", "결과 준비중", 56, new Vector2(.1f,.77f), new Vector2(.9f,.9f));
+            completionText = ResultAuthoredUi.Label(authoredRoot, "Completion", "", 36, new Vector2(.1f,.65f), new Vector2(.9f,.75f));
+            totalStarsText = ResultAuthoredUi.Label(authoredRoot, "TotalStars", "", 36, new Vector2(.1f,.25f), new Vector2(.9f,.4f));
+            continueButton = ResultAuthoredUi.Button(authoredRoot, "ContinueButton", "메인으로", out continueText);
+            emptyStars = new Text[5]; fullStars = new Text[5]; starSlots = new RectTransform[5]; starMasks = new RectTransform[5];
+            for (int i = 0; i < 5; i++)
             {
-                if (transforms[i] != null && transforms[i].name == panelName)
-                    return transforms[i].gameObject;
+                float left = .25f + i * .1f;
+                var slot = ResultAuthoredUi.Rect(authoredRoot, "Star" + i, new Vector2(left,.43f), new Vector2(left+.1f,.60f));
+                starSlots[i] = slot;
+                emptyStars[i] = ResultAuthoredUi.Label(slot, "Empty", "☆", 120, Vector2.zero, Vector2.one);
+                var mask = ResultAuthoredUi.Rect(slot, "FillMask", Vector2.zero, Vector2.one);
+                mask.pivot = new Vector2(0f,.5f);
+                mask.gameObject.AddComponent<RectMask2D>(); starMasks[i] = mask;
+                var full = ResultAuthoredUi.Label(mask, "Full", "★", 120, Vector2.zero, new Vector2(0f,1f));
+                full.rectTransform.pivot = new Vector2(0f,.5f);
+                full.color = new Color(1f,.93f,.22f); fullStars[i] = full;
             }
-
-            return null;
-        }
-
-        Text LabelOn(GameObject panel)
-        {
-            Text label = panel.GetComponentInChildren<Text>(true);
-            if (label == null)
-            {
-                GameObject child = new GameObject("Label");
-                child.transform.SetParent(panel.transform, false);
-                RectTransform rect = child.AddComponent<RectTransform>();
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.one;
-                rect.offsetMin = new Vector2(12f, 8f);
-                rect.offsetMax = new Vector2(-12f, -8f);
-                rect.localScale = Vector3.one;
-                label = child.AddComponent<Text>();
-                label.fontSize = FontSize;
-                label.fontStyle = FontStyle.Bold;
-                label.alignment = TextAnchor.MiddleCenter;
-                label.horizontalOverflow = HorizontalWrapMode.Wrap;
-                label.verticalOverflow = VerticalWrapMode.Overflow;
-                label.raycastTarget = false;
-                label.supportRichText = false;
-            }
-
-            label.gameObject.SetActive(true);
-            label.font = UiFont();
-            return label;
-        }
-
-        Font UiFont()
-        {
-            if (_font != null)
-                return _font;
-
-            _font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "맑은 고딕", "Gulim" }, FontSize);
-            _ownsFont = _font != null;
-            if (_font == null)
-                _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            return _font;
-        }
-
-        static Color LabelColor(Color panel)
-        {
-            float luminance = panel.r * 0.299f + panel.g * 0.587f + panel.b * 0.114f;
-            if (luminance > 0.62f)
-                return new Color(0.08f, 0.08f, 0.1f, 1f);
-            return new Color(0.96f, 0.97f, 0.95f, 1f);
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

@@ -28,10 +28,11 @@ namespace Ohabjizol.Interview
             string runId = CampaignRunStore.Load().RunId;
             StageDefinition definition = StageCatalog.Get(StageSelection.Current);
             var context = new StageContext(runId, definition);
-            var manager = new StageManager(context, StageCompletionService.Complete);
-            var questions = new QuestionController(screen.FakePortfolioAnswerChance);
-            if (views.CalendarWindow != null && views.ScheduleConfig != null)
-                views.CalendarWindow.Bind(new StageCalendarState(views.ScheduleConfig.GetProductionDays(definition.Id)), definition.DisplayName);
+            int productionDays = views.ScheduleConfig != null ? views.ScheduleConfig.GetProductionDays(definition.Id) : 15;
+            var manager = new StageManager(context, StageCompletionService.Complete, productionDays);
+            var questions = new QuestionController(screen.FakePortfolioAnswerChance, manager.Session.RandomSource);
+            if (views.CalendarWindow != null)
+                views.CalendarWindow.Bind(new StageCalendarState(manager.Session.ProjectSchedule), definition.DisplayName);
             views.Workspace.Configure(views.ItemParent, views.WindowParent, views.ItemPrefab,
                 views.ViewerPrefab, views.PortfolioCatalog);
             var documents = new InterviewDocumentPresenter(views.Workspace, views.Panel);

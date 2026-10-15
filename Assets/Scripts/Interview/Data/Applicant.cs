@@ -15,7 +15,8 @@ namespace Ohabjizol.Interview
             SkillSet actualSkills,
             IReadOnlyList<ApplicantDocument> documents,
             ApplicantKind kind, PortfolioDisplayState truePortfolioQuality = PortfolioDisplayState.Normal,
-            PortfolioDisplayState? fakePortfolioQuality = null)
+            PortfolioDisplayState? fakePortfolioQuality = null,
+            MonthlySchedule unavailableSchedule = default(MonthlySchedule))
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("An applicant needs a name.", nameof(name));
@@ -28,8 +29,9 @@ namespace Ohabjizol.Interview
 
             if (!Enum.IsDefined(typeof(PortfolioDisplayState), truePortfolioQuality))
                 throw new ArgumentOutOfRangeException(nameof(truePortfolioQuality));
-            if (fakePortfolioQuality.HasValue && (!Enum.IsDefined(typeof(PortfolioDisplayState), fakePortfolioQuality.Value) || fakePortfolioQuality.Value == truePortfolioQuality))
-                throw new ArgumentException("Fake quality must differ from true quality.", nameof(fakePortfolioQuality));
+            if (fakePortfolioQuality.HasValue && (!Enum.IsDefined(typeof(PortfolioDisplayState), fakePortfolioQuality.Value) || PortfolioQualityRule.Rank(fakePortfolioQuality.Value) >= PortfolioQualityRule.Rank(truePortfolioQuality)))
+                throw new ArgumentException("Fake quality must be strictly worse than true quality.", nameof(fakePortfolioQuality));
+            UnavailableSchedule = unavailableSchedule;
             TruePortfolioQuality = truePortfolioQuality;
             FakePortfolioQuality = fakePortfolioQuality;
             Name = name;
@@ -55,6 +57,8 @@ namespace Ohabjizol.Interview
         public SkillSet ActualSkills { get; }
 
         public IReadOnlyList<ApplicantDocument> Documents { get; }
+
+        public MonthlySchedule UnavailableSchedule { get; }
 
         public ApplicantKind Kind { get; }
         public PortfolioDisplayState TruePortfolioQuality { get; }
