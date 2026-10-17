@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e2fcb2f9f49704db66c15b574d4129, type: 3}
+  m_Name: ApplicantVisualCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::Ohabjizol.Interview.ApplicantVisualCatalog
+  _visuals:
+  - _characterId: character-01
+    _idle: {fileID: 21300000, guid: f0009728df1256a478ea7437a6697870, type: 3}
+    _talk: {fileID: 21300000, guid: 1e5bfc0e36c023141b48f51fb86f8a88, type: 3}
+    _accepted: {fileID: 21300000, guid: a3fac5d7cb9edbe499d38ff2926800b0, type: 3}
+    _rejected: {fileID: 21300000, guid: 25eb3093a9aa12e47be040903fa8f37e, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-02
+    _idle: {fileID: 21300000, guid: 7ae19520d8e13414da74fae804792184, type: 3}
+    _talk: {fileID: 21300000, guid: 2572493e3133b8643a6a31592b86ae97, type: 3}
+    _accepted: {fileID: 21300000, guid: 1f1f5377d1716b14b90865d4bcedf0a7, type: 3}
+    _rejected: {fileID: 21300000, guid: 95c919357bb50dc46a49f3f984064844, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-03
+    _idle: {fileID: 21300000, guid: 475ed4a0f32fb92428c43f5351527feb, type: 3}
+    _talk: {fileID: 21300000, guid: 1f445d5bbbb8ccb44b5287a5b200e55b, type: 3}
+    _accepted: {fileID: 21300000, guid: c10b292acacdbfe4fbb12aa3ba0289fc, type: 3}
+    _rejected: {fileID: 21300000, guid: 81bfcee4e7b15754aa3b83d902a8b540, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-04
+    _idle: {fileID: 21300000, guid: 173dfdde4cfeb394399c03647319bb60, type: 3}
+    _talk: {fileID: 21300000, guid: bdea380b4ac0c48418473c9bb8633443, type: 3}
+    _accepted: {fileID: 21300000, guid: 298508a318b92cc4aa2602becbc02b32, type: 3}
+    _rejected: {fileID: 21300000, guid: ef9ebe65501b88447bcc48f28792c3f0, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-05
+    _idle: {fileID: 21300000, guid: 53ce4e91ac81d794f808b98d21806b54, type: 3}
+    _talk: {fileID: 21300000, guid: e59841105c40ca4488a181664bae9dbe, type: 3}
+    _accepted: {fileID: 21300000, guid: 8492cbb051c9a644983a7539883f100a, type: 3}
+    _rejected: {fileID: 21300000, guid: db78c7c6cdcbc8540b17ce945a555834, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-06
+    _idle: {fileID: 21300000, guid: df2a1071036bdd94584a66e6afa8dae8, type: 3}
+    _talk: {fileID: 21300000, guid: 9a3fa489877febe44908112bbd6d9572, type: 3}
+    _accepted: {fileID: 21300000, guid: 4c8a46fc10ec9c145ad379a7f53d2e32, type: 3}
+    _rejected: {fileID: 21300000, guid: 7205092e013a2f1418ff617712f28f4b, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-07
+    _idle: {fileID: 21300000, guid: 09e1df95a9602c841adc9cab002eb86a, type: 3}
+    _talk: {fileID: 21300000, guid: 5a98352fa27cf534ba90153af646f4df, type: 3}
+    _accepted: {fileID: 21300000, guid: e5265283eee8312419b9a89a6276644f, type: 3}
+    _rejected: {fileID: 21300000, guid: 23512829e8607dc4b8ba496b91ac85e3, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-08
+    _idle: {fileID: 21300000, guid: 5375574a721fda949a2d6e3fd95b3c2a, type: 3}
+    _talk: {fileID: 21300000, guid: 8b41a948d6b2fef47979a8d59cfd5def, type: 3}
+    _accepted: {fileID: 21300000, guid: 9ee2f98b0d9d12347bd92004f6d469b1, type: 3}
+    _rejected: {fileID: 21300000, guid: c72e5928c2658c944a73d385dc459cb9, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-09
+    _idle: {fileID: 21300000, guid: 1bda6f2eb87e5b046b71f105a80267e9, type: 3}
+    _talk: {fileID: 21300000, guid: 96300be7439883a4682a72d870ab1e1a, type: 3}
+    _accepted: {fileID: 21300000, guid: 996bd6cb314774348bea940e5ee7794b, type: 3}
+    _rejected: {fileID: 21300000, guid: e626384174d129c478426cd394d913c7, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-10
+    _idle: {fileID: 21300000, guid: d828a01c148edfb4a9ea1e47a8945fb9, type: 3}
+    _talk: {fileID: 21300000, guid: a91894f6468856944a94d6609ee64c53, type: 3}
+    _accepted: {fileID: 21300000, guid: ff840b0f42e39f34387461ea9b6eafa0, type: 3}
+    _rejected: {fileID: 21300000, guid: 928b85d610dcab44a8d3bf441fb7ee7c, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-11
+    _idle: {fileID: 21300000, guid: 32a1538bd20a9a849946a2fe8d0433d9, type: 3}
+    _talk: {fileID: 21300000, guid: 461b93451b513404a82196a7989d57ba, type: 3}
+    _accepted: {fileID: 21300000, guid: 348c4a78f43a74247b08f1219e9ace9a, type: 3}
+    _rejected: {fileID: 21300000, guid: a38149669b5d5134790657ef3bec7714, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-12
+    _idle: {fileID: 21300000, guid: e82e3a09c305fb748bf822e5085fc1af, type: 3}
+    _talk: {fileID: 21300000, guid: 07aca798375016b4084be65b25bcec1a, type: 3}
+    _accepted: {fileID: 21300000, guid: 8a533fdb5b6a883449aff5c1a857a180, type: 3}
+    _rejected: {fileID: 21300000, guid: b4deafae4337ea946bad6b0030dc08b4, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3
+  - _characterId: character-13
+    _idle: {fileID: 21300000, guid: d9a1506062fd14c43be87729828460cc, type: 3}
+    _talk: {fileID: 21300000, guid: 8888749af2518224d8c4a3130f4197f6, type: 3}
+    _accepted: {fileID: 21300000, guid: c8b8f41c7cd1a0044a93dde46aa58bc0, type: 3}
+    _rejected: {fileID: 21300000, guid: cc8030b0d8d939142abcf29b5e3c4e5f, type: 3}
+    _acceptedDuration: 3
+    _rejectedDuration: 3

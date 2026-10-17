@@ -10187,8 +10187,7 @@ MonoBehaviour:
   _name: {fileID: 7384331018593810661}
   _dots: {fileID: 8188779115557735918}
   speechBubble: {fileID: 6346616003762146705}
-  _idleSprite: {fileID: -7475866568677255109, guid: afdb6da8c5fd0c9498c6b6f3572755f1, type: 3}
-  _talkSprite: {fileID: -2478471689550527380, guid: afdb6da8c5fd0c9498c6b6f3572755f1, type: 3}
+  _visualCatalog: {fileID: 11400000, guid: 2042fa0ef635eea488168a3125d6c1a4, type: 2}
 --- !u!1 &7769082509337555026
 GameObject:
   m_ObjectHideFlags: 0

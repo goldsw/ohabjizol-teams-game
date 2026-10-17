@@ -16,8 +16,10 @@ namespace Ohabjizol.Interview
         readonly InterviewSummaryPresenter _summary;
         readonly StageCalendarWindow _calendar;
         readonly UnityEngine.UI.Button _calendarButton;
+        readonly InterviewDecisionCoordinator _decision;
         bool _subscribed;
         bool _started;
+        bool _disposed;
 
         // Recovery and snapshot capture must finish before constructing a new session.
         public static InterviewRuntime Create(InterviewScreen screen, InterviewViewReferences views)
@@ -39,7 +41,7 @@ namespace Ohabjizol.Interview
             var notification = new InterviewNotificationPresenter(views.Notification, views.UnreadMark);
             var applicant = new InterviewApplicantPresenter(manager, views.Call, documents, notification);
             var questionView = new InterviewQuestionPresenter(screen, questions, views.QuestionCatalog,
-                views.Questions, views.Call, views.Response, views.RadialQuestions);
+                views.Questions, views.Call, views.Response, views.RadialQuestions, applicant);
             var summary = new InterviewSummaryPresenter(manager, views.Title, views.StageLabel, views.Finished,
                 views.Current, views.Required, views.Slots, views.Accept, views.Reject, views.Chat, views.ApplicantStats);
             return new InterviewRuntime(screen, manager, questions, questionView, applicant, documents, notification, summary,
@@ -53,6 +55,8 @@ namespace Ohabjizol.Interview
             _screen = screen; _stage = stage; _questions = questions; _questionView = questionView;
             _applicant = applicant; _documents = documents; _notification = notification; _summary = summary;
             _calendar = calendar; _calendarButton = calendarButton;
+            _decision = new InterviewDecisionCoordinator(screen, stage, PresentDecision);
+            _decision.Changed += DecisionChanged;
         }
         public string ApplicantKey => _applicant.ApplicantKey;
         public PortfolioDisplayState DisplayedPortfolioState => _applicant.DisplayedPortfolioState;
@@ -63,13 +67,13 @@ namespace Ohabjizol.Interview
 
         public void Enable()
         {
-            if (_subscribed) return;
+            if (_disposed || _subscribed) return;
             _subscribed = true;
             if (_calendarButton != null) _calendarButton.onClick.AddListener(OpenCalendar);
             _screen.QuestionRequested += Ask;
-            _screen.DecisionRequested += _stage.Decide;
+            _screen.DecisionRequested += _decision.Request;
             _screen.DocumentPanelRequested += OpenDocuments;
-            _screen.CompletionRetryRequested += _stage.RetryCompletion;
+            _screen.CompletionRetryRequested += RetryCompletion;
             _stage.ApplicantChanging += ClearApplicant;
             _stage.ApplicantChanged += BindApplicant;
             _stage.StateChanged += _summary.Render;
@@ -86,12 +90,15 @@ namespace Ohabjizol.Interview
                 _applicant.Render();
                 _questionView.Render();
                 _summary.Render();
-                _stage.RetryCompletion();
+                RetryCompletion();
             }
+            DecisionChanged();
+            _decision.Resume();
         }
 
         public void Disable()
         {
+            _decision.Suspend();
             if (!_subscribed) return;
             _questionView.Cancel();
             _documents.Suspend();
@@ -100,9 +107,9 @@ namespace Ohabjizol.Interview
             _documents.Unsubscribe();
             _questionView.Unsubscribe();
             _screen.QuestionRequested -= Ask;
-            _screen.DecisionRequested -= _stage.Decide;
+            _screen.DecisionRequested -= _decision.Request;
             _screen.DocumentPanelRequested -= OpenDocuments;
-            _screen.CompletionRetryRequested -= _stage.RetryCompletion;
+            _screen.CompletionRetryRequested -= RetryCompletion;
             _stage.ApplicantChanging -= ClearApplicant;
             _stage.ApplicantChanged -= BindApplicant;
             _stage.StateChanged -= _summary.Render;
@@ -110,19 +117,54 @@ namespace Ohabjizol.Interview
             _subscribed = false;
         }
 
-        public void Dispose() { Disable(); ClearApplicant(); _documents.Dispose(); }
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
+            Disable();
+            _decision.Changed -= DecisionChanged;
+            _decision.Dispose();
+            ClearApplicant();
+            _documents.Dispose();
+        }
 
-        void OpenCalendar() { if (_calendar != null) _calendar.Restore(); }
+        float PresentDecision(bool accepted)
+        {
+            _questionView.Cancel();
+            return accepted ? _applicant.Accepted() : _applicant.Rejected();
+        }
+
+        void DecisionChanged()
+        {
+            bool blocked = _decision.IsPending;
+            if (!blocked) _applicant.CancelDecision();
+            _questionView.SetInputBlocked(blocked);
+            _summary.SetInputBlocked(blocked);
+        }
+
+        void RetryCompletion()
+        {
+            if (_disposed || !_subscribed || _decision.IsPending) return;
+            _stage.RetryCompletion();
+        }
+
+        void OpenCalendar()
+        {
+            if (_disposed || !_subscribed || _decision.IsPending) return;
+            if (_calendar != null) _calendar.Restore();
+        }
 
         void Ask(int index)
         {
-            if (!_stage.IsDeciding && !_stage.Session.IsFinished
+            if (!_disposed && _subscribed && !_decision.IsPending
+                && !_stage.IsDeciding && !_stage.Session.IsFinished
                 && _questions.Applicant == _stage.Session.Current) _questionView.Ask(index);
         }
 
         void OpenDocuments()
         {
-            if (_stage.IsDeciding || _stage.Session.IsFinished || _stage.Session.Current == null) return;
+            if (_disposed || !_subscribed || _decision.IsPending
+                || _stage.IsDeciding || _stage.Session.IsFinished || _stage.Session.Current == null) return;
             _notification.Clear();
             _documents.Open();
         }

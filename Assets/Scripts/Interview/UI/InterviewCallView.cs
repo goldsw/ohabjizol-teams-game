@@ -9,9 +9,8 @@ namespace Ohabjizol.Interview
         [SerializeField] Text _dots;
         [SerializeField] Image speechBubble;
         bool _talking;
-        [Header("Artist sprites; assign persistent assets")]
-        [SerializeField] Sprite _idleSprite;
-        [SerializeField] Sprite _talkSprite;
+        [SerializeField] ApplicantVisualCatalog _visualCatalog;
+        public ApplicantVisualCatalog VisualCatalog => _visualCatalog;
         public RectTransform PortraitRect => _portrait ? _portrait.rectTransform : null;
         public bool HasAuthoredUi => _portrait && _name && _dots;
         public void Configure(Image portrait, Text name, Text dots) { _portrait = portrait; _name = name; _dots = dots; }
@@ -24,8 +23,8 @@ namespace Ohabjizol.Interview
         public void Bind(Applicant applicant)
         {
             SetAnswering(false, 0);
-            _name.text = applicant == null ? "" : applicant.Name + " · " + JobRoleText.Korean(applicant.PrimaryRole);
-            _portrait.enabled = applicant != null;
+            if (_name) _name.text = applicant == null ? "" : applicant.Name + " · " + JobRoleText.Korean(applicant.PrimaryRole);
+            if (_portrait) _portrait.enabled = applicant != null;
         }
         public void SetThinking(string text)
         {
@@ -47,8 +46,11 @@ namespace Ohabjizol.Interview
         {
             SetTalking(answering);
             SetThinking(answering ? new string('.', tick % 3 + 1) : "");
+        }
+        public void SetPose(Sprite sprite)
+        {
             if (!_portrait) return;
-            _portrait.sprite = answering && (tick % 2) != 0 && _talkSprite ? _talkSprite : _idleSprite;
+            _portrait.sprite = sprite;
             _portrait.color = _portrait.sprite ? Color.white : new Color(.21f, .26f, .34f);
         }
         void OnDisable() { SetAnswering(false, 0); }

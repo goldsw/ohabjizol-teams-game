@@ -1,0 +1,352 @@
+{
+  "source": "Source/CUSTOMIZING.aseprite",
+  "sourcehash": "4cb158ce090243609bb6c9226fd11766d4874cea84e159a5f3731eec8862c55f",
+  "hashalgorithm": "sha256",
+  "dimensions": {
+    "width": 57,
+    "height": 66
+  },
+  "sourceframe_index_base": 0,
+  "frame_duration_ms": 100,
+  "state_assignment": "User-defined order within each four-frame tag",
+  "characters": [
+    {
+      "id": "character-01",
+      "tag": "FOOL",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 0,
+          "path": "character-01/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 1,
+          "path": "character-01/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 2,
+          "path": "character-01/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 3,
+          "path": "character-01/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-02",
+      "tag": "MAGICIAN",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 4,
+          "path": "character-02/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 5,
+          "path": "character-02/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 6,
+          "path": "character-02/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 7,
+          "path": "character-02/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-03",
+      "tag": "HIGHPRIESTESS",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 8,
+          "path": "character-03/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 9,
+          "path": "character-03/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 10,
+          "path": "character-03/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 11,
+          "path": "character-03/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-04",
+      "tag": "EMPRESS",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 12,
+          "path": "character-04/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 13,
+          "path": "character-04/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 14,
+          "path": "character-04/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 15,
+          "path": "character-04/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-05",
+      "tag": "EMPEROR",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 16,
+          "path": "character-05/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 17,
+          "path": "character-05/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 18,
+          "path": "character-05/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 19,
+          "path": "character-05/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-06",
+      "tag": "HIEROPHANT",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 20,
+          "path": "character-06/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 21,
+          "path": "character-06/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 22,
+          "path": "character-06/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 23,
+          "path": "character-06/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-07",
+      "tag": "LOVERS",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 24,
+          "path": "character-07/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 25,
+          "path": "character-07/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 26,
+          "path": "character-07/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 27,
+          "path": "character-07/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-08",
+      "tag": "CHARIOT",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 28,
+          "path": "character-08/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 29,
+          "path": "character-08/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 30,
+          "path": "character-08/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 31,
+          "path": "character-08/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-09",
+      "tag": "JUSTICE",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 32,
+          "path": "character-09/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 33,
+          "path": "character-09/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 34,
+          "path": "character-09/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 35,
+          "path": "character-09/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-10",
+      "tag": "HERMIT",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 36,
+          "path": "character-10/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 37,
+          "path": "character-10/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 38,
+          "path": "character-10/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 39,
+          "path": "character-10/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-11",
+      "tag": "WHEELOFFORTUNE",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 40,
+          "path": "character-11/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 41,
+          "path": "character-11/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 42,
+          "path": "character-11/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 43,
+          "path": "character-11/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-12",
+      "tag": "STRENGTH",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 44,
+          "path": "character-12/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 45,
+          "path": "character-12/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 46,
+          "path": "character-12/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 47,
+          "path": "character-12/rejected.png"
+        }
+      ]
+    },
+    {
+      "id": "character-13",
+      "tag": "HANGEDMAN",
+      "states": [
+        {
+          "state": "idle",
+          "sourceframe": 48,
+          "path": "character-13/idle.png"
+        },
+        {
+          "state": "talk",
+          "sourceframe": 49,
+          "path": "character-13/talk.png"
+        },
+        {
+          "state": "accepted",
+          "sourceframe": 50,
+          "path": "character-13/accepted.png"
+        },
+        {
+          "state": "rejected",
+          "sourceframe": 51,
+          "path": "character-13/rejected.png"
+        }
+      ]
+    }
+  ]
+}
