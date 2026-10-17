@@ -16,10 +16,12 @@ namespace Ohabjizol.Interview
             PdfDocumentViewer viewerPrefab, PortfolioSpriteCatalog portfolioCatalog, DownloadPanelView panel, Text notification,
             GameObject unreadMark, Text title, Text stageLabel, Text finished, Text current, Text required,
             Text[] slots, Button accept, Button reject, Button chat,
-            StageCalendarWindow calendarWindow = null, StageScheduleConfig scheduleConfig = null, Button calendarButton = null, RadialQuestionView radialQuestions = null)
+            StageCalendarWindow calendarWindow = null, StageScheduleConfig scheduleConfig = null, Button calendarButton = null, RadialQuestionView radialQuestions = null,
+            ApplicantStatsView applicantStats = null)
         {
             Call = call;
             RadialQuestions = radialQuestions;
+            ApplicantStats = applicantStats;
             _questions = (InterviewQuestionView[])(questions ?? throw new ArgumentNullException(nameof(questions))).Clone();
             QuestionCatalog = questionCatalog;
             Response = response;
@@ -44,6 +46,7 @@ namespace Ohabjizol.Interview
             CalendarWindow = calendarWindow; ScheduleConfig = scheduleConfig; CalendarButton = calendarButton;
         }
 
+        public ApplicantStatsView ApplicantStats { get; }
         public InterviewCallView Call { get; }
         public RadialQuestionView RadialQuestions { get; }
         public InterviewQuestionView[] Questions => (InterviewQuestionView[])_questions.Clone();

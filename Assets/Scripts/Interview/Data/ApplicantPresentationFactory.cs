@@ -8,7 +8,7 @@ namespace Ohabjizol.Interview
         {
             if (applicant == null) throw new ArgumentNullException(nameof(applicant));
             return new ApplicantDocumentPacket(applicantKey, applicant.Name, applicant.PrimaryRole,
-                Text(applicant, DocumentKind.Application), Text(applicant, DocumentKind.Portfolio), applicant.TruePortfolioQuality);
+                Text(applicant, DocumentKind.Application), Text(applicant, DocumentKind.Portfolio), applicant.TruePortfolioQuality, applicant.DisplayedSkills);
         }
         static string Text(Applicant applicant, DocumentKind kind)
         {

@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97bbb565210346dbb770447751494407, type: 3}
+  m_Name: StageStatsCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::Ohabjizol.Interview.StageStatsCatalogAsset
+  stages:
+  - stageId: 0
+    useOverride: 1
+    characterIds:
+    - character-01
+    - character-02
+    - character-03
+    - character-04
+    - character-05
+    - character-06
+    - character-07
+    - character-08
+    - character-09
+    - character-10
+    - character-11
+    - character-12
+    - character-13
+    requiredPlanning: 30
+    requiredProgramming: 30
+    requiredGraphics: 30
+  - stageId: 1
+    useOverride: 0
+    characterIds: []
+    requiredPlanning: 0
+    requiredProgramming: 0
+    requiredGraphics: 0
+  - stageId: 2
+    useOverride: 0
+    characterIds: []
+    requiredPlanning: 0
+    requiredProgramming: 0
+    requiredGraphics: 0
+  - stageId: 3
+    useOverride: 0
+    characterIds: []
+    requiredPlanning: 0
+    requiredProgramming: 0
+    requiredGraphics: 0

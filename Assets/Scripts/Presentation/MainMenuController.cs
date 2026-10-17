@@ -1,244 +1,254 @@
 using System;
+using System.Collections;
+using Ohabjizol.Interview;
+using Ohabjizol.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Ohabjizol.Presentation
 {
-    /// <summary>
-    /// Main-menu PLAY button on the monitor. The first press invokes <see cref="onPlay"/>,
-    /// which centers the drifted camera. LoadingScene opens only after that move finishes
-    /// and the camera is locked. This click path does not zoom. Later presses are ignored.
-    /// This does not touch the game managers.
-    /// </summary>
     public sealed class MainMenuController : MonoBehaviour
     {
         [SerializeField] string loadingSceneName = "LoadingScene";
+        [SerializeField] string endingSceneName = "EndingScene";
         [SerializeField] Transform viewRoot;
         [SerializeField] MainMenuCameraController cameraController;
-        [SerializeField] Button playButton;
-        [SerializeField] Vector2 playButtonAnchoredPosition = new Vector2(0f, -260f);
-
-        /// <summary>
-        /// Registered play callback. PLAY invokes this once to center the camera.
-        /// The loading scene is not opened when this returns.
-        /// </summary>
+        [SerializeField] float connectDelay = 1f;
+        [SerializeField] DesktopLayout desktopLayout = new DesktopLayout();
+        [SerializeField] DesktopInitialState initialWindows = new DesktopInitialState();
+        [SerializeField] DesktopView _desktop;
+        [SerializeField] RectTransform _generatedDesktopRoot;
+        [SerializeField] GameObject bootOverlay;
+        [SerializeField] Transform introStart;
+        [SerializeField] Transform zoomTarget;
+        [SerializeField] MonitorClickHandler monitorClick;
+        [SerializeField] float introMoveDuration = 1f;
+        [SerializeField] float bootDuration = 1.5f;
         public Action onPlay;
-
+        [SerializeField] PhysicsRaycaster monitorPhysicsRaycaster;
+        bool _monitorPickingCaptured, _monitorOriginallyEnabled;
+        MenuPhase _phase;
         bool _accepted;
-        static Sprite _whiteSprite;
+        static bool _introCompleted;
+        public enum MenuPhase { MainMenu3D, Zooming, Booting, DesktopReady, Launching }
+        public MenuPhase Phase
+        {
+            get => _phase;
+            private set { _phase = value; ApplyMonitorPicking(); }
+        }
+        public bool HasAuthoredUi => _desktop != null && _desktop.HasAuthoredUi &&
+            _generatedDesktopRoot != null && bootOverlay != null && introStart != null &&
+            zoomTarget != null && cameraController != null && monitorClick != null;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetSession() { _introCompleted = false; }
 
         void Awake()
         {
-            if (cameraController == null)
-                cameraController = FindFirstObjectByType<MainMenuCameraController>();
-            if (viewRoot == null)
+            if (!Application.isPlaying) return;
+            if (!HasAuthoredUi)
             {
-                var screen = FindFirstObjectByType<ComputerScreen>();
-                if (screen != null)
-                    viewRoot = screen.ViewRoot;
+                Debug.LogError("MainMenu requires baked Desktop/window references, camera poses, monitor click handler and EventSystem. Run BakeAuthoredUi in Edit Mode and save.", this);
+                enabled = false;
+                return;
             }
-
-            EnsureEventSystem();
-            if (playButton == null)
-                playButton = CreatePlayButton();
-            BindCanvasCamera();
+            if (!_desktop.Bind(connectDelay, Launch)) { enabled = false; return; }
+            monitorClick.Bind(this);
             onPlay = AlignCenter;
-            playButton.onClick.AddListener(Play);
+            bootOverlay.SetActive(false);
+            _generatedDesktopRoot.gameObject.SetActive(false);
+            if (_introCompleted)
+            {
+                cameraController.SetAuthoredPose(zoomTarget);
+                Ready();
+            }
+            else
+            {
+                cameraController.SetAuthoredPose(introStart);
+                Phase = MenuPhase.MainMenu3D;
+            }
         }
 
-        void Update()
+        void OnEnable()
         {
-            if (_accepted || playButton == null || Mouse.current == null)
-                return;
-            if (!Mouse.current.leftButton.wasPressedThisFrame)
-                return;
+            if (!Application.isPlaying) return;
+            if (!monitorPhysicsRaycaster)
+            {
+                var cam = MenuCamera() ?? Camera.main;
+                if (cam) monitorPhysicsRaycaster = cam.GetComponent<PhysicsRaycaster>();
+            }
+            if (monitorPhysicsRaycaster && !_monitorPickingCaptured)
+            {
+                _monitorOriginallyEnabled = monitorPhysicsRaycaster.enabled;
+                _monitorPickingCaptured = true;
+            }
+            ApplyMonitorPicking();
+        }
 
-            var rect = playButton.transform as RectTransform;
-            if (rect == null)
-                return;
-            if (!RectTransformUtility.RectangleContainsScreenPoint(rect, Mouse.current.position.ReadValue(), EventCamera()))
-                return;
+        void ApplyMonitorPicking()
+        {
+            if (_monitorPickingCaptured && monitorPhysicsRaycaster)
+                monitorPhysicsRaycaster.enabled = _monitorOriginallyEnabled && enabled && Phase == MenuPhase.MainMenu3D;
+        }
 
+        void RestoreMonitorPicking()
+        {
+            if (_monitorPickingCaptured && monitorPhysicsRaycaster)
+                monitorPhysicsRaycaster.enabled = _monitorOriginallyEnabled;
+            _monitorPickingCaptured = false;
+        }
+
+        void OnDisable() { RestoreMonitorPicking(); }
+        void OnDestroy() { RestoreMonitorPicking(); }
+
+        void Start()
+        {
+            if (!Application.isPlaying || !enabled) return;
+            if (EventSystem.current == null || !EventSystem.current.isActiveAndEnabled)
+            {
+                Debug.LogError("MainMenu requires an active authored EventSystem and input module. Configure and save them in Edit Mode.", this);
+                enabled = false;
+            }
+        }
+
+        public void MonitorClicked()
+        {
+            if (!enabled || Phase != MenuPhase.MainMenu3D || _accepted) return;
+            Phase = MenuPhase.Zooming;
+            StartCoroutine(Boot());
+        }
+
+        IEnumerator Boot()
+        {
+            yield return cameraController.MoveToAuthoredPose(zoomTarget, introMoveDuration);
+            Phase = MenuPhase.Booting;
+            bootOverlay.SetActive(true);
+            yield return new WaitForSecondsRealtime(Mathf.Max(0f, bootDuration));
+            bootOverlay.SetActive(false);
+            _introCompleted = true;
+            Ready();
+        }
+
+        void Ready()
+        {
+            Phase = MenuPhase.DesktopReady;
+            _generatedDesktopRoot.gameObject.SetActive(true);
+            _desktop.RefreshAuthoredContent();
+        }
+
+        public void Launch(StageId ignored)
+        {
+            if (_accepted || Phase != MenuPhase.DesktopReady) return;
+            var run = CampaignRunStore.Load();
+            if (run.IsComplete)
+            {
+                _accepted = true;
+                Phase = MenuPhase.Launching;
+                _desktop.Lock();
+                SceneManager.LoadScene(endingSceneName, LoadSceneMode.Single);
+                return;
+            }
+            StageSelection.Set(run.NextStage);
             Play();
+        }
+
+        public void StartNewRun()
+        {
+            if (_accepted || Phase != MenuPhase.DesktopReady) return;
+            CampaignRunStore.StartNewRun();
+            _desktop.RefreshAuthoredContent();
         }
 
         public void Play()
         {
-            if (_accepted)
-                return;
-
+            if (_accepted || Phase != MenuPhase.DesktopReady) return;
             _accepted = true;
-            if (playButton != null)
-            {
-                playButton.onClick.RemoveListener(Play);
-                playButton.interactable = false;
-            }
-
-            if (onPlay != null)
-                onPlay.Invoke();
-            else
-                OpenAfterCenter();
+            Phase = MenuPhase.Launching;
+            _desktop.Lock();
+            if (onPlay != null) onPlay.Invoke(); else OpenAfterCenter();
         }
-
-        void AlignCenter()
-        {
-            if (cameraController != null)
-                cameraController.AlignToCenter(OpenAfterCenter);
-            else
-                OpenAfterCenter();
-        }
-
+        void AlignCenter() { cameraController.AlignToCenter(OpenAfterCenter); }
         void OpenAfterCenter()
         {
-            var camera = cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
-            ComputerTransitionController.RememberPose(camera);
-            OpenLoadingScene();
-        }
-
-        public Button EnsureWorldPlayButton(ComputerScreen screen)
-        {
-            if (playButton != null)
-                return playButton;
-
-            playButton = CreatePlayButton(screen);
-            return playButton;
-        }
-
-        void OpenLoadingScene()
-        {
+            ComputerTransitionController.RememberPose(MenuCamera());
             SceneManager.LoadScene(loadingSceneName, LoadSceneMode.Single);
         }
+        Camera MenuCamera() => cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
 
-        Camera EventCamera()
+#if UNITY_EDITOR
+        public void BakeAuthoredUi()
         {
-            var canvas = playButton != null ? playButton.GetComponentInParent<Canvas>() : null;
-            if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-                return canvas.worldCamera != null ? canvas.worldCamera : Camera.main;
-            return null;
-        }
-
-        void BindCanvasCamera()
-        {
-            var canvas = playButton != null ? playButton.GetComponentInParent<Canvas>() : null;
-            if (canvas == null || canvas.renderMode != RenderMode.WorldSpace)
-                return;
-
-            var camera = cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
-            if (camera != null)
-                canvas.worldCamera = camera;
-        }
-
-        static void EnsureEventSystem()
-        {
-            if (FindFirstObjectByType<EventSystem>() != null)
-                return;
-
-            var eventObject = new GameObject("EventSystem");
-            eventObject.AddComponent<EventSystem>();
-            var module = eventObject.AddComponent<InputSystemUIInputModule>();
-            module.AssignDefaultActions();
-        }
-
-        Button CreatePlayButton()
-        {
-            return CreatePlayButton(FindScreen());
-        }
-
-        Button CreatePlayButton(ComputerScreen screen)
-        {
-            var canvasObject = new GameObject("MenuScreenCanvas");
-            var canvas = canvasObject.AddComponent<Canvas>();
+            if (Application.isPlaying) throw new InvalidOperationException("BakeAuthoredUi requires Edit Mode.");
+            if (cameraController == null) cameraController = FindFirstObjectByType<MainMenuCameraController>();
+            var screen = viewRoot != null ? viewRoot.GetComponentInChildren<ComputerScreen>(true) : FindFirstObjectByType<ComputerScreen>();
+            if (screen == null || cameraController == null) throw new InvalidOperationException("Bake requires ComputerScreen and MainMenuCameraController.");
+            viewRoot = screen.ViewRoot;
+            UiKit.EnsureEventSystem();
+            var camera = MenuCamera();
+            if (camera.GetComponent<PhysicsRaycaster>() == null) camera.gameObject.AddComponent<PhysicsRaycaster>();
+            monitorPhysicsRaycaster = camera.GetComponent<PhysicsRaycaster>();
+            if (screen.GetComponent<Collider>() == null) screen.gameObject.AddComponent<BoxCollider>();
+            monitorClick = screen.GetComponent<MonitorClickHandler>();
+            if (monitorClick == null) monitorClick = screen.gameObject.AddComponent<MonitorClickHandler>();
+            monitorClick.Bind(this);
+            Canvas canvas = screen.GetComponentInChildren<Canvas>(true);
+            if (canvas == null) canvas = new GameObject("MenuScreenCanvas", typeof(RectTransform), typeof(Canvas)).GetComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
-            canvasObject.AddComponent<GraphicRaycaster>();
-
-            var root = canvasObject.GetComponent<RectTransform>();
-            var camera = cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
-            if (screen != null)
-                screen.PlaceWorldCanvas(root, camera);
-            else
-                Debug.LogError("Menu UI needs a ComputerScreen so the canvas can sit on the monitor.");
-
-            var title = CreateText(canvasObject.transform, "Title", "MAIN MENU", 220, FontStyle.Bold);
-            var titleRect = title.rectTransform;
-            titleRect.anchorMin = new Vector2(0.5f, 0.5f);
-            titleRect.anchorMax = new Vector2(0.5f, 0.5f);
-            titleRect.anchoredPosition = new Vector2(0f, 190f);
-            titleRect.sizeDelta = new Vector2(1500f, 280f);
-            title.horizontalOverflow = HorizontalWrapMode.Overflow;
-            title.verticalOverflow = VerticalWrapMode.Overflow;
-
-            var buttonObject = new GameObject("PlayButton");
-            buttonObject.transform.SetParent(canvasObject.transform, false);
-            var buttonRect = buttonObject.AddComponent<RectTransform>();
-            buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
-            buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
-            buttonRect.anchoredPosition = playButtonAnchoredPosition;
-            buttonRect.sizeDelta = new Vector2(1100f, 220f);
-
-            var image = buttonObject.AddComponent<Image>();
-            image.sprite = WhiteSprite();
-            image.color = new Color(0.12f, 0.38f, 0.28f, 1f);
-            var button = buttonObject.AddComponent<Button>();
-            button.targetGraphic = image;
-
-            var label = CreateText(buttonObject.transform, "Label", "PLAY", 120, FontStyle.Bold);
-            label.horizontalOverflow = HorizontalWrapMode.Overflow;
-            label.verticalOverflow = VerticalWrapMode.Overflow;
-            Stretch(label.rectTransform);
-            return button;
-        }
-
-        ComputerScreen FindScreen()
-        {
-            if (viewRoot != null)
+            canvas.worldCamera = camera;
+            if (_desktop == null) screen.PlaceWorldCanvas(canvas.GetComponent<RectTransform>(), camera);
+            if (canvas.GetComponent<GraphicRaycaster>() == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
+            if (_desktop == null)
             {
-                var onView = viewRoot.GetComponentInChildren<ComputerScreen>(true);
-                if (onView != null)
-                    return onView;
+                _generatedDesktopRoot = new GameObject("AuthoredDesktopRoot", typeof(RectTransform)).GetComponent<RectTransform>();
+                _generatedDesktopRoot.SetParent(canvas.transform, false);
+                UiKit.Stretch(_generatedDesktopRoot, 0f);
+                _desktop = _generatedDesktopRoot.gameObject.AddComponent<DesktopView>();
+                desktopLayout.IconTile = 144f;
+                desktopLayout.IconCell = new Vector2(176f, 194f);
+                desktopLayout.IconSpacing = 208f;
+                _desktop.Build(_generatedDesktopRoot, desktopLayout, connectDelay, null, initialWindows);
             }
-
-            return FindFirstObjectByType<ComputerScreen>();
+            _desktop.CaptureEditorReferences();
+            UnityEditor.EditorUtility.SetDirty(screen);
+            UnityEditor.EditorUtility.SetDirty(camera);
+            if (EventSystem.current != null) UnityEditor.EditorUtility.SetDirty(EventSystem.current.gameObject);
+            if (bootOverlay == null)
+            {
+                Image boot = UiKit.Image(canvas.transform, "BootOverlay", new Color32(0xEC, 0x80, 0x32, 0xFF));
+                UiKit.Stretch(boot.rectTransform, 0f);
+                Text label = UiKit.Text(boot.transform, "BootLabel", 56, FontStyle.Bold, TextAnchor.MiddleCenter);
+                label.text = "청강 OS\n시작하는 중…";
+                UiKit.Stretch(label.rectTransform, 0f);
+                bootOverlay = boot.gameObject;
+            }
+            if (introStart == null) introStart = CreatePose("IntroStart", camera.transform.position, camera.transform.rotation);
+            if (zoomTarget == null)
+            {
+                Vector3 center = screen.transform.position;
+                Vector3 direction = (camera.transform.position - center).normalized;
+                if (direction.sqrMagnitude < 0.01f) direction = screen.transform.forward;
+                float distance = Mathf.Max(screen.transform.lossyScale.y, screen.transform.lossyScale.x / camera.aspect) * 0.55f /
+                    Mathf.Tan(camera.fieldOfView * Mathf.Deg2Rad * 0.5f);
+                Vector3 position = center + direction * Mathf.Max(0.1f, distance);
+                zoomTarget = CreatePose("DesktopZoomTarget", position, Quaternion.LookRotation(center - position, camera.transform.up));
+            }
+            bootOverlay.SetActive(false);
+            _generatedDesktopRoot.gameObject.SetActive(false);
+            foreach (var component in canvas.GetComponentsInChildren<Component>(true))
+                if (component != null) UnityEditor.EditorUtility.SetDirty(component);
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(monitorClick);
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
         }
-
-        static Text CreateText(Transform parent, string name, string value, int size, FontStyle style)
+        Transform CreatePose(string name, Vector3 position, Quaternion rotation)
         {
-            var textObject = new GameObject(name);
-            textObject.transform.SetParent(parent, false);
-            var text = textObject.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.text = value;
-            text.fontSize = size;
-            text.fontStyle = style;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.color = new Color(0.86f, 0.95f, 0.88f, 1f);
-            text.raycastTarget = false;
-            return text;
+            var pose = new GameObject(name).transform;
+            pose.SetParent(transform, false);
+            pose.SetPositionAndRotation(position, rotation);
+            return pose;
         }
-
-        static void Stretch(RectTransform rect)
-        {
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-        }
-
-        static Sprite WhiteSprite()
-        {
-            if (_whiteSprite != null)
-                return _whiteSprite;
-
-            var texture = Texture2D.whiteTexture;
-            _whiteSprite = Sprite.Create(
-                texture,
-                new Rect(0f, 0f, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f),
-                100f);
-            return _whiteSprite;
-        }
+#endif
     }
 }

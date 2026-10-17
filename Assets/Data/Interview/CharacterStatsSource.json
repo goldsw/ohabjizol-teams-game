@@ -1,0 +1,2047 @@
+{
+  "sourceJson": "D:\\UnityProjects\\GitHub\\Games\\ohabjizol-teams-game\\Logs\\UIEffects\\20261015-MainMenuStats\\character-stats-source.json",
+  "characters": [
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 11,
+      "name": "캐릭터 01",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B14",
+          "baseStats": {
+            "planning": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "C14",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "D14",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "E14",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "H14",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I14",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "J14",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B15",
+          "baseStats": {
+            "planning": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "C15",
+              "blank": false
+            },
+            "programming": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "D15",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "E15",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H15",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "I15",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "J15",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B16",
+          "baseStats": {
+            "planning": {
+              "raw": "3~9",
+              "min": 3,
+              "max": 9,
+              "cell": "C16",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "D16",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E16",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "H16",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "I16",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J16",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 28,
+      "name": "캐릭터 02",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B31",
+          "baseStats": {
+            "planning": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "C31",
+              "blank": false
+            },
+            "programming": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "D31",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "E31",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "H31",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "I31",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "J31",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B32",
+          "baseStats": {
+            "planning": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "C32",
+              "blank": false
+            },
+            "programming": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "D32",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "E32",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "H32",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "I32",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "J32",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B33",
+          "baseStats": {
+            "planning": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "C33",
+              "blank": false
+            },
+            "programming": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "D33",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "E33",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H33",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "I33",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "J33",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 44,
+      "name": "캐릭터 03",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B47",
+          "baseStats": {
+            "planning": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "C47",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "D47",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "E47",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "H47",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "I47",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "J47",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B48",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C48",
+              "blank": false
+            },
+            "programming": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "D48",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "E48",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H48",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "I48",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "J48",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B49",
+          "baseStats": {
+            "planning": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "C49",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "D49",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E49",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "H49",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I49",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J49",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 60,
+      "name": "캐릭터 04",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B63",
+          "baseStats": {
+            "planning": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "C63",
+              "blank": false
+            },
+            "programming": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "D63",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "E63",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "H63",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "I63",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "J63",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B64",
+          "baseStats": {
+            "planning": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "C64",
+              "blank": false
+            },
+            "programming": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "D64",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "E64",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "H64",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "I64",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J64",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B65",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C65",
+              "blank": false
+            },
+            "programming": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "D65",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E65",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H65",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "I65",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J65",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 77,
+      "name": "캐릭터 05",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B80",
+          "baseStats": {
+            "planning": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "C80",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "D80",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "E80",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "H80",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "I80",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "J80",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B81",
+          "baseStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "C81",
+              "blank": false
+            },
+            "programming": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "D81",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "E81",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H81",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "I81",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "J81",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B82",
+          "baseStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "C82",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "D82",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "E82",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "H82",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "I82",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "J82",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 93,
+      "name": "캐릭터 06",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B96",
+          "baseStats": {
+            "planning": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "C96",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "D96",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "E96",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "H96",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I96",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "J96",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B97",
+          "baseStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "C97",
+              "blank": false
+            },
+            "programming": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "D97",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "E97",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "H97",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "I97",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J97",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B98",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C98",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "D98",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E98",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H98",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "I98",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J98",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 109,
+      "name": "캐릭터 07",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B112",
+          "baseStats": {
+            "planning": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "C112",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "D112",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "E112",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "H112",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "I112",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J112",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B113",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C113",
+              "blank": false
+            },
+            "programming": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "D113",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "E113",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H113",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "I113",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "J113",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B114",
+          "baseStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "C114",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "D114",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "E114",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H114",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I114",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "J114",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 127,
+      "name": "캐릭터 08",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B130",
+          "baseStats": {
+            "planning": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "C130",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "D130",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "E130",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "H130",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "I130",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J130",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B131",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C131",
+              "blank": false
+            },
+            "programming": {
+              "raw": "8~10",
+              "min": 8,
+              "max": 10,
+              "cell": "D131",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "E131",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H131",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "I131",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "J131",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B132",
+          "baseStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "C132",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "D132",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E132",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~2",
+              "min": 1,
+              "max": 2,
+              "cell": "H132",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I132",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J132",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 144,
+      "name": "캐릭터 09",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B147",
+          "baseStats": {
+            "planning": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "C147",
+              "blank": false
+            },
+            "programming": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "D147",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "E147",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H147",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "I147",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "J147",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B148",
+          "baseStats": {
+            "planning": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "C148",
+              "blank": false
+            },
+            "programming": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "D148",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "E148",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "H148",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "I148",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "J148",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B149",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C149",
+              "blank": false
+            },
+            "programming": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "D149",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "E149",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H149",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "I149",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J149",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 161,
+      "name": "캐릭터 10",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B164",
+          "baseStats": {
+            "planning": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "C164",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "D164",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E164",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "H164",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "I164",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J164",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B165",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C165",
+              "blank": false
+            },
+            "programming": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "D165",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "E165",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H165",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "I165",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "J165",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B166",
+          "baseStats": {
+            "planning": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "C166",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "D166",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "E166",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "H166",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "I166",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J166",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 176,
+      "name": "캐릭터 11",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B179",
+          "baseStats": {
+            "planning": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "C179",
+              "blank": false
+            },
+            "programming": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "D179",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "E179",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "H179",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "I179",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "J179",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B180",
+          "baseStats": {
+            "planning": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "C180",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "D180",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "7~10",
+              "min": 7,
+              "max": 10,
+              "cell": "E180",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "H180",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I180",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "2~7",
+              "min": 2,
+              "max": 7,
+              "cell": "J180",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B181",
+          "baseStats": {
+            "planning": {
+              "raw": "6~10",
+              "min": 6,
+              "max": 10,
+              "cell": "C181",
+              "blank": false
+            },
+            "programming": {
+              "raw": "2~6",
+              "min": 2,
+              "max": 6,
+              "cell": "D181",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "E181",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "H181",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~3",
+              "min": 1,
+              "max": 3,
+              "cell": "I181",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "J181",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 191,
+      "name": "캐릭터 12",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B194",
+          "baseStats": {
+            "planning": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "C194",
+              "blank": false
+            },
+            "programming": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "D194",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "E194",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "H194",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "I194",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J194",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B195",
+          "baseStats": {
+            "planning": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "C195",
+              "blank": false
+            },
+            "programming": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "D195",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "E195",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "H195",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "I195",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J195",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B196",
+          "baseStats": {
+            "planning": {
+              "raw": "4~8",
+              "min": 4,
+              "max": 8,
+              "cell": "C196",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "D196",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "5~9",
+              "min": 5,
+              "max": 9,
+              "cell": "E196",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~5",
+              "min": 1,
+              "max": 5,
+              "cell": "H196",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I196",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "J196",
+              "blank": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sourceSheet": "Sheet1",
+      "sourceRow": 206,
+      "name": "캐릭터 13",
+      "roles": [
+        {
+          "role": "기획",
+          "roleCell": "B209",
+          "baseStats": {
+            "planning": {
+              "raw": "4~10",
+              "min": 4,
+              "max": 10,
+              "cell": "C209",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~9",
+              "min": 3,
+              "max": 9,
+              "cell": "D209",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "E209",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "H209",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "I209",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "J209",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "프로그래밍",
+          "roleCell": "B210",
+          "baseStats": {
+            "planning": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "C210",
+              "blank": false
+            },
+            "programming": {
+              "raw": "4~10",
+              "min": 4,
+              "max": 10,
+              "cell": "D210",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "3~9",
+              "min": 3,
+              "max": 9,
+              "cell": "E210",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "H210",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "I210",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "J210",
+              "blank": false
+            }
+          }
+        },
+        {
+          "role": "아트",
+          "roleCell": "B211",
+          "baseStats": {
+            "planning": {
+              "raw": "3~9",
+              "min": 3,
+              "max": 9,
+              "cell": "C211",
+              "blank": false
+            },
+            "programming": {
+              "raw": "3~7",
+              "min": 3,
+              "max": 7,
+              "cell": "D211",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "4~10",
+              "min": 4,
+              "max": 10,
+              "cell": "E211",
+              "blank": false
+            }
+          },
+          "fakeStats": {
+            "planning": {
+              "raw": "1~6",
+              "min": 1,
+              "max": 6,
+              "cell": "H211",
+              "blank": false
+            },
+            "programming": {
+              "raw": "1~4",
+              "min": 1,
+              "max": 4,
+              "cell": "I211",
+              "blank": false
+            },
+            "graphics": {
+              "raw": "1~7",
+              "min": 1,
+              "max": 7,
+              "cell": "J211",
+              "blank": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

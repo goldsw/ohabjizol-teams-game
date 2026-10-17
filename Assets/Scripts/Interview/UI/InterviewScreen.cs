@@ -22,6 +22,7 @@ namespace Ohabjizol.Interview
         [SerializeField] Text _finishedLabel;
         [SerializeField] Text _currentLabel;
         [SerializeField] Text _requiredLabel;
+        [SerializeField] ApplicantStatsView _applicantStats;
         [SerializeField] Text[] _slotLabels = new Text[4];
         [SerializeField] InterviewQuestionView[] _questions = new InterviewQuestionView[5];
         [SerializeField] InterviewCallView _call;
@@ -94,7 +95,7 @@ namespace Ohabjizol.Interview
                     _workspace, _itemParent, _windowParent, _itemPrefab, _viewerPrefab, _portfolioCatalog, _downloadPanel,
                     _notification, _unreadMark, _titleLabel, _stageLabel, _finishedLabel, _currentLabel,
                     _requiredLabel, _slotLabels, _acceptButton, _rejectButton, _chatButton,
-                    _calendarWindow, _scheduleConfig, _calendarButton, _radialQuestions);
+                    _calendarWindow, _scheduleConfig, _calendarButton, _radialQuestions, _applicantStats);
                 _runtime = InterviewRuntime.Create(this, views);
                 discordVisible = _discordViewRoot.gameObject.activeSelf;
                 for (int i = 0; i < _questionHandlers.Length; i++)

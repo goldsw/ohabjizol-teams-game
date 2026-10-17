@@ -35,6 +35,7 @@ namespace Ohabjizol.Interview
         [SerializeField] Text _name;
         [SerializeField] Text _role;
         [SerializeField] Text _skills;
+        [SerializeField] ApplicantStatsView _applicantStats;
         [SerializeField] Text _missing;
         [SerializeField] Button[] _lineButtons = new Button[LineSlotCount];
         [SerializeField] Text[] _lineLabels = new Text[LineSlotCount];
@@ -146,6 +147,9 @@ namespace Ohabjizol.Interview
 
         void WriteHeader(Applicant current)
         {
+            if (_applicantStats)
+                _applicantStats.Bind(current == null ? null : current.DisplayedSkills);
+            if (_skills) _skills.enabled = !_applicantStats;
             if (_name == null)
                 return;
 
@@ -159,14 +163,28 @@ namespace Ohabjizol.Interview
 
             _name.text = current.Name;
             _role.text = "주 직군  " + JobRoleText.Korean(current.PrimaryRole);
+            if (_applicantStats) { _skills.text = string.Empty; return; }
             SkillSet shown = current.DisplayedSkills;
             if (shown == null)
-                _skills.text = "표시 능력";
+                _skills.text = "예상능력";
             else
-                _skills.text = "표시 능력  기획 " + shown.Planning
+                _skills.text = "예상능력  기획 " + shown.Planning
                     + "  프로그래밍 " + shown.Programming
                     + "  그래픽 " + shown.Graphics;
         }
+
+#if UNITY_EDITOR
+        // Legacy windows can opt into an explicitly authored view without rebuilding their header.
+        public void ConfigureApplicantStatsEditor(ApplicantStatsView stats)
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Stats authoring requires EditMode.");
+            if (!stats || !stats.HasAuthoredUi || !stats.transform.IsChildOf(transform))
+                throw new ArgumentException("An authored stats view inside this window is required.", nameof(stats));
+            _applicantStats = stats;
+            Refresh();
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
 
         void WriteLines(ApplicantDocument document, bool interactive)
         {

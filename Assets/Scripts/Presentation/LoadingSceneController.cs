@@ -1,3 +1,4 @@
+using Ohabjizol.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,12 +20,17 @@ namespace Ohabjizol.Presentation
         [SerializeField] string nextSceneName = "InterviewScene";
         [SerializeField] ComputerTransitionController transition;
         [SerializeField] RectTransform loadingUiOverride;
-        [SerializeField] string bootText = "SYSTEM BOOTING…";
-        [SerializeField] string waitText = "PLEASE WAIT…";
-        [SerializeField] string completeText = "LOADING COMPLETE";
+        [SerializeField] string bootText = "청강코드 실행 중…";
+        [SerializeField] string waitText = "서버에 연결하는 중…";
+        [SerializeField] string completeText = "연결 완료";
         [SerializeField] float completeHoldDuration = 0.75f;
         [SerializeField] bool showPercent = true;
         [SerializeField] float labelPulseSpeed = 2.2f;
+        [SerializeField] Color backgroundColor = new Color32(0x31, 0x33, 0x38, 0xFF);
+        [SerializeField] Color barColor = new Color32(0x1E, 0x1F, 0x22, 0xFF);
+        [SerializeField] Color accentColor = new Color32(0x58, 0x65, 0xF2, 0xFF);
+        [SerializeField] Color textColor = new Color32(0xF2, 0xF3, 0xF5, 0xFF);
+        [SerializeField] Color mutedTextColor = new Color32(0xB5, 0xBA, 0xC1, 0xFF);
 
         AsyncOperation _operation;
         float _elapsed;
@@ -219,12 +225,45 @@ namespace Ohabjizol.Presentation
             if (scan != null)
                 _scan = scan as RectTransform;
 
+            ApplyTheme(root);
             if (_bootLabel != null)
                 _bootLabel.text = bootText;
             if (_waitLabel != null)
                 _waitLabel.text = waitText;
             if (_percentLabel != null)
                 _percentLabel.gameObject.SetActive(showPercent);
+        }
+
+        /// <summary>
+        /// Recolors the scene-saved or default UI by object name. Labels switch to
+        /// <see cref="UiKit.Font"/> because the built-in font has no Hangul.
+        /// </summary>
+        void ApplyTheme(RectTransform root)
+        {
+            var background = root.Find("Background");
+            if (background != null && background.GetComponent<Image>() != null)
+                background.GetComponent<Image>().color = backgroundColor;
+
+            var bar = root.Find("ProgressBar");
+            if (bar != null && bar.GetComponent<Image>() != null)
+                bar.GetComponent<Image>().color = barColor;
+            if (_progressFill != null)
+                _progressFill.color = accentColor;
+            if (_scan != null && _scan.GetComponent<Image>() != null)
+                _scan.GetComponent<Image>().color = new Color(accentColor.r, accentColor.g, accentColor.b, 0.12f);
+
+            StyleLabel(_bootLabel, textColor);
+            StyleLabel(_waitLabel, mutedTextColor);
+            StyleLabel(_percentLabel, mutedTextColor);
+        }
+
+        static void StyleLabel(Text label, Color color)
+        {
+            if (label == null)
+                return;
+
+            label.font = UiKit.Font;
+            label.color = color;
         }
 
         void UpdateLoadingUi()

@@ -1,0 +1,4895 @@
+{
+  "source": {
+    "path": "C:\\Users\\eeseo\\Downloads\\캐릭터 능력치 정리 (1).xlsx",
+    "readOnly": true
+  },
+  "sheets": [
+    {
+      "name": "Sheet1",
+      "maxRow": 211,
+      "maxColumn": 10,
+      "rows": [
+        {
+          "row": 11,
+          "cells": [
+            {
+              "cell": "A11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B11",
+              "value": "캐릭터 01",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G11",
+              "value": "캐릭터 01(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J11",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 13,
+          "cells": [
+            {
+              "cell": "A13",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B13",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C13",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D13",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E13",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F13",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G13",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H13",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I13",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J13",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 14,
+          "cells": [
+            {
+              "cell": "A14",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B14",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C14",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D14",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E14",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F14",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G14",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H14",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I14",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J14",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 15,
+          "cells": [
+            {
+              "cell": "A15",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B15",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C15",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D15",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E15",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F15",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G15",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H15",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I15",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J15",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 16,
+          "cells": [
+            {
+              "cell": "A16",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B16",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C16",
+              "value": "3~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D16",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E16",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F16",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G16",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H16",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I16",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J16",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 28,
+          "cells": [
+            {
+              "cell": "A28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B28",
+              "value": "캐릭터 02",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G28",
+              "value": "캐릭터 02(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J28",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 30,
+          "cells": [
+            {
+              "cell": "A30",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B30",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C30",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D30",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E30",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F30",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G30",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H30",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I30",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J30",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 31,
+          "cells": [
+            {
+              "cell": "A31",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B31",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C31",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D31",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E31",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F31",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G31",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H31",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I31",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J31",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 32,
+          "cells": [
+            {
+              "cell": "A32",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B32",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C32",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D32",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E32",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F32",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G32",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H32",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I32",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J32",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 33,
+          "cells": [
+            {
+              "cell": "A33",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B33",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C33",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D33",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E33",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F33",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G33",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H33",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I33",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J33",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 44,
+          "cells": [
+            {
+              "cell": "A44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B44",
+              "value": "캐릭터 03",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G44",
+              "value": "캐릭터 03(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J44",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 46,
+          "cells": [
+            {
+              "cell": "A46",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B46",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C46",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D46",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E46",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F46",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G46",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H46",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I46",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J46",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 47,
+          "cells": [
+            {
+              "cell": "A47",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B47",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C47",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D47",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E47",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F47",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G47",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H47",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I47",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J47",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 48,
+          "cells": [
+            {
+              "cell": "A48",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B48",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C48",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D48",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E48",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F48",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G48",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H48",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I48",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J48",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 49,
+          "cells": [
+            {
+              "cell": "A49",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B49",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C49",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D49",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E49",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F49",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G49",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H49",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I49",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J49",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 60,
+          "cells": [
+            {
+              "cell": "A60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B60",
+              "value": "캐릭터 04",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G60",
+              "value": "캐릭터 04(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J60",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 62,
+          "cells": [
+            {
+              "cell": "A62",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B62",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C62",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D62",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E62",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F62",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G62",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H62",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I62",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J62",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 63,
+          "cells": [
+            {
+              "cell": "A63",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B63",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C63",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D63",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E63",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F63",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G63",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H63",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I63",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J63",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 64,
+          "cells": [
+            {
+              "cell": "A64",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B64",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C64",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D64",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E64",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F64",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G64",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H64",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I64",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J64",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 65,
+          "cells": [
+            {
+              "cell": "A65",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B65",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C65",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D65",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E65",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F65",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G65",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H65",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I65",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J65",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 77,
+          "cells": [
+            {
+              "cell": "A77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B77",
+              "value": "캐릭터 05",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G77",
+              "value": "캐릭터 05(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J77",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 79,
+          "cells": [
+            {
+              "cell": "A79",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B79",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C79",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D79",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E79",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F79",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G79",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H79",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I79",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J79",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 80,
+          "cells": [
+            {
+              "cell": "A80",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B80",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C80",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D80",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E80",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F80",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G80",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H80",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I80",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J80",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 81,
+          "cells": [
+            {
+              "cell": "A81",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B81",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C81",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D81",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E81",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F81",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G81",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H81",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I81",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J81",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 82,
+          "cells": [
+            {
+              "cell": "A82",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B82",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C82",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D82",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E82",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F82",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G82",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H82",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I82",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J82",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 93,
+          "cells": [
+            {
+              "cell": "A93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B93",
+              "value": "캐릭터 06",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G93",
+              "value": "캐릭터 06(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J93",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 95,
+          "cells": [
+            {
+              "cell": "A95",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B95",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C95",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D95",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E95",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F95",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G95",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H95",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I95",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J95",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 96,
+          "cells": [
+            {
+              "cell": "A96",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B96",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C96",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D96",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E96",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F96",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G96",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H96",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I96",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J96",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 97,
+          "cells": [
+            {
+              "cell": "A97",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B97",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C97",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D97",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E97",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F97",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G97",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H97",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I97",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J97",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 98,
+          "cells": [
+            {
+              "cell": "A98",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B98",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C98",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D98",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E98",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F98",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G98",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H98",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I98",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J98",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 109,
+          "cells": [
+            {
+              "cell": "A109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B109",
+              "value": "캐릭터 07",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G109",
+              "value": "캐릭터 07(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J109",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 111,
+          "cells": [
+            {
+              "cell": "A111",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B111",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C111",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D111",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E111",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F111",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G111",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H111",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I111",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J111",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 112,
+          "cells": [
+            {
+              "cell": "A112",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B112",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C112",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D112",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E112",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F112",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G112",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H112",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I112",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J112",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 113,
+          "cells": [
+            {
+              "cell": "A113",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B113",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C113",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D113",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E113",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F113",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G113",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H113",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I113",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J113",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 114,
+          "cells": [
+            {
+              "cell": "A114",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B114",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C114",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D114",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E114",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F114",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G114",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H114",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I114",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J114",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 127,
+          "cells": [
+            {
+              "cell": "A127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B127",
+              "value": "캐릭터 08",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G127",
+              "value": "캐릭터 08(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J127",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 129,
+          "cells": [
+            {
+              "cell": "A129",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B129",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C129",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D129",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E129",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F129",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G129",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H129",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I129",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J129",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 130,
+          "cells": [
+            {
+              "cell": "A130",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B130",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C130",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D130",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E130",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F130",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G130",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H130",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I130",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J130",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 131,
+          "cells": [
+            {
+              "cell": "A131",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B131",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C131",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D131",
+              "value": "8~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E131",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F131",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G131",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H131",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I131",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J131",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 132,
+          "cells": [
+            {
+              "cell": "A132",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B132",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C132",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D132",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E132",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F132",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G132",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H132",
+              "value": "1~2",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I132",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J132",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 144,
+          "cells": [
+            {
+              "cell": "A144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B144",
+              "value": "캐릭터 09",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G144",
+              "value": "캐릭터 09(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J144",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 146,
+          "cells": [
+            {
+              "cell": "A146",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B146",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C146",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D146",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E146",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F146",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G146",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H146",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I146",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J146",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 147,
+          "cells": [
+            {
+              "cell": "A147",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B147",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C147",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D147",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E147",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F147",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G147",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H147",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I147",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J147",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 148,
+          "cells": [
+            {
+              "cell": "A148",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B148",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C148",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D148",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E148",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F148",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G148",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H148",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I148",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J148",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 149,
+          "cells": [
+            {
+              "cell": "A149",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B149",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C149",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D149",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E149",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F149",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G149",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H149",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I149",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J149",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 161,
+          "cells": [
+            {
+              "cell": "A161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B161",
+              "value": "캐릭터 10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G161",
+              "value": "캐릭터 10(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J161",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 163,
+          "cells": [
+            {
+              "cell": "A163",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B163",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C163",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D163",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E163",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F163",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G163",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H163",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I163",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J163",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 164,
+          "cells": [
+            {
+              "cell": "A164",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B164",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C164",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D164",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E164",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F164",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G164",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H164",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I164",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J164",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 165,
+          "cells": [
+            {
+              "cell": "A165",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B165",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C165",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D165",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E165",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F165",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G165",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H165",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I165",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J165",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 166,
+          "cells": [
+            {
+              "cell": "A166",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B166",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C166",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D166",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E166",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F166",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G166",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H166",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I166",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J166",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 176,
+          "cells": [
+            {
+              "cell": "A176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B176",
+              "value": "캐릭터 11",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G176",
+              "value": "캐릭터 11(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J176",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 178,
+          "cells": [
+            {
+              "cell": "A178",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B178",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C178",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D178",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E178",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F178",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G178",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H178",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I178",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J178",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 179,
+          "cells": [
+            {
+              "cell": "A179",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B179",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C179",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D179",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E179",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F179",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G179",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H179",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I179",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J179",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 180,
+          "cells": [
+            {
+              "cell": "A180",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B180",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C180",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D180",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E180",
+              "value": "7~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F180",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G180",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H180",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I180",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J180",
+              "value": "2~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 181,
+          "cells": [
+            {
+              "cell": "A181",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B181",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C181",
+              "value": "6~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D181",
+              "value": "2~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E181",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F181",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G181",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H181",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I181",
+              "value": "1~3",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J181",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 191,
+          "cells": [
+            {
+              "cell": "A191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B191",
+              "value": "캐릭터 12",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G191",
+              "value": "캐릭터 12(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J191",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 193,
+          "cells": [
+            {
+              "cell": "A193",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B193",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C193",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D193",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E193",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F193",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G193",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H193",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I193",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J193",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 194,
+          "cells": [
+            {
+              "cell": "A194",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B194",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C194",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D194",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E194",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F194",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G194",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H194",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I194",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J194",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 195,
+          "cells": [
+            {
+              "cell": "A195",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B195",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C195",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D195",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E195",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F195",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G195",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H195",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I195",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J195",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 196,
+          "cells": [
+            {
+              "cell": "A196",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B196",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C196",
+              "value": "4~8",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D196",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E196",
+              "value": "5~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F196",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G196",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H196",
+              "value": "1~5",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I196",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J196",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 206,
+          "cells": [
+            {
+              "cell": "A206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B206",
+              "value": "캐릭터 13",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "D206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "E206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "F206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G206",
+              "value": "캐릭터 13(허위)",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "I206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "J206",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "row": 208,
+          "cells": [
+            {
+              "cell": "A208",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B208",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C208",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D208",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E208",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F208",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G208",
+              "value": "지원 직군",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H208",
+              "value": "기획력",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I208",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J208",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 209,
+          "cells": [
+            {
+              "cell": "A209",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B209",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C209",
+              "value": "4~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D209",
+              "value": "3~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E209",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F209",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G209",
+              "value": "기획",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H209",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I209",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J209",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 210,
+          "cells": [
+            {
+              "cell": "A210",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B210",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C210",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D210",
+              "value": "4~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E210",
+              "value": "3~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F210",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G210",
+              "value": "프로그래밍",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H210",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I210",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J210",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        },
+        {
+          "row": 211,
+          "cells": [
+            {
+              "cell": "A211",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "B211",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "C211",
+              "value": "3~9",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "D211",
+              "value": "3~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "E211",
+              "value": "4~10",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "F211",
+              "value": null,
+              "formula": null,
+              "cachedValue": null,
+              "blank": true
+            },
+            {
+              "cell": "G211",
+              "value": "아트",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "H211",
+              "value": "1~6",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "I211",
+              "value": "1~4",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            },
+            {
+              "cell": "J211",
+              "value": "1~7",
+              "formula": null,
+              "cachedValue": null,
+              "blank": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "mappingNotes": {
+    "stageRequirements": "없음",
+    "baseActualEstimatedClassification": "unresolved; source labels preserved",
+    "blankValues": "null with blank=true"
+  }
+}

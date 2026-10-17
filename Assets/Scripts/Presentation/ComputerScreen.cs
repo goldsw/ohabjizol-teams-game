@@ -38,7 +38,7 @@ namespace Ohabjizol.Presentation
             if (!Application.isPlaying)
                 return;
 
-            Canvas.preWillRenderCanvases += FitChildCanvases;
+            // Authored world canvas transforms are saved during Edit Mode baking.
         }
 
         void OnDisable()
@@ -96,7 +96,7 @@ namespace Ohabjizol.Presentation
 
             var scaler = root.GetComponent<CanvasScaler>();
             if (scaler != null)
-                Destroy(scaler);
+                DestroyImmediate(scaler);
         }
 
         void Awake()

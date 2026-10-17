@@ -41,7 +41,7 @@ namespace Ohabjizol.Interview
             var questionView = new InterviewQuestionPresenter(screen, questions, views.QuestionCatalog,
                 views.Questions, views.Call, views.Response, views.RadialQuestions);
             var summary = new InterviewSummaryPresenter(manager, views.Title, views.StageLabel, views.Finished,
-                views.Current, views.Required, views.Slots, views.Accept, views.Reject, views.Chat);
+                views.Current, views.Required, views.Slots, views.Accept, views.Reject, views.Chat, views.ApplicantStats);
             return new InterviewRuntime(screen, manager, questions, questionView, applicant, documents, notification, summary,
                 views.CalendarWindow, views.CalendarButton);
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,6 +44,32 @@ namespace Ohabjizol.Presentation
         {
             _initialLocalPosition = transform.localPosition;
             _initialLocalRotation = transform.localRotation;
+        }
+
+        public void SetAuthoredPose(Transform pose)
+        {
+            if (pose == null) throw new ArgumentNullException(nameof(pose));
+            _locked = true;
+            _aligning = false;
+            transform.SetPositionAndRotation(pose.position, pose.rotation);
+            _initialLocalPosition = transform.localPosition;
+            _initialLocalRotation = transform.localRotation;
+            _yaw = _pitch = _offsetX = _offsetY = 0f;
+        }
+        public IEnumerator MoveToAuthoredPose(Transform pose, float duration)
+        {
+            LockLook();
+            Vector3 position = transform.position;
+            Quaternion rotation = transform.rotation;
+            float elapsed = 0f;
+            while (elapsed < Mathf.Max(0f, duration))
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / duration));
+                transform.SetPositionAndRotation(Vector3.Lerp(position, pose.position, t), Quaternion.Slerp(rotation, pose.rotation, t));
+                yield return null;
+            }
+            SetAuthoredPose(pose);
         }
 
         public void LockLook()

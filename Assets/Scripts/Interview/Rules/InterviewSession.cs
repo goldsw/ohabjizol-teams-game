@@ -154,37 +154,29 @@ namespace Ohabjizol.Interview
                 _verificationFailureCount++;
         }
 
+        public SelectedTeamDisplaySnapshot ReadSelectedTeam()
+        {
+            return SelectedTeamDisplayProjection.Project(SelectedTeamQuery.Capture(_team));
+        }
+
         void BuildResult()
         {
-            SkillSet actual = _team.ActualSum;
-            SkillSet required = Theme.RequiredSkills;
-            int accuracyPercent = StageAccuracyRule.Percent(actual, required);
+            var snapshot = SelectedTeamQuery.Capture(_team);
+            var score = InterviewScoreProcessor.Process(snapshot, Theme);
+            var schedule = InterviewScheduleProcessor.Process(snapshot, ProjectSchedule);
             Result = new InterviewResult(
-                actual,
-                FulfillmentRate.Percent(actual, required),
+                score.ActualSum,
+                score.FulfillmentPercent,
                 _verificationSuccessCount,
                 _verificationFailureCount,
-                _team.FraudCount,
-                ResultGradeRule.Evaluate(actual, required, Theme.CoreRole, _team.FraudCount),
+                score.FraudCount,
+                score.Grade,
                 Stage,
-                required,
-                accuracyPercent,
-                StageAccuracyRule.IsClear(accuracyPercent),
-                BuildScheduleResult());
+                score.RequiredSkills,
+                score.AccuracyPercent,
+                score.IsClear,
+                schedule);
         }
-
-        InterviewScheduleResult BuildScheduleResult()
-        {
-            var members = Team.Members;
-            var participants = new ParticipantScheduleResult[members.Count];
-            for (int i = 0; i < participants.Length; i++)
-            {
-                var applicant = members[i].Applicant;
-                participants[i] = new ParticipantScheduleResult(applicant.Name, applicant.UnavailableSchedule, ProjectSchedule);
-            }
-            return new InterviewScheduleResult(ProjectSchedule, participants);
-        }
-
         static StageDefinition Require(StageDefinition stage)
         {
             if (stage == null)
@@ -202,9 +194,10 @@ namespace Ohabjizol.Interview
             {
                 var source = applicants[i] ?? throw new ArgumentException("An applicant cannot be null.", nameof(applicants));
                 var unavailable = MonthlySchedule.CreateRandom(random.Next(1, 3), random);
-                copy[i] = new Applicant(source.Name, source.PrimaryRole, source.DisplayedSkills, source.ActualSkills,
+                copy[i] = new Applicant(source.Name, source.PrimaryRole, source.ExpectedSkills, source.ActualSkills,
                     source.Documents, source.Kind, source.TruePortfolioQuality,
-                    PortfolioQualityRule.CreateFake(source.TruePortfolioQuality, random), unavailable);
+                    PortfolioQualityRule.CreateFake(source.TruePortfolioQuality, random), unavailable,
+                    source.FakeSkills, source.FakeRoleMetadata, source.CharacterId);
             }
             return copy;
         }

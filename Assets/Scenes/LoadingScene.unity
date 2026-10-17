@@ -169,9 +169,9 @@ MonoBehaviour:
   nextSceneName: InterviewScene
   transition: {fileID: 200004}
   loadingUiOverride: {fileID: 1961587514}
-  bootText: "SYSTEM BOOTING\u2026"
-  waitText: "PLEASE WAIT\u2026"
-  completeText: LOADING COMPLETE
+  bootText: "\uCCAD\uAC15\uCF54\uB4DC \uC2E4\uD589 \uC911\u2026"
+  waitText: "\uC11C\uBC84\uC5D0 \uC5F0\uACB0\uD558\uB294 \uC911\u2026"
+  completeText: "\uC5F0\uACB0 \uC644\uB8CC"
   completeHoldDuration: 0.75
   showPercent: 1
   labelPulseSpeed: 2.2

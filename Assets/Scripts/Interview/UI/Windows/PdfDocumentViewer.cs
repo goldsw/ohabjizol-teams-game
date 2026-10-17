@@ -11,6 +11,7 @@ namespace Ohabjizol.Interview
         [SerializeField] Image bodyImage;
         [SerializeField] Text documentTitle;
         [SerializeField] RectTransform portfolioHost;
+        [SerializeField] ApplicantStatsView applicantStats;
         ApplicantDocumentPacket packet;
         DocumentKind kind;
         PortfolioSpriteCatalog catalog;
@@ -130,6 +131,12 @@ namespace Ohabjizol.Interview
         public override void Refresh()
         {
             bool portfolio = packet != null && kind == DocumentKind.Portfolio;
+            if (applicantStats != null)
+            {
+                bool application = kind == DocumentKind.Application;
+                applicantStats.gameObject.SetActive(application);
+                applicantStats.Bind(application && packet != null ? packet.DisplayedSkills : null);
+            }
             string heading = kind == DocumentKind.Application ? "지원서" : "포트폴리오";
             Title = heading;
             if (documentTitle != null)
@@ -146,6 +153,43 @@ namespace Ohabjizol.Interview
             }
             if (portfolioHost != null) portfolioHost.gameObject.SetActive(hasCard);
         }
+
+#if UNITY_EDITOR
+        /// <summary>Adds only a stats row block to the existing document scroll layout.</summary>
+        public void BakeApplicantStatsUi(Font font)
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Stats authoring requires EditMode.");
+            if (!bodyText || !font) throw new InvalidOperationException("Authored document body and persistent font required.");
+            if (applicantStats)
+            {
+                if (!applicantStats.HasAuthoredUi) throw new InvalidOperationException("PDF stats references are incomplete.");
+                return;
+            }
+            var content = bodyText.transform.parent as RectTransform;
+            if (!content || !content.GetComponent<VerticalLayoutGroup>())
+                throw new InvalidOperationException("The authored PDF body must be inside its vertical scroll layout.");
+            Transform existing = content.Find("ApplicantStats");
+            if (existing)
+            {
+                applicantStats = existing.GetComponent<ApplicantStatsView>();
+                if (!applicantStats || !applicantStats.HasAuthoredUi)
+                    throw new InvalidOperationException("Existing PDF stats require authored references.");
+            }
+            else
+            {
+                var host = new GameObject("ApplicantStats", typeof(RectTransform), typeof(LayoutElement));
+                host.transform.SetParent(content, false);
+                host.transform.SetAsFirstSibling();
+                var size = host.GetComponent<LayoutElement>();
+                size.minHeight = size.preferredHeight = 160f;
+                size.flexibleHeight = 0f;
+                applicantStats = host.AddComponent<ApplicantStatsView>();
+                applicantStats.BakeAuthoredUi(font, bodyText.color, 20);
+                applicantStats.gameObject.SetActive(false);
+            }
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
 
         void ClearCard()
         {

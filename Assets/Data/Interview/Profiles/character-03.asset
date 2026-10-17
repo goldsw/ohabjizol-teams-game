@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f96901bdb074cc0b7733cf2c92362b2, type: 3}
+  m_Name: character-03
+  m_EditorClassIdentifier: Assembly-CSharp::Ohabjizol.Interview.ApplicantProfileAsset
+  characterId: character-03
+  displayName: "\uCE90\uB9AD\uD130 03"
+  sourceSheet: Sheet1
+  sourceRow: 44
+  roleProfiles:
+  - role: 0
+    roleCell: B47
+    fakeRoleMetadata: "\uAE30\uD68D"
+    observedSourceCellsJson: "[{\r\n              \"cell\": \"B47\",\r\n             
+      \"value\": \"\uAE30\uD68D\",\r\n              \"formula\": null,\r\n             
+      \"cachedValue\": null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"G47\",\r\n              \"value\": \"\uAE30\uD68D\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            },{\r\n              \"cell\": \"C47\",\r\n             
+      \"value\": \"6~10\",\r\n              \"formula\": null,\r\n              \"cachedValue\":
+      null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"D47\",\r\n              \"value\": \"2~6\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"E47\",\r\n              \"value\": \"5~9\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            },{\r\n              \"cell\": \"H47\",\r\n             
+      \"value\": \"1~7\",\r\n              \"formula\": null,\r\n              \"cachedValue\":
+      null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"I47\",\r\n              \"value\": \"1~3\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"J47\",\r\n              \"value\": \"1~6\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            }]"
+    baseStatRanges:
+      planning:
+        min: 6
+        max: 10
+        raw: 6~10
+        cell: C47
+        blank: 0
+      programming:
+        min: 2
+        max: 6
+        raw: 2~6
+        cell: D47
+        blank: 0
+      graphics:
+        min: 5
+        max: 9
+        raw: 5~9
+        cell: E47
+        blank: 0
+    fakeStatRanges:
+      planning:
+        min: 1
+        max: 7
+        raw: 1~7
+        cell: H47
+        blank: 0
+      programming:
+        min: 1
+        max: 3
+        raw: 1~3
+        cell: I47
+        blank: 0
+      graphics:
+        min: 1
+        max: 6
+        raw: 1~6
+        cell: J47
+        blank: 0
+  - role: 1
+    roleCell: B48
+    fakeRoleMetadata: "\uD504\uB85C\uADF8\uB798\uBC0D"
+    observedSourceCellsJson: "[{\r\n              \"cell\": \"B48\",\r\n             
+      \"value\": \"\uD504\uB85C\uADF8\uB798\uBC0D\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"G48\",\r\n              \"value\": \"\uD504\uB85C\uADF8\uB798\uBC0D\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            },{\r\n              \"cell\": \"C48\",\r\n             
+      \"value\": \"2~6\",\r\n              \"formula\": null,\r\n              \"cachedValue\":
+      null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"D48\",\r\n              \"value\": \"7~10\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"E48\",\r\n              \"value\": \"5~9\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            },{\r\n              \"cell\": \"H48\",\r\n             
+      \"value\": \"1~3\",\r\n              \"formula\": null,\r\n              \"cachedValue\":
+      null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"I48\",\r\n              \"value\": \"2~7\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"J48\",\r\n              \"value\": \"1~6\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            }]"
+    baseStatRanges:
+      planning:
+        min: 2
+        max: 6
+        raw: 2~6
+        cell: C48
+        blank: 0
+      programming:
+        min: 7
+        max: 10
+        raw: 7~10
+        cell: D48
+        blank: 0
+      graphics:
+        min: 5
+        max: 9
+        raw: 5~9
+        cell: E48
+        blank: 0
+    fakeStatRanges:
+      planning:
+        min: 1
+        max: 3
+        raw: 1~3
+        cell: H48
+        blank: 0
+      programming:
+        min: 2
+        max: 7
+        raw: 2~7
+        cell: I48
+        blank: 0
+      graphics:
+        min: 1
+        max: 6
+        raw: 1~6
+        cell: J48
+        blank: 0
+  - role: 2
+    roleCell: B49
+    fakeRoleMetadata: "\uC544\uD2B8"
+    observedSourceCellsJson: "[{\r\n              \"cell\": \"B49\",\r\n             
+      \"value\": \"\uC544\uD2B8\",\r\n              \"formula\": null,\r\n             
+      \"cachedValue\": null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"G49\",\r\n              \"value\": \"\uC544\uD2B8\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            },{\r\n              \"cell\": \"C49\",\r\n             
+      \"value\": \"5~9\",\r\n              \"formula\": null,\r\n              \"cachedValue\":
+      null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"D49\",\r\n              \"value\": \"3~7\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"E49\",\r\n              \"value\": \"7~10\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            },{\r\n              \"cell\": \"H49\",\r\n             
+      \"value\": \"1~6\",\r\n              \"formula\": null,\r\n              \"cachedValue\":
+      null,\r\n              \"blank\": false\r\n            },{\r\n             
+      \"cell\": \"I49\",\r\n              \"value\": \"1~4\",\r\n              \"formula\":
+      null,\r\n              \"cachedValue\": null,\r\n              \"blank\": false\r\n           
+      },{\r\n              \"cell\": \"J49\",\r\n              \"value\": \"2~7\",\r\n             
+      \"formula\": null,\r\n              \"cachedValue\": null,\r\n             
+      \"blank\": false\r\n            }]"
+    baseStatRanges:
+      planning:
+        min: 5
+        max: 9
+        raw: 5~9
+        cell: C49
+        blank: 0
+      programming:
+        min: 3
+        max: 7
+        raw: 3~7
+        cell: D49
+        blank: 0
+      graphics:
+        min: 7
+        max: 10
+        raw: 7~10
+        cell: E49
+        blank: 0
+    fakeStatRanges:
+      planning:
+        min: 1
+        max: 6
+        raw: 1~6
+        cell: H49
+        blank: 0
+      programming:
+        min: 1
+        max: 4
+        raw: 1~4
+        cell: I49
+        blank: 0
+      graphics:
+        min: 2
+        max: 7
+        raw: 2~7
+        cell: J49
+        blank: 0
+  truePortfolioQuality: 0

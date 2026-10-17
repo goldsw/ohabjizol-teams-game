@@ -16,7 +16,10 @@ namespace Ohabjizol.Interview
             IReadOnlyList<ApplicantDocument> documents,
             ApplicantKind kind, PortfolioDisplayState truePortfolioQuality = PortfolioDisplayState.Normal,
             PortfolioDisplayState? fakePortfolioQuality = null,
-            MonthlySchedule unavailableSchedule = default(MonthlySchedule))
+            MonthlySchedule unavailableSchedule = default(MonthlySchedule),
+            SkillSet fakeSkills = null,
+            string fakeRoleMetadata = null,
+            string characterId = null)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("An applicant needs a name.", nameof(name));
@@ -36,7 +39,10 @@ namespace Ohabjizol.Interview
             FakePortfolioQuality = fakePortfolioQuality;
             Name = name;
             PrimaryRole = primaryRole;
-            DisplayedSkills = displayedSkills;
+            ExpectedSkills = displayedSkills;
+            FakeSkills = fakeSkills;
+            FakeRoleMetadata = fakeRoleMetadata;
+            CharacterId = characterId;
             ActualSkills = actualSkills;
             Documents = new ApplicantDocument[]
             {
@@ -52,7 +58,17 @@ namespace Ohabjizol.Interview
 
         public JobRole PrimaryRole { get; }
 
-        public SkillSet DisplayedSkills { get; }
+        public SkillSet ExpectedSkills { get; }
+
+        public SkillSet FakeSkills { get; }
+
+        public string FakeRoleMetadata { get; }
+
+        public string CharacterId { get; }
+
+        public bool HasFakeSkills => FakeSkills != null;
+
+        public SkillSet DisplayedSkills => FakeSkills ?? ExpectedSkills;
 
         public SkillSet ActualSkills { get; }
 

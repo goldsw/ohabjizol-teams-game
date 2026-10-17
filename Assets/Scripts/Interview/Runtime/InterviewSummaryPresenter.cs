@@ -5,15 +5,18 @@ namespace Ohabjizol.Interview
     public sealed class InterviewSummaryPresenter
     {
         readonly StageManager _stage;
+        readonly ApplicantStatsView _applicantStats;
         readonly Text _title, _stageLabel, _finished, _current, _required;
         readonly Text[] _slots;
         readonly Button _accept, _reject, _chat;
         readonly string _finishedText;
 
         public InterviewSummaryPresenter(StageManager stage, Text title, Text stageLabel, Text finished,
-            Text current, Text required, Text[] slots, Button accept, Button reject, Button chat)
+            Text current, Text required, Text[] slots, Button accept, Button reject, Button chat,
+            ApplicantStatsView applicantStats = null)
         {
             _stage = stage; _title = title; _stageLabel = stageLabel; _finished = finished;
+            _applicantStats = applicantStats;
             _current = current; _required = required; _slots = slots;
             _accept = accept; _reject = reject; _chat = chat; _finishedText = finished.text;
         }
@@ -23,16 +26,20 @@ namespace Ohabjizol.Interview
             var session = _stage.Session;
             var definition = _stage.Context.StageDefinition;
             var theme = session.Theme;
+            if (_applicantStats != null)
+                _applicantStats.Bind(session.IsFinished || session.Current == null
+                    ? null : session.Current.DisplayedSkills);
             _title.text = definition.DisplayName + (theme == null ? "" : " · 주제 " + theme.DisplayName);
             _stageLabel.text = definition.DisplayName;
-            var members = session.Team == null ? null : session.Team.Members;
+            var selectedTeam = session.ReadSelectedTeam();
+            var members = selectedTeam.Members;
             for (int i = 0; i < _slots.Length; i++)
             {
-                var person = members != null && i < members.Count && members[i] != null ? members[i].Applicant : null;
+                var person = i < members.Count ? members[i] : null;
                 _slots[i].text = person == null ? (i + 1) + "  빈 자리"
                     : (i + 1) + "  " + person.Name + "  " + JobRoleText.Korean(person.PrimaryRole);
             }
-            _current.text = SkillLine("현재", session.Team == null ? null : session.Team.DisplayedSum);
+            _current.text = SkillLine("현재", selectedTeam.DisplayedSum);
             _required.text = SkillLine("요구", theme == null ? null : theme.RequiredSkills);
             bool open = !session.IsFinished && session.Current != null && !_stage.IsDeciding;
             bool retry = _stage.CompletionPending && _stage.CompletionError != null;
