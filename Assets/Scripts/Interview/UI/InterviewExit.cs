@@ -25,7 +25,7 @@ namespace Ohabjizol.Interview
             if (result == null)
                 return;
 
-            string sceneName = _screen.HandoffSceneName;
+            string sceneName = ResultSceneRoute.For(result);
             if (string.IsNullOrEmpty(sceneName))
                 return;
 

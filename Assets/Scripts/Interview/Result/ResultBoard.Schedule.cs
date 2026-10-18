@@ -13,8 +13,15 @@ namespace Ohabjizol.Interview
         [SerializeField] Text scheduleNames;
         [SerializeField] Text[] scheduleDays = new Text[30];
 
+        Coroutine scheduleFitRoutine;
+
         void ShowSchedule(InterviewResult value)
         {
+            if (scheduleFitRoutine != null)
+            {
+                StopCoroutine(scheduleFitRoutine);
+                scheduleFitRoutine = null;
+            }
             if (scheduleRoot == null) return;
             scheduleRoot.gameObject.SetActive(value != null);
             if (value == null || scheduleSummary == null) return;
@@ -39,7 +46,6 @@ namespace Ohabjizol.Interview
             for (int i = 0; i < count; i++)
                 names.Append('\n').Append(CleanScheduleName(participants[i].ApplicantName));
             scheduleNames.text = names.ToString();
-            float height = scheduleNames.preferredHeight + 20f;
             for (int day = 1; day <= 30; day++)
             {
                 bool projectDay = schedule.ProjectSchedule.IsMarked(day);
@@ -57,12 +63,110 @@ namespace Ohabjizol.Interview
                         : unavailable ? "<color=#FFD879>×</color>" : "·");
                 }
                 scheduleDays[day - 1].text = column.ToString();
-                height = Mathf.Max(height, scheduleDays[day - 1].preferredHeight + 20f);
             }
-            scheduleContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             Canvas.ForceUpdateCanvases();
+            FitScheduleLayout(count);
+            if (Application.isPlaying && isActiveAndEnabled)
+                scheduleFitRoutine = StartCoroutine(RefitScheduleWhenSized(count));
+        }
+
+        // Shared by the runtime renderer and the editor presentation bake.
+        public void FitScheduleLayout(int participantCount)
+        {
+            if (scheduleRoot == null || scheduleScroll == null || scheduleContent == null
+                || scheduleNames == null || scheduleDays == null) return;
+
+            scheduleScroll.horizontal = true;
+            scheduleScroll.vertical = false;
+            scheduleScroll.velocity = Vector2.zero;
+            var viewport = scheduleScroll.viewport;
+            if (viewport == null) return;
+            scheduleRoot.ForceUpdateRectTransforms();
+            viewport.ForceUpdateRectTransforms();
+            float height = viewport.rect.height;
+            // Keep authored sizes when prefab/canvas geometry has not resolved yet.
+            if (viewport.rect.width <= 0f || height <= 16f || scheduleNames.font == null) return;
+
+            int rows = Mathf.Max(0, participantCount) + 2;
+            var probe = new StringBuilder();
+            for (int row = 0; row < rows; row++)
+            {
+                if (row != 0) probe.Append('\n');
+                probe.Append("가Ag■×!…");
+            }
+            string rowProbe = probe.ToString();
+            float available = height - 16f;
+            int fontSize = 22;
+            // Actual Noto font metrics determine the largest size that fits all rows.
+            for (; fontSize > 1; fontSize--)
+                if (MeasureScheduleRows(rowProbe, fontSize) <= available) break;
+
+            scheduleContent.anchorMin = new Vector2(0f, 1f);
+            scheduleContent.anchorMax = new Vector2(0f, 1f);
+            scheduleContent.pivot = new Vector2(0f, 1f);
+            scheduleContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            ApplyScheduleColumn(scheduleNames, fontSize);
+            foreach (var day in scheduleDays)
+                if (day != null) ApplyScheduleColumn(day, fontSize);
+            var position = scheduleContent.anchoredPosition;
+            position.y = 0f;
+            scheduleContent.anchoredPosition = position;
             scheduleScroll.verticalNormalizedPosition = 1f;
             scheduleScroll.horizontalNormalizedPosition = 0f;
+        }
+
+        float MeasureScheduleRows(string probe, int fontSize)
+        {
+            var settings = scheduleNames.GetGenerationSettings(Vector2.zero);
+            settings.font = scheduleNames.font;
+            settings.fontSize = fontSize;
+            settings.fontStyle = FontStyle.Normal;
+            settings.lineSpacing = 1f;
+            settings.resizeTextForBestFit = false;
+            settings.horizontalOverflow = HorizontalWrapMode.Overflow;
+            settings.verticalOverflow = VerticalWrapMode.Overflow;
+            var generator = scheduleNames.cachedTextGeneratorForLayout;
+            float height = generator.GetPreferredHeight(probe, settings);
+            height = Mathf.Max(height, generator.GetPreferredHeight(scheduleNames.text, settings));
+            foreach (var day in scheduleDays)
+                if (day != null)
+                    height = Mathf.Max(height, generator.GetPreferredHeight(day.text, settings));
+            return height / scheduleNames.pixelsPerUnit;
+        }
+
+        void ApplyScheduleColumn(Text text, int fontSize)
+        {
+            text.font = scheduleNames.font;
+            text.fontStyle = FontStyle.Normal;
+            text.fontSize = fontSize;
+            text.resizeTextForBestFit = false;
+            text.lineSpacing = 1f;
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.verticalOverflow = VerticalWrapMode.Truncate;
+            text.alignment = text == scheduleNames ? TextAnchor.UpperLeft : TextAnchor.UpperCenter;
+            var rect = text.rectTransform;
+            var min = rect.offsetMin;
+            var max = rect.offsetMax;
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 1f);
+            rect.offsetMin = new Vector2(min.x, 8f);
+            rect.offsetMax = new Vector2(max.x, -8f);
+        }
+
+        System.Collections.IEnumerator RefitScheduleWhenSized(int participantCount)
+        {
+            var previousSize = new Vector2(-1f, -1f);
+            while (scheduleRoot != null && scheduleRoot.gameObject.activeInHierarchy)
+            {
+                yield return null;
+                if (scheduleScroll == null || scheduleScroll.viewport == null) continue;
+                var size = scheduleScroll.viewport.rect.size;
+                if (size == previousSize) continue;
+                FitScheduleLayout(participantCount);
+                previousSize = scheduleScroll.viewport.rect.size;
+            }
+            scheduleFitRoutine = null;
         }
 
         static string CleanScheduleName(string value)
@@ -78,7 +182,12 @@ namespace Ohabjizol.Interview
             if (authoredRoot == null) BakeAuthoredUi();
             if (!HasAuthoredUi)
                 throw new System.InvalidOperationException("Result schedule bake requires valid ResultBoard authored UI references (title, completion, stars, totals and continue button).");
-            if (scheduleRoot != null) return;
+            if (scheduleRoot != null)
+            {
+                FitScheduleLayout(6);
+                UnityEditor.EditorUtility.SetDirty(this);
+                return;
+            }
             // Reserve the lower half for the scrollable schedule; keep existing score and actions.
             PlaceScheduleRect(titleText.rectTransform, .1f, .88f, .9f, .98f);
             PlaceScheduleRect(completionText.rectTransform, .1f, .81f, .9f, .88f);
@@ -108,7 +217,7 @@ namespace Ohabjizol.Interview
             scheduleScroll.viewport = viewport;
             scheduleScroll.content = scheduleContent;
             scheduleScroll.horizontal = true;
-            scheduleScroll.vertical = true;
+            scheduleScroll.vertical = false;
             scheduleScroll.movementType = ScrollRect.MovementType.Clamped;
             scheduleScroll.scrollSensitivity = 32f;
             scheduleNames = ScheduleText(scheduleContent, "Names", false);
@@ -121,6 +230,7 @@ namespace Ohabjizol.Interview
                 ScheduleColumn(scheduleDays[day].rectTransform, 252f + day * 40f, 40f);
             }
             scheduleSummary.text = "일정 정보 없음";
+            FitScheduleLayout(6);
             scheduleScroll.gameObject.SetActive(false);
             UnityEditor.EditorUtility.SetDirty(this);
 #endif

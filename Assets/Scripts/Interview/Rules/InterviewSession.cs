@@ -202,6 +202,13 @@ namespace Ohabjizol.Interview
                     PortfolioQualityRule.CreateFake(source.TruePortfolioQuality, random), unavailable,
                     source.FakeSkills, source.FakeRoleMetadata, source.CharacterId);
             }
+            for (int i = copy.Length - 1; i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                var swap = copy[i];
+                copy[i] = copy[j];
+                copy[j] = swap;
+            }
             return copy;
         }
 

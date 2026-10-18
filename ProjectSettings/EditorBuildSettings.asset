@@ -23,6 +23,24 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndingScene.unity
     guid: cbd4f163e13853d4b829d8f48458d618
+  - enabled: 1
+    path: Assets/Scenes/GoodEndingScene.unity
+    guid: 9796b3dfa51cef8459bfd67d4c687d7b
+  - enabled: 1
+    path: Assets/Scenes/NormalEndingScene.unity
+    guid: fcf72c5ee681a204abde0b019793d1e0
+  - enabled: 1
+    path: Assets/Scenes/BadEndingScene.unity
+    guid: 1a44f51c737b19d459fd577f15d656c2
+  - enabled: 1
+    path: Assets/Scenes/GoodResultScene.unity
+    guid: 4b3116813f84e324b9ff7b0b4ca2601c
+  - enabled: 1
+    path: Assets/Scenes/NormalResultScene.unity
+    guid: b38fbc754d8c7ef46bcd395ed9d59ce1
+  - enabled: 1
+    path: Assets/Scenes/BadResultScene.unity
+    guid: 48797713152384044a89ab4265556241
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
