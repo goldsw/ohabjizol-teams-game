@@ -51,7 +51,7 @@ namespace Ohabjizol.Interview
             var kinds = new[] { DocumentKind.Application, DocumentKind.Portfolio, DocumentKind.Schedule, DocumentKind.InterviewRecord };
             for (int i = 0; i < kinds.Length; i++)
                 documents[i] = new ApplicantDocument(kinds[i], new[] { new DocumentLine(characterId + "-" + i + "-1", displayName + " / " + roleName, false), new DocumentLine(characterId + "-" + i + "-2", "임시 지원 문서", false) });
-            return new Applicant(displayName, profile.role, expected, expected, documents, ApplicantKind.Normal,
+            return new Applicant(displayName, profile.role, expected, fake ?? expected, documents, ApplicantKind.Normal,
                 truePortfolioQuality, fakeSkills: fake, fakeRoleMetadata: profile.fakeRoleMetadata, characterId: characterId);
         }
     }

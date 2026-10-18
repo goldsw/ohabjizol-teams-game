@@ -53,6 +53,7 @@ namespace Ohabjizol.Interview
         {
 #if UNITY_EDITOR
             BakeAuthoredUi();
+            authoredRoot.GetComponent<Canvas>().sortingOrder = 100;
             BakeResultScheduleUi();
             if (selectedMemberRows == null || selectedMemberRows.Length != 6)
                 System.Array.Resize(ref selectedMemberRows, 6);

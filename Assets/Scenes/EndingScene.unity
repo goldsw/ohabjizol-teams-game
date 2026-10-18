@@ -1103,6 +1103,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2731601537848124756, guid: 3790144a46a78eb40b9d54d7d7913d61, type: 3}
+      propertyPath: m_SortingOrder
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2847819250912410913, guid: 3790144a46a78eb40b9d54d7d7913d61, type: 3}
       propertyPath: m_Name
       value: EndingBoard

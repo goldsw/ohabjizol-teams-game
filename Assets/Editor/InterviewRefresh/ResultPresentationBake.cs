@@ -37,12 +37,21 @@ public static class ResultPresentationBake
             var result = Find<ResultBoard>(resultScene);
             if (result == null) throw new InvalidOperationException("ResultScene has no ResultBoard.");
             result.BakeInspectionUi();
+            NormalizeAuthored(result);
+            foreach (var legacyRoot in resultScene.GetRootGameObjects())
+            {
+                if (legacyRoot.name == "ResultOverlay" &&
+                    legacyRoot.GetComponent<Canvas>() != null &&
+                    legacyRoot.GetComponentInChildren<ResultBoard>(true) == null)
+                    legacyRoot.SetActive(false);
+            }
             Save(resultScene, paths[0]);
             var legacyScene = Open(paths[1], opened);
             var legacy = Find<EndingBoard>(legacyScene);
             if (legacy == null) throw new InvalidOperationException("EndingScene has no EndingBoard template.");
             legacy.BakeAuthoredUi();
             Configure(legacy, false, EndingKind.Bad);
+            NormalizeAuthored(legacy);
             if (!legacy.HasAuthoredUi) throw new InvalidOperationException("Legacy EndingBoard template is incomplete.");
             Save(legacyScene, paths[1]);
             foreach (var kind in Kinds)
@@ -66,6 +75,7 @@ public static class ResultPresentationBake
                 if (board == null) throw new InvalidOperationException("Ending scene has no EndingBoard: " + path);
                 board.BakeAuthoredUi();
                 Configure(board, true, kind);
+                NormalizeAuthored(board);
                 if (!board.HasAuthoredUi) throw new InvalidOperationException("Incomplete ending UI: " + path);
                 Save(scene, path);
             }
@@ -95,6 +105,7 @@ public static class ResultPresentationBake
             var boards = root.GetComponentsInChildren<ResultBoard>(true);
             if (boards.Length != 1) throw new InvalidOperationException("Expected one ResultBoard in prefab.");
             boards[0].BakeInspectionUi();
+            NormalizeAuthored(boards[0]);
             EditorUtility.SetDirty(boards[0]);
             if (!PrefabUtility.SaveAsPrefabAsset(root, path))
                 throw new InvalidOperationException("Failed to save result inspection prefab.");
@@ -121,6 +132,45 @@ public static class ResultPresentationBake
                 found = candidate;
             }
         return found;
+    }
+
+    static void NormalizeAuthored(Component board)
+    {
+        const string fontPath = "Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf";
+        var font = AssetDatabase.LoadAssetAtPath<Font>(fontPath);
+        if (font == null || !EditorUtility.IsPersistent(font) ||
+            !AssetDatabase.Contains(font) || AssetDatabase.GetAssetPath(font) != fontPath)
+            throw new InvalidOperationException("Persistent authored UI font required: " + fontPath);
+
+        var serialized = new SerializedObject(board);
+        serialized.Update();
+        var property = serialized.FindProperty("authoredRoot");
+        var root = property == null ? null : property.objectReferenceValue as Component;
+        if (root == null)
+            throw new InvalidOperationException("Missing authoredRoot on " + board.name);
+        var authoredCanvas = root.GetComponent<Canvas>();
+        if (authoredCanvas == null)
+            throw new InvalidOperationException("Missing authored Canvas on " + board.name);
+
+        foreach (var text in root.GetComponentsInChildren<UnityEngine.UI.Text>(true))
+        {
+            text.font = font;
+            EditorUtility.SetDirty(text);
+        }
+        foreach (var image in root.GetComponentsInChildren<UnityEngine.UI.Image>(true))
+        {
+            if (image.sprite != null && !EditorUtility.IsPersistent(image.sprite))
+            {
+                image.sprite = null;
+                EditorUtility.SetDirty(image);
+            }
+        }
+        authoredCanvas.enabled = true;
+        authoredCanvas.sortingOrder = 100;
+        root.gameObject.SetActive(true);
+        EditorUtility.SetDirty(authoredCanvas);
+        EditorUtility.SetDirty(root.gameObject);
+        EditorUtility.SetDirty(board);
     }
 
     static void Configure(EndingBoard board, bool useFixedKind, EndingKind kind)

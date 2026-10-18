@@ -68,7 +68,7 @@ namespace Ohabjizol.Interview
 
         public bool HasFakeSkills => FakeSkills != null;
 
-        public SkillSet DisplayedSkills => FakeSkills ?? ExpectedSkills;
+        public SkillSet DisplayedSkills => ExpectedSkills;
 
         public SkillSet ActualSkills { get; }
 
