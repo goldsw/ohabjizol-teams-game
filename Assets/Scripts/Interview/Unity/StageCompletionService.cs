@@ -5,8 +5,9 @@ namespace Ohabjizol.Interview
 {
     public static class StageCompletionService
     {
-        internal const string JournalKey = "ohabjizol.stage-completion-journal.v1";
-        public static IReadOnlyList<string> PersistenceKeys { get; } = Array.AsReadOnly(new[] {
+        internal const string LegacyJournalKey = "ohabjizol.stage-completion-journal.v1";
+        internal static string JournalKey => StageExecutionPolicy.PersistenceKey(LegacyJournalKey);
+        public static IReadOnlyList<string> PersistenceKeys => Array.AsReadOnly(new[] {
             StageProgressStore.LegacyKey, StageProgressStore.Key, StageProgressStore.BackupKey,
             CampaignRunStore.Key, JournalKey });
 

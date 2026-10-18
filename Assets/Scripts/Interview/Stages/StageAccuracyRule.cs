@@ -11,6 +11,18 @@ namespace Ohabjizol.Interview
 
         public static int Percent(SkillSet actual, SkillSet required)
         {
+            return FloorPercent(RawPercent(actual, required));
+        }
+
+        internal static int FloorPercent(double rawPercent)
+        {
+            double clamped = Math.Max(0d, Math.Min(100d, rawPercent));
+            // Correct integer boundary noise without promoting a near-perfect score.
+            return Math.Min(clamped < 100d ? 99 : 100, (int)Math.Floor(clamped + 1e-12d));
+        }
+
+        public static double RawPercent(SkillSet actual, SkillSet required)
+        {
             if (actual == null)
                 throw new ArgumentNullException(nameof(actual));
             if (required == null)
@@ -25,7 +37,7 @@ namespace Ohabjizol.Interview
                 return 100;
 
             double average = total / counted;
-            return (int)Math.Round(100d * (1d - average), MidpointRounding.AwayFromZero);
+            return Math.Max(0d, Math.Min(100d, 100d * (1d - average)));
         }
 
         public static bool IsClear(int percent)

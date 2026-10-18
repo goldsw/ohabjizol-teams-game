@@ -35,6 +35,8 @@ namespace Ohabjizol.Interview
             _workspace.BindApplicant(applicant == null ? null : ApplicantPresentationFactory.Create(applicant, key, state));
         }
 
+        public void TickDownloads(float deltaTime) { if (_panel) _panel.TickDownloads(deltaTime); }
+
         public void Open() { if (_hasApplicant) _panel.Open(); }
         public void Suspend() { _panel.CloseImmediate(); _workspace.CloseWindows(); }
         public void Clear()

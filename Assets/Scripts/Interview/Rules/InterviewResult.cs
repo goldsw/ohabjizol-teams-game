@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Ohabjizol.Interview
 {
@@ -18,7 +19,9 @@ namespace Ohabjizol.Interview
             SkillSet requiredSkills,
             int accuracyPercent,
             bool isCleared,
-            InterviewScheduleResult scheduleResult = null)
+            InterviewScheduleResult scheduleResult = null,
+            double? rawAccuracyPercent = null,
+            IReadOnlyList<SelectedTeamResultMember> selectedMembers = null)
         {
             if (actualSkills == null)
                 throw new ArgumentNullException(nameof(actualSkills));
@@ -33,7 +36,13 @@ namespace Ohabjizol.Interview
             Grade = grade;
             Stage = stage;
             RequiredSkills = requiredSkills;
-            AccuracyPercent = accuracyPercent;
+            RawAccuracyPercent = rawAccuracyPercent ?? accuracyPercent;
+            AccuracyPercent = StageAccuracyRule.FloorPercent(RawAccuracyPercent);
+            HalfStarUnits = StarRatingRule.HalfUnits(AccuracyPercent);
+            var memberCopy = new SelectedTeamResultMember[selectedMembers == null ? 0 : selectedMembers.Count];
+            for (int i = 0; i < memberCopy.Length; i++)
+                memberCopy[i] = selectedMembers[i];
+            SelectedMembers = Array.AsReadOnly(memberCopy);
             IsCleared = isCleared;
             ScheduleResult = scheduleResult ?? new InterviewScheduleResult(default(MonthlySchedule), Array.Empty<ParticipantScheduleResult>());
         }
@@ -55,6 +64,12 @@ namespace Ohabjizol.Interview
         public SkillSet RequiredSkills { get; }
 
         public int AccuracyPercent { get; }
+
+        public double RawAccuracyPercent { get; }
+
+        public int HalfStarUnits { get; }
+
+        public IReadOnlyList<SelectedTeamResultMember> SelectedMembers { get; }
 
         public bool IsCleared { get; }
 

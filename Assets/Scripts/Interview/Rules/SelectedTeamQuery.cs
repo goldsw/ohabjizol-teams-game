@@ -17,7 +17,8 @@ namespace Ohabjizol.Interview
                 var applicant = member.Applicant;
                 captured[i] = new SelectedApplicantSnapshot(member.JoinOrder, applicant.CharacterId,
                     applicant.Name, applicant.PrimaryRole, applicant.ActualSkills,
-                    applicant.DisplayedSkills, applicant.Kind, applicant.UnavailableSchedule);
+                    applicant.DisplayedSkills, applicant.Kind, applicant.UnavailableSchedule,
+                    applicant.TruePortfolioQuality, applicant.FakePortfolioQuality);
             }
             return new SelectedTeamSnapshot(captured);
         }

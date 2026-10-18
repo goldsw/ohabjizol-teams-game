@@ -23,7 +23,9 @@ namespace Ohabjizol.Interview
     {
         internal SelectedApplicantSnapshot(int joinOrder, string characterId, string name,
             JobRole primaryRole, SkillSet actualSkills, SkillSet displayedSkills,
-            ApplicantKind kind, MonthlySchedule unavailableSchedule)
+            ApplicantKind kind, MonthlySchedule unavailableSchedule,
+            PortfolioDisplayState truePortfolioQuality = PortfolioDisplayState.Normal,
+            PortfolioDisplayState? fakePortfolioQuality = null)
         {
             JoinOrder = joinOrder;
             CharacterId = characterId;
@@ -33,6 +35,8 @@ namespace Ohabjizol.Interview
             ActualSkills = actualSkills;
             DisplayedSkills = displayedSkills;
             Kind = kind;
+            TruePortfolioQuality = truePortfolioQuality;
+            FakePortfolioQuality = fakePortfolioQuality;
             _unavailableSchedule = SelectedScheduleSnapshot.Copy(unavailableSchedule);
         }
 
@@ -43,6 +47,8 @@ namespace Ohabjizol.Interview
         internal SkillSet ActualSkills { get; }
         internal SkillSet DisplayedSkills { get; }
         internal ApplicantKind Kind { get; }
+        internal PortfolioDisplayState TruePortfolioQuality { get; }
+        internal PortfolioDisplayState? FakePortfolioQuality { get; }
 
         readonly MonthlySchedule _unavailableSchedule;
         internal MonthlySchedule UnavailableSchedule => SelectedScheduleSnapshot.Copy(_unavailableSchedule);

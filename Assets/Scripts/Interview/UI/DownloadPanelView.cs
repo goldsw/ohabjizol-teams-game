@@ -18,45 +18,33 @@ namespace Ohabjizol.Interview
         [SerializeField, Range(.2f, 1f)] float _minimumDownloadSeconds = .2f;
         [SerializeField, Range(.2f, 1f)] float _maximumDownloadSeconds = 1f;
         Coroutine _slide;
-        Coroutine _applicationDownload, _portfolioDownload;
-        bool _applicationPending, _portfolioPending, _applicationCompleted, _portfolioCompleted;
-        string _applicantKey;
-        int _generation;
+        readonly DocumentDownloadController _downloads = new DocumentDownloadController();
         public event Action<DocumentDownloadRequest> DownloadCompleted;
 
         public void ConfigureProgressEditor(Image applicationFill, Image portfolioFill)
         {
             _applicationFill = applicationFill;
             _portfolioFill = portfolioFill;
-            SetProgress(_applicationFill, _applicationCompleted ? 1f : 0f);
-            SetProgress(_portfolioFill, _portfolioCompleted ? 1f : 0f);
+            RenderProgress();
         }
 
-        public void BindContext(string key)
+        public void BindContext(string key) { _downloads.BindContext(key); RenderProgress(); }
+        public bool IsCurrent(DocumentDownloadRequest request) => _downloads.IsCurrent(request);
+        public void CancelPending() { _downloads.CancelPending(); RenderProgress(); }
+        public void TickDownloads(float deltaTime) { _downloads.Tick(deltaTime); RenderProgress(); }
+
+        void RenderProgress()
         {
-            CancelPending();
-            if (!string.Equals(_applicantKey, key, StringComparison.Ordinal))
-            {
-                _applicationCompleted = _portfolioCompleted = false;
-                SetProgress(_applicationFill, 0f);
-                SetProgress(_portfolioFill, 0f);
-            }
-            _applicantKey = key;
+            SetProgress(_applicationFill, _downloads.Progress(DocumentKind.Application));
+            SetProgress(_portfolioFill, _downloads.Progress(DocumentKind.Portfolio));
         }
 
-        public bool IsCurrent(DocumentDownloadRequest request) =>
-            request != null && request.Generation == _generation &&
-            string.Equals(request.ApplicantKey, _applicantKey, StringComparison.Ordinal);
-
-        public void CancelPending()
+        void OnDownloadCompleted(DocumentDownloadRequest request)
         {
-            unchecked { ++_generation; }
-            if (_applicationDownload != null) StopCoroutine(_applicationDownload);
-            if (_portfolioDownload != null) StopCoroutine(_portfolioDownload);
-            _applicationDownload = _portfolioDownload = null;
-            _applicationPending = _portfolioPending = false;
-            SetProgress(_applicationFill, _applicationCompleted ? 1f : 0f);
-            SetProgress(_portfolioFill, _portfolioCompleted ? 1f : 0f);
+            DownloadCompleted?.Invoke(request);
+            if (!IsCurrent(request)) return;
+            if (request.Kind == DocumentKind.Application) ApplicationRequested?.Invoke();
+            else PortfolioRequested?.Invoke();
         }
 
         static void SetProgress(Image fill, float progress)
@@ -71,55 +59,11 @@ namespace Ohabjizol.Interview
 
         void BeginDownload(DocumentKind kind)
         {
-            if (!isActiveAndEnabled || string.IsNullOrEmpty(_applicantKey)) return;
-            bool application = kind == DocumentKind.Application;
-            if (application ? _applicationPending || _applicationCompleted : _portfolioPending || _portfolioCompleted) return;
-            var request = new DocumentDownloadRequest(_applicantKey, _generation, kind);
+            if (!isActiveAndEnabled) return;
             float minimum = Mathf.Clamp(_minimumDownloadSeconds, .2f, 1f);
             float maximum = Mathf.Clamp(_maximumDownloadSeconds, minimum, 1f);
-            if (application)
-            {
-                _applicationPending = true;
-                _applicationDownload = StartCoroutine(Download(request, UnityEngine.Random.Range(minimum, maximum)));
-            }
-            else
-            {
-                _portfolioPending = true;
-                _portfolioDownload = StartCoroutine(Download(request, UnityEngine.Random.Range(minimum, maximum)));
-            }
-        }
-
-        IEnumerator Download(DocumentDownloadRequest request, float duration)
-        {
-            bool application = request.Kind == DocumentKind.Application;
-            Image fill = application ? _applicationFill : _portfolioFill;
-            float elapsed = 0f;
-            SetProgress(fill, 0f);
-            while (elapsed < duration)
-            {
-                yield return null;
-                if (!IsCurrent(request)) yield break;
-                elapsed += Time.unscaledDeltaTime;
-                SetProgress(fill, elapsed / duration);
-            }
-            if (!IsCurrent(request)) yield break;
-            SetProgress(fill, 1f);
-            if (application)
-            {
-                _applicationPending = false;
-                _applicationCompleted = true;
-                _applicationDownload = null;
-            }
-            else
-            {
-                _portfolioPending = false;
-                _portfolioCompleted = true;
-                _portfolioDownload = null;
-            }
-            DownloadCompleted?.Invoke(request);
-            if (!IsCurrent(request)) yield break;
-            if (application) ApplicationRequested?.Invoke();
-            else PortfolioRequested?.Invoke();
+            _downloads.Begin(kind, UnityEngine.Random.Range(minimum, maximum));
+            RenderProgress();
         }
         public event Action ApplicationRequested;
         public event Action PortfolioRequested;
@@ -132,24 +76,27 @@ namespace Ohabjizol.Interview
         void Awake()
         {
             if (!HasAuthoredUi) { Debug.LogError("DownloadPanelView: missing authored references.", this); enabled = false; return; }
+            _downloads.Completed += OnDownloadCompleted;
             _applicationButton.onClick.AddListener(RequestApplication);
             _portfolioButton.onClick.AddListener(RequestPortfolio);
             _closeButton.onClick.AddListener(Close);
         }
         void OnDestroy()
         {
+            _downloads.CancelPending();
+            _downloads.Completed -= OnDownloadCompleted;
             if (_applicationButton) _applicationButton.onClick.RemoveListener(RequestApplication);
             if (_portfolioButton) _portfolioButton.onClick.RemoveListener(RequestPortfolio);
             if (_closeButton) _closeButton.onClick.RemoveListener(Close);
         }
+        void OnEnable() { RenderProgress(); }
         void OnDisable() { CloseImmediate(); }
         void RequestApplication() => BeginDownload(DocumentKind.Application);
         void RequestPortfolio() => BeginDownload(DocumentKind.Portfolio);
         public void Open() => MoveTo(_openPosition);
-        public void Close() { CancelPending(); MoveTo(_closedPosition); }
+        public void Close() { MoveTo(_closedPosition); }
         public void CloseImmediate()
         {
-            CancelPending();
             if (_slide != null) StopCoroutine(_slide);
             _slide = null;
             if (_panelRect) _panelRect.anchoredPosition = _closedPosition;

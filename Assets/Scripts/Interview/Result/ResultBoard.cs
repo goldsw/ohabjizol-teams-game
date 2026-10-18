@@ -42,6 +42,7 @@ namespace Ohabjizol.Interview
         {
             result = null;
             ShowSchedule(null);
+            ShowInspection(null);
             if (!HasAuthoredUi) return;
             titleText.text = "결과 준비중";
             completionText.text = string.Empty;
@@ -54,14 +55,15 @@ namespace Ohabjizol.Interview
             if (value == null) throw new ArgumentNullException(nameof(value));
             result = value;
             ShowSchedule(value);
+            ShowInspection(value);
             if (!HasAuthoredUi) return;
             var run = CampaignRunStore.Load();
             titleText.text = StageCatalog.Get(value.Stage).DisplayName;
             completionText.text = value.IsCleared ? "완료 · 클리어" : "완료";
-            totalStarsText.text = "이번 단계 " + Stars(StarRatingRule.HalfUnits(value.AccuracyPercent))
-                + "별\n누적 " + Stars(run.TotalHalfStars) + " / 20별";
+            totalStarsText.text = "이번 단계 " + Stars(value.HalfStarUnits)
+                + " / 5별\n누적 " + Stars(run.TotalHalfStars) + " / " + (StageExecutionPolicy.ActiveStages.Count * 5) + "별";
             continueText.text = run.IsComplete ? "엔딩 보기" : "메인으로";
-            SetStars(StarRatingRule.HalfUnits(value.AccuracyPercent));
+            SetStars(value.HalfStarUnits);
         }
         static string Stars(int halves) => (halves / 2).ToString() + (halves % 2 == 0 ? "" : ".5");
         void SetStars(int halves)
@@ -83,8 +85,8 @@ namespace Ohabjizol.Interview
         }
         void Continue()
         {
-            bool complete = result != null && CampaignRunStore.Load().IsComplete;
-            SceneManager.LoadScene(complete ? "EndingScene" : "MainMenuScene", LoadSceneMode.Single);
+            var run = CampaignRunStore.Load();
+            SceneManager.LoadScene(result != null && run.IsComplete ? EndingSceneRoute.For(run.Ending) : "MainMenuScene", LoadSceneMode.Single);
         }
         public void BakeAuthoredUi()
         {

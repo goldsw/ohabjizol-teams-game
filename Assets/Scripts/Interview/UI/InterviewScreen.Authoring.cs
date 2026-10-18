@@ -18,7 +18,7 @@ namespace Ohabjizol.Interview
             }
             if (!_questionCatalog)
                 throw new InvalidOperationException("Bake prerequisite: parent-created and seeded QuestionCatalog.asset.");
-            if (HasAuthoredUi) return;
+            if (HasAuthoredUi) { BakeTeamWindow(); return; }
             if (_discordViewRoot) throw new InvalidOperationException("Existing authored view is incomplete. Assign missing references before baking again.");
             var itemAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/InterviewRefresh/Documents/PdfTaskbarItem.prefab");
             _itemPrefab = itemAsset ? itemAsset.GetComponent<DocumentTaskbarItem>() : null;
@@ -47,8 +47,8 @@ namespace Ohabjizol.Interview
             var team = UiKit.Image(_discordViewRoot, "TeamSummary", new Color(.07f, .08f, .1f, .94f));
             UiKit.Place(team.rectTransform, .02f, .16f, .26f, .91f);
             Label(team.transform, "TeamTitle", "팀", .06f, .88f, .94f, .98f, 26);
-            _slotLabels = new Text[4];
-            for (int i = 0; i < 4; i++) _slotLabels[i] = Label(team.transform, "Slot" + i, "빈 자리", .06f, .72f - i * .16f, .94f, .86f - i * .16f, 18);
+            _slotLabels = new Text[6];
+            for (int i = 0; i < _slotLabels.Length; i++) _slotLabels[i] = Label(team.transform, "Slot" + i, "빈 자리", .06f, .76f - i * .11f, .94f, .86f - i * .11f, 18);
             _currentLabel = Label(team.transform, "Current", "현재", .06f, .1f, .94f, .2f, 16);
             _requiredLabel = Label(team.transform, "Required", "요구", .06f, .01f, .94f, .1f, 16);
             var main = Rect(_discordViewRoot, "MainVideo", .29f, .39f, .75f, .89f);
@@ -114,6 +114,7 @@ namespace Ohabjizol.Interview
             UiKit.Place(_discordButton.GetComponent<RectTransform>(), .19f, .1f, .28f, .9f);
             _itemParent = Rect(taskbar.transform, "DownloadedItems", .29f, .1f, .79f, .9f);
             _stageLabel = Label(taskbar.transform, "Stage", "Stage", .8f, .1f, .99f, .9f, 18);
+            BakeTeamWindow();
             SetDiscordVisible(discordVisible);
             UnityEditor.EditorUtility.SetDirty(this);
         }

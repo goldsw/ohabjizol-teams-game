@@ -11,7 +11,7 @@ namespace Ohabjizol.Interview
     {
         readonly Applicant[] _applicants;
         readonly InterviewCursor _cursor = new InterviewCursor();
-        readonly TeamRoster _team = new TeamRoster();
+        readonly TeamRoster _team;
         string _selectedLineId;
         int _verificationSuccessCount;
         int _verificationFailureCount;
@@ -33,13 +33,14 @@ namespace Ohabjizol.Interview
                 throw new ArgumentNullException(nameof(theme));
 
             Stage = stage;
+            _team = new TeamRoster(StageExecutionPolicy.TeamCapacity(stage));
             Theme = theme;
             RandomSource = random ?? new Random();
             ProjectSchedule = MonthlySchedule.CreateRandom(productionDays, RandomSource);
             _applicants = CopyApplicants(applicants, RandomSource);
             if (_applicants.Length == 0)
             {
-                _cursor.Advance(0, 0);
+                _cursor.Advance(0, 0, _team.Capacity);
                 BuildResult();
             }
         }
@@ -125,7 +126,7 @@ namespace Ohabjizol.Interview
             Accumulate(VerificationRule.Evaluate(current, _selectedLineId));
             _team.TryAdd(current);
             _selectedLineId = null;
-            _cursor.Advance(_applicants.Length, _team.Count);
+            _cursor.Advance(_applicants.Length, _team.Count, _team.Capacity);
             if (_cursor.IsFinished)
                 BuildResult();
         }
@@ -141,7 +142,7 @@ namespace Ohabjizol.Interview
 
             Accumulate(VerificationRule.Evaluate(current, _selectedLineId));
             _selectedLineId = null;
-            _cursor.Advance(_applicants.Length, _team.Count);
+            _cursor.Advance(_applicants.Length, _team.Count, _team.Capacity);
             if (_cursor.IsFinished)
                 BuildResult();
         }
@@ -175,7 +176,9 @@ namespace Ohabjizol.Interview
                 score.RequiredSkills,
                 score.AccuracyPercent,
                 score.IsClear,
-                schedule);
+                schedule,
+                score.RawAccuracyPercent,
+                SelectedTeamResultProjection.Project(snapshot));
         }
         static StageDefinition Require(StageDefinition stage)
         {

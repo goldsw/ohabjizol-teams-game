@@ -13,20 +13,22 @@ namespace Ohabjizol.Interview
             RunId = runId;
         }
         public string RunId { get; }
-        // After completion this remains ThirdYear; callers must check IsComplete first.
+        // After completion this remains the last active stage; callers must check IsComplete first.
         public StageId NextStage
         {
             get
             {
-                for (int i = 0; i < StageCount; i++) if (!completed[i]) return (StageId)i;
-                return StageId.ThirdYear;
+                var stages = StageExecutionPolicy.ActiveStages;
+                for (int i = 0; i < stages.Count; i++) if (!completed[(int)stages[i]]) return stages[i];
+                return stages[stages.Count - 1];
             }
         }
         public bool IsComplete
         {
             get
             {
-                for (int i = 0; i < StageCount; i++) if (!completed[i]) return false;
+                var stages = StageExecutionPolicy.ActiveStages;
+                for (int i = 0; i < stages.Count; i++) if (!completed[(int)stages[i]]) return false;
                 return true;
             }
         }
@@ -35,18 +37,26 @@ namespace Ohabjizol.Interview
             get
             {
                 int sum = 0;
-                for (int i = 0; i < StageCount; i++) if (completed[i]) sum += StarRatingRule.HalfUnits(percentages[i]);
+                var stages = StageExecutionPolicy.ActiveStages;
+                for (int i = 0; i < stages.Count; i++)
+                {
+                    int index = (int)stages[i];
+                    if (completed[index]) sum += StarRatingRule.HalfUnits(percentages[index]);
+                }
                 return sum;
             }
         }
-        // A provisional ending until all four stages are complete.
+        // A provisional ending until all active stages are complete.
+        // Thresholds use the original 40-half-unit scale, preserving 90%/70% defaults.
         public EndingKind Ending => ResolveEnding();
-        public EndingKind ResolveEnding(int goodHalfThreshold = 30, int normalHalfThreshold = 20)
+        public EndingKind ResolveEnding(int goodHalfThreshold = 36, int normalHalfThreshold = 28)
         {
             if (normalHalfThreshold < 0 || goodHalfThreshold < normalHalfThreshold || goodHalfThreshold > 40)
                 throw new ArgumentOutOfRangeException(nameof(goodHalfThreshold));
-            return TotalHalfStars >= goodHalfThreshold ? EndingKind.Good
-                : TotalHalfStars >= normalHalfThreshold ? EndingKind.Normal : EndingKind.Bad;
+            int scaledTotal = TotalHalfStars * StageCount;
+            int activeCount = StageExecutionPolicy.ActiveStages.Count;
+            return scaledTotal >= goodHalfThreshold * activeCount ? EndingKind.Good
+                : scaledTotal >= normalHalfThreshold * activeCount ? EndingKind.Normal : EndingKind.Bad;
         }
         public bool IsCompleted(StageId stage) => completed[Index(stage)];
         internal int Accuracy(StageId stage) => percentages[Index(stage)];

@@ -4,7 +4,8 @@ namespace Ohabjizol.Interview
 {
     public static class CampaignRunStore
     {
-        internal const string Key = "ohabjizol.campaign-run.v1";
+        internal const string LegacyKey = "ohabjizol.campaign-run.v1";
+        internal static string Key => StageExecutionPolicy.PersistenceKey(LegacyKey);
         public static CampaignRunProgress Load()
         {
             StageCompletionService.RecoverPending();

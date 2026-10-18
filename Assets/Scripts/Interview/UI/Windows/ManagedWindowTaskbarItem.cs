@@ -29,7 +29,7 @@ namespace Ohabjizol.Interview
         }
         public void Refresh()
         {
-            if (background) background.color = window != null && window.IsActive
+            if (background) background.color = window != null && window.IsVisible
                 ? new Color32(255, 174, 76, 255) : new Color32(166, 159, 152, 255);
         }
         void Click()

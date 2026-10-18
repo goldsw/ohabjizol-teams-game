@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 namespace Ohabjizol.Interview
 {
     /// <summary>
-    /// Up to four members. Displayed and actual skill sums stay separate.
+    /// Stage-specific capacity. Displayed and actual skill sums stay separate.
     /// </summary>
     public sealed class TeamRoster
     {
@@ -16,10 +16,17 @@ namespace Ohabjizol.Interview
         SkillSet _displayedSum = SkillSet.Zero;
         SkillSet _actualSum = SkillSet.Zero;
 
-        public TeamRoster()
+        public TeamRoster() : this(MaxMembers) { }
+
+        public TeamRoster(int capacity)
         {
+            if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+            Capacity = capacity;
             _visibleMembers = _members.AsReadOnly();
         }
+
+        public int Capacity { get; }
+        public bool Full => Count >= Capacity;
 
         public IReadOnlyList<TeamMember> Members
         {
@@ -60,7 +67,7 @@ namespace Ohabjizol.Interview
         {
             if (applicant == null)
                 throw new ArgumentNullException(nameof(applicant));
-            if (_members.Count >= MaxMembers)
+            if (Full)
                 return false;
 
             _members.Add(new TeamMember(applicant, _members.Count + 1));

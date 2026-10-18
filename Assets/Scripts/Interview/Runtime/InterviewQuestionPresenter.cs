@@ -27,7 +27,16 @@ namespace Ohabjizol.Interview
         }
 
         public void Subscribe() { _controller.Changed += Render; }
-        public void Unsubscribe() { _controller.Changed -= Render; Cancel(); if (_radial) _radial.SetAvailable(false); }
+        public void Unsubscribe()
+        {
+            _controller.Changed -= Render;
+            Cancel();
+            if (_radial)
+            {
+                _radial.SetAvailable(false);
+                _radial.ResetCollapsed();
+            }
+        }
 
         public void Bind(Applicant applicant)
         {
@@ -60,7 +69,7 @@ namespace Ohabjizol.Interview
         public void Render()
         {
             _response.text = _controller.Response;
-            if (_radial) _radial.SetAvailable(!_inputBlocked && _controller.Applicant != null);
+            if (_radial) _radial.SetAvailable(_controller.Applicant != null);
             for (int i = 0; i < _views.Length; i++)
             {
                 var definitions = _controller.Definitions;

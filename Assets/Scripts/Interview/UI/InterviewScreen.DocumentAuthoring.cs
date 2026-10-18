@@ -139,6 +139,7 @@ namespace Ohabjizol.Interview
             if (!view) view = host.AddComponent<WindowTaskbarView>();
             view.ConfigureEditor(content, itemPrefab, _windowParent);
             _workspace.ConfigureTaskbarEditor(view);
+            if (_teamWindow) BakeTeamWindow();
             UnityEditor.EditorUtility.SetDirty(_workspace);
             UnityEditor.EditorUtility.SetDirty(this);
         }

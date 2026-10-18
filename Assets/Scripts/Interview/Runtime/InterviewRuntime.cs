@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Ohabjizol.Interview
@@ -17,6 +18,7 @@ namespace Ohabjizol.Interview
         readonly StageCalendarWindow _calendar;
         readonly UnityEngine.UI.Button _calendarButton;
         readonly InterviewDecisionCoordinator _decision;
+        Coroutine _downloadTick;
         bool _subscribed;
         bool _started;
         bool _disposed;
@@ -80,6 +82,7 @@ namespace Ohabjizol.Interview
             _stage.CompletionFailed += ReportCompletionFailure;
             _questionView.Subscribe();
             _documents.Subscribe();
+            _downloadTick = _screen.StartCoroutine(TickDownloads());
             if (!_started)
             {
                 _started = true;
@@ -99,6 +102,8 @@ namespace Ohabjizol.Interview
         public void Disable()
         {
             _decision.Suspend();
+            if (_downloadTick != null && _screen) _screen.StopCoroutine(_downloadTick);
+            _downloadTick = null;
             if (!_subscribed) return;
             _questionView.Cancel();
             _documents.Suspend();
@@ -126,6 +131,15 @@ namespace Ohabjizol.Interview
             _decision.Dispose();
             ClearApplicant();
             _documents.Dispose();
+        }
+
+        IEnumerator TickDownloads()
+        {
+            while (_subscribed && !_disposed)
+            {
+                yield return null;
+                if (_subscribed && !_disposed) _documents.TickDownloads(Time.unscaledDeltaTime);
+            }
         }
 
         float PresentDecision(bool accepted)

@@ -49,47 +49,23 @@ namespace Ohabjizol.Interview
                     Transform existing = windowParent.Find("RadialQuestionWindow");
                     if (existing) window = existing.GetComponent<RadialQuestionWindow>();
                 }
-                bool newWindow = !window;
-                if (newWindow)
+                var center = binding.FindProperty("_portrait").objectReferenceValue as RectTransform;
+                if (!center || center == call.PortraitRect || center.name != "ApplicantCenter")
+                    center = window ? window.transform.Find("Info/ApplicantCenter") as RectTransform : null;
+                if (!center || center == call.PortraitRect)
                 {
-                    float radius = binding.FindProperty("_radius").floatValue;
-                    float halfWidth = 77f, halfHeight = 24f;
-                    foreach (Button button in buttons)
-                    {
-                        Rect rect = ((RectTransform)button.transform).rect;
-                        halfWidth = Mathf.Max(halfWidth, rect.width * .5f);
-                        halfHeight = Mathf.Max(halfHeight, rect.height * .5f);
-                    }
-                    Vector2 size = new Vector2(2f * (radius + halfWidth + 24f),
-                        2f * (radius + halfHeight + 24f) + WindowToolbar.ToolbarHeight);
-                    window = WindowFactory.Create<RadialQuestionWindow>(windowParent, "질문", size, Vector2.zero);
-                    window.name = "RadialQuestionWindow";
-                    // Transparent info leaves the applicant visible through the question ring.
-                    Image infoImage = window.Info.GetComponent<Image>();
-                    if (infoImage) { infoImage.color = Color.clear; infoImage.raycastTarget = false; }
-                    Vector3 portraitCenter = call.PortraitRect.TransformPoint(call.PortraitRect.rect.center);
-                    window.Root.position = portraitCenter + window.Root.TransformVector(new Vector3(0f, WindowToolbar.ToolbarHeight * .5f, 0f));
-                    AddMinimize(window);
-                    window.CaptureEditorReferences();
-                }
-                else window.InitializeAuthored();
-                Image rootImage = window.GetComponent<Image>();
-                if (rootImage) { rootImage.color = Color.clear; rootImage.raycastTarget = false; }
-                Image authoredInfoImage = window.Info ? window.Info.GetComponent<Image>() : null;
-                if (authoredInfoImage) { authoredInfoImage.color = Color.clear; authoredInfoImage.raycastTarget = false; }
-                if (!window.Info) throw new InvalidOperationException("Question window Info reference missing.");
-                if (!options) options = Rect("OptionsRoot", window.Info);
-                if (options.parent != window.Info) options.SetParent(window.Info, true);
-                Stretch(options);
-                Transform centerTransform = window.Info.Find("ApplicantCenter");
-                RectTransform center = centerTransform as RectTransform;
-                if (!center)
-                {
-                    center = Rect("ApplicantCenter", window.Info);
+                    center = Rect("ApplicantCenter", windowParent);
                     center.anchorMin = center.anchorMax = center.pivot = new Vector2(.5f, .5f);
-                    center.anchoredPosition = Vector2.zero;
                     center.sizeDelta = Vector2.zero;
+                    center.position = call.PortraitRect.TransformPoint(call.PortraitRect.rect.center);
                 }
+                center.SetParent(windowParent, true);
+                if (!options) options = Rect("OptionsRoot", windowParent);
+                if (options.parent != windowParent) options.SetParent(windowParent, false);
+                options.localScale = Vector3.one;
+                options.localRotation = Quaternion.identity;
+                Stretch(options);
+                options.anchoredPosition3D = Vector3.zero;
                 foreach (Button button in buttons)
                 {
                     if (button.transform.parent != options) button.transform.SetParent(options, true);
@@ -123,7 +99,7 @@ namespace Ohabjizol.Interview
                 }
                 var fixedLauncher = launcher.GetComponent<RadialQuestionLauncher>();
                 if (!fixedLauncher) fixedLauncher = launcher.gameObject.AddComponent<RadialQuestionLauncher>();
-                fixedLauncher.ConfigureEditor(launcher, window);
+                fixedLauncher.ConfigureEditor(launcher, null, radial);
                 launcher.interactable = true;
                 launcher.gameObject.SetActive(true);
                 var appsSize = fixedApps.GetComponent<LayoutElement>();
@@ -133,15 +109,15 @@ namespace Ohabjizol.Interview
                 appsSize.preferredWidth = Mathf.Max(appsSize.preferredWidth, requiredWidth);
                 appsSize.minHeight = Mathf.Max(appsSize.minHeight, 52f);
                 appsSize.preferredHeight = Mathf.Max(appsSize.preferredHeight, 52f);
-                radial.ConfigureWindowEditor(window, fixedLauncher);
-                radial.ConfigureEditor(legacyLauncher, options, center, buttons);
-                window.ConfigureEditor(radial);
-                if (newWindow) window.gameObject.SetActive(false);
+                if (legacyLauncher && legacyLauncher != launcher) legacyLauncher.gameObject.SetActive(false);
+                radial.ConfigureWindowEditor(null, fixedLauncher);
+                radial.ConfigureEditor(null, options, center, buttons);
+                if (window) window.gameObject.SetActive(false);
                 serialized.FindProperty("_radialQuestions").objectReferenceValue = radial;
                 serialized.ApplyModifiedPropertiesWithoutUndo();
                 EditorUtility.SetDirty(screen);
                 EditorUtility.SetDirty(radial);
-                EditorUtility.SetDirty(window);
+                if (window) EditorUtility.SetDirty(window);
                 EditorUtility.SetDirty(fixedLauncher);
                 if (!PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath))
                     throw new InvalidOperationException("Failed to save radial question prefab.");

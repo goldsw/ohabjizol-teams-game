@@ -23,7 +23,7 @@ namespace Ohabjizol.Interview
         [SerializeField] Text _currentLabel;
         [SerializeField] Text _requiredLabel;
         [SerializeField] ApplicantStatsView _applicantStats;
-        [SerializeField] Text[] _slotLabels = new Text[4];
+        [SerializeField] Text[] _slotLabels = new Text[6];
         [SerializeField] InterviewQuestionView[] _questions = new InterviewQuestionView[5];
         [SerializeField] InterviewCallView _call;
         [SerializeField] RadialQuestionView _radialQuestions;
@@ -74,7 +74,8 @@ namespace Ohabjizol.Interview
                     || !_downloadPanel || !_downloadPanel.HasAuthoredUi || !_workspace || !_itemParent
                     || !_windowParent || !_itemPrefab || !_viewerPrefab || !_portfolioCatalog || !_questionCatalog
                     || !_workspace.HasAuthoredLibrary || !_calendarWindow || !_scheduleConfig || !_calendarButton
-                    || _questions == null || _questions.Length != 5 || _slotLabels == null || _slotLabels.Length != 4)
+                    || _questions == null || _questions.Length != 5 || _slotLabels == null
+                    || _slotLabels.Length < StageExecutionPolicy.TeamCapacity(StageSelection.Current))
                     return false;
                 foreach (var question in _questions) if (!question || !question.HasAuthoredUi) return false;
                 foreach (var slot in _slotLabels) if (!slot) return false;

@@ -19,9 +19,9 @@ namespace Ohabjizol.Interview
         {
             get
             {
-                if (!_hasValue)
-                    return StageProgressStore.Load().NextStage;
-                return _current;
+                if (StageExecutionPolicy.SingleStageMode)
+                    return StageExecutionPolicy.Normalize(StageId.EntranceGameJam);
+                return StageExecutionPolicy.Normalize(_hasValue ? _current : StageProgressStore.Load().NextStage);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Ohabjizol.Interview
             if (!Enum.IsDefined(typeof(StageId), id))
                 throw new ArgumentOutOfRangeException(nameof(id));
 
-            _current = id;
+            _current = StageExecutionPolicy.Normalize(id);
             _hasValue = true;
         }
 

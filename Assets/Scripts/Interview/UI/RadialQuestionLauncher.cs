@@ -9,6 +9,9 @@ namespace Ohabjizol.Interview
     {
         [SerializeField] Button _button;
         [SerializeField] RadialQuestionWindow _window;
+        [SerializeField] RadialQuestionView _questions;
+        [SerializeField] Color _collapsedColor = new Color32(240, 158, 74, 255);
+        [SerializeField] Color _expandedColor = new Color32(255, 206, 128, 255);
 
         public RadialQuestionWindow Window => _window;
 
@@ -18,6 +21,24 @@ namespace Ohabjizol.Interview
             _button = button;
             _window = window;
             if (isActiveAndEnabled && _button) _button.onClick.AddListener(Invoke);
+        }
+
+        public void ConfigureEditor(Button button, RadialQuestionWindow window, RadialQuestionView questions)
+        {
+            ConfigureEditor(button, window);
+            _questions = questions;
+            RefreshColor();
+        }
+
+        void LateUpdate()
+        {
+            RefreshColor();
+        }
+
+        void RefreshColor()
+        {
+            if (_button && _button.image)
+                _button.image.color = _questions && _questions.IsExpanded ? _expandedColor : _collapsedColor;
         }
 
         void OnEnable()
@@ -35,29 +56,8 @@ namespace Ohabjizol.Interview
 
         public void Invoke()
         {
-            if (!_window) return;
-            _window.InitializeAuthored();
-            if (!_window.IsOpen || _window.IsMinimized)
-            {
-                _window.Restore();
-                return;
-            }
-            // WindowToolbar brings windows forward by sibling order.
-            Transform root = _window.transform;
-            if (root.parent)
-            {
-                for (int i = root.GetSiblingIndex() + 1; i < root.parent.childCount; i++)
-                {
-                    Transform sibling = root.parent.GetChild(i);
-                    var other = sibling.GetComponent<WindowToolbar>();
-                    if (other && other.IsOpen)
-                    {
-                        _window.BringToFront();
-                        return;
-                    }
-                }
-            }
-            _window.Minimize();
+            if (_questions) _questions.ToggleExpanded();
+            RefreshColor();
         }
     }
 }

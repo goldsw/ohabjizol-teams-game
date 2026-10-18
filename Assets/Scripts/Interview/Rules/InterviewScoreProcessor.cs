@@ -15,19 +15,20 @@ namespace Ohabjizol.Interview
             }
 
             SkillSet required = theme.RequiredSkills;
-            int accuracyPercent = StageAccuracyRule.Percent(actual, required);
+            double rawAccuracyPercent = StageAccuracyRule.RawPercent(actual, required);
+            int accuracyPercent = StageAccuracyRule.FloorPercent(rawAccuracyPercent);
             int fulfillmentPercent = FulfillmentRate.Percent(actual, required);
             ResultGrade grade = ResultGradeRule.Evaluate(actual, required, theme.CoreRole, fraudCount);
             bool isClear = StageAccuracyRule.IsClear(accuracyPercent);
             return new InterviewScoreSummary(actual, required, fraudCount, fulfillmentPercent,
-                grade, accuracyPercent, isClear);
+                grade, accuracyPercent, isClear, rawAccuracyPercent);
         }
     }
 
     internal sealed class InterviewScoreSummary
     {
         internal InterviewScoreSummary(SkillSet actualSum, SkillSet requiredSkills, int fraudCount,
-            int fulfillmentPercent, ResultGrade grade, int accuracyPercent, bool isClear)
+            int fulfillmentPercent, ResultGrade grade, int accuracyPercent, bool isClear, double rawAccuracyPercent)
         {
             ActualSum = actualSum;
             RequiredSkills = requiredSkills;
@@ -35,6 +36,7 @@ namespace Ohabjizol.Interview
             FulfillmentPercent = fulfillmentPercent;
             Grade = grade;
             AccuracyPercent = accuracyPercent;
+            RawAccuracyPercent = rawAccuracyPercent;
             IsClear = isClear;
         }
 
@@ -44,6 +46,7 @@ namespace Ohabjizol.Interview
         internal int FulfillmentPercent { get; }
         internal ResultGrade Grade { get; }
         internal int AccuracyPercent { get; }
+        internal double RawAccuracyPercent { get; }
         internal bool IsClear { get; }
     }
 }

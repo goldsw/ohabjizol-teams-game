@@ -18,6 +18,8 @@ namespace Ohabjizol.Interview
         bool _expanded;
         bool _available;
 
+        public bool IsExpanded => _expanded;
+
         public void ConfigureEditor(Button launcher, RectTransform optionsRoot,
             RectTransform portrait, Button[] questions)
         {
@@ -39,7 +41,6 @@ namespace Ohabjizol.Interview
 
         void OnEnable()
         {
-            ResetCollapsed();
             if (_launcher)
             {
                 _launcher.onClick.RemoveListener(ToggleExpanded);
@@ -51,26 +52,25 @@ namespace Ohabjizol.Interview
         {
             if (_launcher) _launcher.onClick.RemoveListener(ToggleExpanded);
             SetAvailable(false);
+            ResetCollapsed();
         }
 
         public void ResetCollapsed()
         {
+            _phase = Mathf.Repeat(_startAngle, 360f);
             CollapseContent();
-            if (_window && (_window.IsOpen || _window.IsMinimized)) _window.Close();
         }
 
         public void CollapseContent()
         {
             _expanded = false;
-            _phase = Mathf.Repeat(_startAngle, 360f);
             if (_optionsRoot) _optionsRoot.gameObject.SetActive(false);
         }
 
         public void SetAvailable(bool available)
         {
             _available = available;
-            if (_launcher) _launcher.interactable = _window || available;
-            if (!available) ResetCollapsed();
+            if (_launcher) _launcher.interactable = available;
         }
 
         public void ShowQuestions()
@@ -83,18 +83,6 @@ namespace Ohabjizol.Interview
 
         public void ToggleExpanded()
         {
-            if (_fixedLauncher)
-            {
-                _fixedLauncher.Invoke();
-                return;
-            }
-            if (_window)
-            {
-                _window.InitializeAuthored();
-                if (_window.IsOpen) _window.Minimize();
-                else _window.Restore();
-                return;
-            }
             if (!_available || !_optionsRoot || !_portrait) return;
             _expanded = !_expanded;
             if (_expanded) PositionQuestions();
@@ -104,7 +92,7 @@ namespace Ohabjizol.Interview
         void Update()
         {
             if (!_expanded || !_optionsRoot || !_portrait) return;
-            _phase = Mathf.Repeat(_phase + _rotationDegreesPerSecond * Time.unscaledDeltaTime, 360f);
+            _phase = Mathf.Repeat(_phase - Mathf.Abs(_rotationDegreesPerSecond) * Time.unscaledDeltaTime, 360f);
             PositionQuestions();
         }
 
@@ -120,7 +108,7 @@ namespace Ohabjizol.Interview
                 var rect = _questions[i].transform as RectTransform;
                 if (!rect) continue;
                 rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
-                float angle = (_phase + step * i) * Mathf.Deg2Rad;
+                float angle = (_phase - step * i) * Mathf.Deg2Rad;
                 rect.localPosition = new Vector3(center.x + Mathf.Cos(angle) * _radius,
                     center.y + Mathf.Sin(angle) * _radius, center.z);
                 rect.localRotation = Quaternion.identity;
