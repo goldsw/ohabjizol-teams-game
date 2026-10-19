@@ -32,12 +32,9 @@ namespace Ohabjizol.Presentation
         [SerializeField] Color textColor = new Color32(0xF2, 0xF3, 0xF5, 0xFF);
         [SerializeField] Color mutedTextColor = new Color32(0xB5, 0xBA, 0xC1, 0xFF);
 
-        AsyncOperation _operation;
-        float _elapsed;
-        float _displayedProgress;
-        bool _completeShown;
-        float _completeElapsed;
-        bool _zoomStarted;
+        SceneLaunchFlow _flow;
+        LoadingUiPresenter _presenter;
+bool _zoomStarted;
         bool _activated;
         Text _bootLabel;
         Text _waitLabel;
@@ -62,49 +59,25 @@ namespace Ohabjizol.Presentation
 
         void Start()
         {
-            BuildLoadingUi();
-            _operation = SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
-            if (_operation == null)
+            if (!BuildLoadingUi())
+                return;
+            _flow = new SceneLaunchFlow(minimumLoadingDuration, loadingProgressSpeed, completeHoldDuration);
+            if (!_flow.TryStart(nextSceneName, out var error))
             {
-                Debug.LogError("Could not start async load for " + nextSceneName);
+                Debug.LogError(error, this);
                 return;
             }
-
-            _operation.allowSceneActivation = false;
+            _presenter.Show();
         }
 
         void Update()
         {
-            if (_operation == null || _activated || _zoomStarted)
+            if (_flow == null || !_flow.IsStarted || _activated || _zoomStarted)
                 return;
-
-            if (!_completeShown)
-            {
-                _elapsed += Time.deltaTime;
-                bool loadReady = _operation.progress >= 0.9f;
-                bool timeReady = _elapsed >= minimumLoadingDuration;
-                float asyncPortion = Mathf.Clamp01(_operation.progress / 0.9f);
-                float visualTarget = loadReady ? 0.92f : asyncPortion * 0.92f;
-                if (loadReady && timeReady)
-                    visualTarget = 1f;
-
-                if (loadingProgressSpeed <= 0f)
-                    _displayedProgress = visualTarget;
-                else
-                    _displayedProgress = Mathf.MoveTowards(_displayedProgress, visualTarget, loadingProgressSpeed * Time.deltaTime);
-
-                UpdateLoadingUi();
-                if (!loadReady || !timeReady || _displayedProgress < 0.999f)
-                    return;
-
-                ShowComplete();
+            _flow.Tick(Time.unscaledDeltaTime);
+            _presenter.Render(_flow.Snapshot);
+            if (!_flow.CanBeginZoom)
                 return;
-            }
-
-            _completeElapsed += Time.deltaTime;
-            if (completeHoldDuration > 0f && _completeElapsed < completeHoldDuration)
-                return;
-
             _zoomStarted = true;
             if (transition == null)
                 transition = FindFirstObjectByType<ComputerTransitionController>();
@@ -113,27 +86,6 @@ namespace Ohabjizol.Presentation
             else
                 ActivateInterview();
         }
-
-        void ShowComplete()
-        {
-            _completeShown = true;
-            _displayedProgress = 1f;
-            if (_progressFill != null)
-                _progressFill.fillAmount = 1f;
-            if (_percentLabel != null && showPercent)
-                _percentLabel.text = "100%";
-            if (_bootLabel != null)
-            {
-                _bootLabel.text = completeText;
-                var color = _bootLabel.color;
-                color.a = 1f;
-                _bootLabel.color = color;
-            }
-
-            if (_waitLabel != null)
-                _waitLabel.text = string.Empty;
-        }
-
         public RectTransform CreateLoadingCanvas(ComputerScreen screen)
         {
             if (screen == null)
@@ -171,35 +123,46 @@ namespace Ohabjizol.Presentation
 
         void ActivateInterview()
         {
-            if (_activated || _operation == null)
+            if (!isActiveAndEnabled || _activated || _flow == null || !_flow.CanBeginZoom)
                 return;
 
-            _activated = true;
-            _pendingScene = nextSceneName;
+            // Legacy-only cleanup: the main menu launch does not install this hook.
+            _pendingScene = nextSceneName.Replace((char)92, '/');
+            SceneManager.sceneLoaded -= HandleInterviewLoaded;
             SceneManager.sceneLoaded += HandleInterviewLoaded;
-            _operation.allowSceneActivation = true;
+            _activated = _flow.TryActivate();
+            if (!_activated)
+            {
+                SceneManager.sceneLoaded -= HandleInterviewLoaded;
+                _pendingScene = null;
+            }
         }
 
         static void HandleInterviewLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (string.IsNullOrEmpty(_pendingScene) || scene.name != _pendingScene)
+            if (string.IsNullOrEmpty(_pendingScene) || mode != LoadSceneMode.Single ||
+                (scene.path != _pendingScene && scene.name != _pendingScene))
                 return;
 
             SceneManager.sceneLoaded -= HandleInterviewLoaded;
             _pendingScene = null;
-
-            var screen = FindFirstObjectByType<ComputerScreen>();
-            if (screen != null && screen.ViewRoot != null)
+            // Search only the explicit loaded scene, never another scene or DDOL roots.
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                var screen = root.GetComponentInChildren<ComputerScreen>(true);
+                if (screen == null || screen.ViewRoot == null || screen.ViewRoot.gameObject.scene != scene)
+                    continue;
                 Destroy(screen.ViewRoot.gameObject);
+                break;
+            }
         }
-
-        void BuildLoadingUi()
+        bool BuildLoadingUi()
         {
             var screen = FindScreen();
             if (screen == null)
             {
                 Debug.LogError("Loading UI needs a ComputerScreen on this scene's monitor.");
-                return;
+                return false;
             }
 
             RectTransform root = loadingUiOverride;
@@ -226,14 +189,17 @@ namespace Ohabjizol.Presentation
                 _scan = scan as RectTransform;
 
             ApplyTheme(root);
-            if (_bootLabel != null)
-                _bootLabel.text = bootText;
-            if (_waitLabel != null)
-                _waitLabel.text = waitText;
-            if (_percentLabel != null)
-                _percentLabel.gameObject.SetActive(showPercent);
+            _presenter = root.GetComponent<LoadingUiPresenter>();
+            if (_presenter == null)
+                _presenter = root.gameObject.AddComponent<LoadingUiPresenter>();
+            _presenter.Configure(bootText, waitText, completeText, showPercent, labelPulseSpeed);
+            if (!_presenter.Bind(_bootLabel, _waitLabel, _percentLabel, _progressFill, _scan, out var error))
+            {
+                Debug.LogError(error, this);
+                return false;
+            }
+            return true;
         }
-
         /// <summary>
         /// Recolors the scene-saved or default UI by object name. Labels switch to
         /// <see cref="UiKit.Font"/> because the built-in font has no Hangul.
@@ -264,27 +230,6 @@ namespace Ohabjizol.Presentation
 
             label.font = UiKit.Font;
             label.color = color;
-        }
-
-        void UpdateLoadingUi()
-        {
-            if (_progressFill != null)
-                _progressFill.fillAmount = _displayedProgress;
-            if (_percentLabel != null && showPercent)
-                _percentLabel.text = Mathf.RoundToInt(_displayedProgress * 100f) + "%";
-            if (_bootLabel != null && labelPulseSpeed > 0f)
-            {
-                float pulse = 0.65f + 0.35f * Mathf.Sin(Time.time * labelPulseSpeed);
-                var color = _bootLabel.color;
-                color.a = pulse;
-                _bootLabel.color = color;
-            }
-
-            if (_scan != null && labelPulseSpeed > 0f)
-            {
-                float y = Mathf.Lerp(-360f, 360f, Mathf.PingPong(Time.time * 0.35f, 1f));
-                _scan.anchoredPosition = new Vector2(0f, y);
-            }
         }
 
         ComputerScreen FindScreen()

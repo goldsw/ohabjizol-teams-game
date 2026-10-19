@@ -46,6 +46,7 @@ namespace Ohabjizol.Interview
                 views.Questions, views.Call, views.Response, views.RadialQuestions, applicant);
             var summary = new InterviewSummaryPresenter(manager, views.Title, views.StageLabel, views.Finished,
                 views.Current, views.Required, views.Slots, views.Accept, views.Reject, views.Chat, views.ApplicantStats);
+            if (screen.NotepadWindow != null) screen.NotepadWindow.Bind(manager.Notes);
             return new InterviewRuntime(screen, manager, questions, questionView, applicant, documents, notification, summary,
                 views.CalendarWindow, views.CalendarButton);
         }
@@ -78,7 +79,7 @@ namespace Ohabjizol.Interview
             _screen.CompletionRetryRequested += RetryCompletion;
             _stage.ApplicantChanging += ClearApplicant;
             _stage.ApplicantChanged += BindApplicant;
-            _stage.StateChanged += _summary.Render;
+            _stage.StateChanged += RenderSummary;
             _stage.CompletionFailed += ReportCompletionFailure;
             _questionView.Subscribe();
             _documents.Subscribe();
@@ -92,7 +93,7 @@ namespace Ohabjizol.Interview
             {
                 _applicant.Render();
                 _questionView.Render();
-                _summary.Render();
+                RenderSummary();
                 RetryCompletion();
             }
             DecisionChanged();
@@ -117,7 +118,7 @@ namespace Ohabjizol.Interview
             _screen.CompletionRetryRequested -= RetryCompletion;
             _stage.ApplicantChanging -= ClearApplicant;
             _stage.ApplicantChanged -= BindApplicant;
-            _stage.StateChanged -= _summary.Render;
+            _stage.StateChanged -= RenderSummary;
             _stage.CompletionFailed -= ReportCompletionFailure;
             _subscribed = false;
         }
@@ -127,6 +128,7 @@ namespace Ohabjizol.Interview
             if (_disposed) return;
             _disposed = true;
             Disable();
+            if (_screen && _screen.NotepadWindow != null) _screen.NotepadWindow.Unbind();
             _decision.Changed -= DecisionChanged;
             _decision.Dispose();
             ClearApplicant();
@@ -146,6 +148,13 @@ namespace Ohabjizol.Interview
         {
             _questionView.Cancel();
             return accepted ? _applicant.Accepted() : _applicant.Rejected();
+        }
+
+        void RenderSummary()
+        {
+            _summary.Render();
+            if (_screen.TeamWindow)
+                _screen.TeamWindow.BindTeam(_stage.Session.ReadSelectedTeam());
         }
 
         void DecisionChanged()

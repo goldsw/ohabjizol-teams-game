@@ -38,14 +38,15 @@ namespace Ohabjizol.Interview
             var run = CampaignRunStore.Load();
             bool complete = run.IsComplete;
             var ending = useFixedKind ? fixedKind : run.ResolveEnding(goodHalfStarThreshold, normalHalfStarThreshold);
-            goodPanel.SetActive(complete && ending == EndingKind.Good);
-            normalPanel.SetActive(complete && ending == EndingKind.Normal);
-            badPanel.SetActive(complete && ending == EndingKind.Bad);
-            pendingText.gameObject.SetActive(!complete);
+            bool showArtwork = complete || useFixedKind;
+            goodPanel.SetActive(showArtwork && ending == EndingKind.Good);
+            normalPanel.SetActive(showArtwork && ending == EndingKind.Normal);
+            badPanel.SetActive(showArtwork && ending == EndingKind.Bad);
+            pendingText.gameObject.SetActive(!showArtwork);
             pendingText.text = "엔딩 준비중";
             goodText.text = goodTemplate; normalText.text = normalTemplate; badText.text = badTemplate;
             int halves = run.TotalHalfStars;
-            totalStarsText.text = "누적 " + (halves / 2) + (halves % 2 == 0 ? "" : ".5") + " / " + (StageExecutionPolicy.ActiveStages.Count * 5) + "별";
+            totalStarsText.text = useFixedKind && !complete ? "" : "누적 " + (halves / 2) + (halves % 2 == 0 ? "" : ".5") + " / " + (StageExecutionPolicy.ActiveStages.Count * 5) + "별";
         }
         void OnDestroy()
         {
@@ -75,6 +76,96 @@ namespace Ohabjizol.Interview
 #endif
         }
 #if UNITY_EDITOR
+        public void ConfigureArtworkEditor(Sprite good, Sprite normal, Sprite bad)
+        {
+            ConfigurePanelArtwork(goodPanel, good);
+            ConfigurePanelArtwork(normalPanel, normal);
+            ConfigurePanelArtwork(badPanel, bad);
+            foreach (var story in new[] { goodText, normalText, badText })
+            {
+                var rect = story.rectTransform;
+                UnityEditor.Undo.RecordObject(rect, "Position ending story");
+                rect.anchorMin = new Vector2(.1f, .21f);
+                rect.anchorMax = new Vector2(.9f, .30f);
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+                UnityEditor.EditorUtility.SetDirty(rect);
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(rect);
+            }
+            var starsRect = totalStarsText.rectTransform;
+            UnityEditor.Undo.RecordObject(starsRect, "Position ending total stars");
+            starsRect.anchorMin = new Vector2(starsRect.anchorMin.x, .02f);
+            starsRect.anchorMax = new Vector2(starsRect.anchorMax.x, .08f);
+            starsRect.offsetMin = new Vector2(starsRect.offsetMin.x, 0f);
+            starsRect.offsetMax = new Vector2(starsRect.offsetMax.x, 0f);
+            UnityEditor.EditorUtility.SetDirty(starsRect);
+            UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(starsRect);
+        }
+
+        public void ConfigureFixedKindEditor(EndingKind kind)
+        {
+            if (!HasAuthoredUi) throw new System.InvalidOperationException("Ending authored UI required.");
+            UnityEditor.Undo.RecordObject(this, "Configure fixed ending");
+            useFixedKind = true;
+            fixedKind = kind;
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+            foreach (var panel in new[] { goodPanel, normalPanel, badPanel, pendingText.gameObject })
+                UnityEditor.Undo.RecordObject(panel, "Preview fixed ending");
+            goodPanel.SetActive(kind == EndingKind.Good);
+            normalPanel.SetActive(kind == EndingKind.Normal);
+            badPanel.SetActive(kind == EndingKind.Bad);
+            pendingText.gameObject.SetActive(false);
+            foreach (var text in new[] { goodText, normalText, badText, pendingText, totalStarsText })
+                UnityEditor.Undo.RecordObject(text, "Preview fixed ending text");
+            goodText.text = goodTemplate;
+            normalText.text = normalTemplate;
+            badText.text = badTemplate;
+            pendingText.text = "엔딩 준비중";
+            var run = CampaignRunStore.Load();
+            int halves = run.TotalHalfStars;
+            totalStarsText.text = !run.IsComplete ? "" : "누적 " + (halves / 2) + (halves % 2 == 0 ? "" : ".5") + " / " + (StageExecutionPolicy.ActiveStages.Count * 5) + "별";
+            foreach (var panel in new[] { goodPanel, normalPanel, badPanel, pendingText.gameObject })
+            {
+                UnityEditor.EditorUtility.SetDirty(panel);
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(panel);
+            }
+            foreach (var text in new[] { goodText, normalText, badText, pendingText, totalStarsText })
+            {
+                UnityEditor.EditorUtility.SetDirty(text);
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(text);
+            }
+        }
+
+        static void ConfigurePanelArtwork(GameObject panel, Sprite sprite)
+        {
+            if (!panel || !sprite) throw new System.InvalidOperationException("Ending panel and native artwork Sprite required.");
+            var image = panel.GetComponent<Image>();
+            if (!image) throw new System.InvalidOperationException("Ending panel Image missing: " + panel.name);
+            var rect = image.rectTransform;
+            UnityEditor.Undo.RecordObject(rect, "Stretch ending artwork");
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            var background = rect.parent.Find("OrangeBackground");
+            if (!background) throw new System.InvalidOperationException("Ending OrangeBackground missing.");
+            int backgroundIndex = background.GetSiblingIndex();
+            // Moving a panel from before the background shifts the background left.
+            rect.SetSiblingIndex(backgroundIndex + (rect.GetSiblingIndex() < backgroundIndex ? 0 : 1));
+            UnityEditor.EditorUtility.SetDirty(rect);
+            UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(rect);
+            UnityEditor.Undo.RecordObject(image, "Configure ending artwork");
+            image.sprite = sprite;
+            image.overrideSprite = null;
+            image.color = Color.white;
+            image.type = Image.Type.Simple;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+            UnityEditor.EditorUtility.SetDirty(image);
+            UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(image);
+        }
+
         GameObject Panel(string name, string template, out Text text)
         {
             var rect = ResultAuthoredUi.Rect(authoredRoot, name, new Vector2(.1f,.4f), new Vector2(.9f,.72f));

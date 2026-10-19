@@ -88,6 +88,7 @@ public static class ResultPresentationBake
             var legacy = Find<EndingBoard>(legacyScene);
             if (legacy == null) throw new InvalidOperationException("EndingScene has no EndingBoard template.");
             legacy.BakeAuthoredUi();
+            InterviewImeEndingBake.ConfigureEndingArtwork(legacy);
             Configure(legacy, false, EndingKind.Bad);
             NormalizeAuthored(legacy);
             if (!legacy.HasAuthoredUi) throw new InvalidOperationException("Legacy EndingBoard template is incomplete.");
@@ -112,6 +113,7 @@ public static class ResultPresentationBake
                 var board = Find<EndingBoard>(scene);
                 if (board == null) throw new InvalidOperationException("Ending scene has no EndingBoard: " + path);
                 board.BakeAuthoredUi();
+                InterviewImeEndingBake.ConfigureEndingArtwork(board);
                 Configure(board, true, kind);
                 NormalizeAuthored(board);
                 if (!board.HasAuthoredUi) throw new InvalidOperationException("Incomplete ending UI: " + path);

@@ -1,15 +1,15 @@
-# 에이전트 2: 창 프레임워크와 문서 창
+# 에이전트 B: 창 프레임워크와 문서 창
 
 먼저 `AI/아키텍처.md`와 `AI/작업지침/00_팀장_분배와_계약.md`를 읽는다.
 
-일은 두 단계다. 2-1을 끝내면 바로 팀장에게 보고한다. 3번과 4번이 그것을 기다린다.
+일은 두 단계다. B-1을 끝내면 바로 팀장에게 보고한다. C번과 D번이 그것을 기다린다.
 
 ## 소유 파일
 
 - `Assets/Scripts/UI/**` (신규, 네임스페이스 `Ohabjizol.UI`)
 - `Assets/Scripts/Interview/UI/Windows/**` (신규, 네임스페이스 `Ohabjizol.Interview`)
 
-## 2-1. 공용 창 프레임워크
+## B-1. 공용 창 프레임워크
 
 `Ohabjizol.UI`는 게임 네임스페이스(`Interview`, `Presentation`, `Managers`)를 참조하지 않는다.
 
@@ -55,7 +55,7 @@ Window (Root, WindowToolbar 또는 파생 컴포넌트)
 
 `Assets/Scripts/UI/WindowFrameworkDemo.cs`: 빈 씬에 붙이면 오버레이 캔버스와 창 두 개를 만든다. 사용자가 드래그·닫기를 눈으로 확인하는 용도다. 씬 파일은 만들지 않는다.
 
-## 2-2. 문서 창 (`Interview/UI/Windows`)
+## B-2. 문서 창 (`Interview/UI/Windows`)
 
 ### `DocumentKindText`
 
@@ -69,15 +69,15 @@ Window (Root, WindowToolbar 또는 파생 컴포넌트)
 - 지원서 창만 머리에 이름, 주 직군, 표시 능력을 보여 준다. 사용자의 지원서 시안(제목 "지원서", 그 아래 "이름" 칸)이 이 배치다.
 - 문장 두 줄은 버튼이다. 누르면 `session.SelectLine(line.Id)` 후 `changed?.Invoke()`. 고른 문장은 `InterviewScreen`과 같은 강조색과 "의심  " 접두.
 - `session.IsFinished`거나 `Current`가 없으면 버튼을 끈다. 그 종류의 서류가 없으면 "제출되지 않음".
-- 지원자가 바뀌어도 창은 열린 채로 새 지원자를 그린다. 그 호출은 4번이 `Refresh`로 한다.
-- 기본 크기 560 × 700 (1920 × 1080 기준). 위치는 4번이 정한다.
+- 지원자가 바뀌어도 창은 열린 채로 새 지원자를 그린다. 그 호출은 D번이 `Refresh`로 한다.
+- 기본 크기 560 × 700 (1920 × 1080 기준). 위치는 D번이 정한다.
 
 ## 하지 않는 것
 
-- `InterviewScreen.cs`를 고치지 않는다. 연결은 4번이 한다.
-- 메뉴의 설정·청강코드·튜토리얼 창 내용은 3번이 `InfoWindow`를 파생해 만든다.
+- `InterviewScreen.cs`를 고치지 않는다. 연결은 D번이 한다.
+- 메뉴의 설정·청강코드·튜토리얼 창 내용은 C번이 `InfoWindow`를 파생해 만든다.
 
 ## 끝났다는 기준
 
-- 2-1: 데모로 오버레이에서 드래그·닫기·앞으로 가져오기가 된다. 월드 스페이스는 3번이 확인한다.
-- 2-2: 4번이 `Bind`와 `Refresh`만으로 네 창을 띄울 수 있다.
+- B-1: 데모로 오버레이에서 드래그·닫기·앞으로 가져오기가 된다. 월드 스페이스는 C번이 확인한다.
+- B-2: D번이 `Bind`와 `Refresh`만으로 네 창을 띄울 수 있다.

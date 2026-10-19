@@ -175,6 +175,11 @@ MonoBehaviour:
   completeHoldDuration: 0.75
   showPercent: 1
   labelPulseSpeed: 2.2
+  backgroundColor: {r: 0.19215687, g: 0.2, b: 0.21960784, a: 1}
+  barColor: {r: 0.11764706, g: 0.12156863, b: 0.13333334, a: 1}
+  accentColor: {r: 0.34509805, g: 0.39607844, b: 0.9490196, a: 1}
+  textColor: {r: 0.9490196, g: 0.9529412, b: 0.9607843, a: 1}
+  mutedTextColor: {r: 0.70980394, g: 0.7294118, b: 0.75686276, a: 1}
 --- !u!114 &200004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetComputerScreen: {fileID: 1409169212}
+  screenFrame: {fileID: 1961587514}
   transitionDuration: 1.6
   targetPositionOffset: {x: 0, y: 0, z: 0}
   targetFov: 42
@@ -532,6 +538,7 @@ GameObject:
   - component: {fileID: 1072062100}
   - component: {fileID: 1072062102}
   - component: {fileID: 1072062101}
+  - component: {fileID: 1072062104}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -657,6 +664,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1282835740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1072062104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072062099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c0e5b14d2f4a64b8e7c3d91f0a6b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ohabjizol.Presentation.MainMenuCameraController
+  cameraPoseRoot: {fileID: 0}
+  mouseLookPivot: {fileID: 0}
+  computerScreenFrame: {fileID: 1961587514}
+  horizontalLookAmount: 0.6
+  verticalLookAmount: 0.35
+  smoothSpeed: 7
+  maxYaw: 0.8
+  maxPitch: 0.45
+  maxHorizontalOffset: 0.22
+  maxVerticalOffset: 0.12
+  centerAlignDuration: 0.5
 --- !u!1 &1077343248
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-# 에이전트 1: 스테이지와 진행 저장
+# 에이전트 A: 스테이지와 진행 저장
 
 먼저 `AI/아키텍처.md`와 `AI/작업지침/00_팀장_분배와_계약.md`를 읽는다. 계약 시그니처는 그 문서가 기준이다.
 
@@ -18,7 +18,7 @@
 - `Assets/Scripts/Interview/Data/**`, `Rules/**`, `Stages/**`(신규), `Unity/**`, `Result/**`
 - `Assets/Scenes/ResultScene.unity` (가능하면 건드리지 않는다. 버튼은 코드로 만든다)
 
-`InterviewScreen.cs`, `InterviewExit.cs`는 4번 소유다. 세션 생성 줄을 바꾸는 일은 4번이 한다.
+`InterviewScreen.cs`, `InterviewExit.cs`는 D번 소유다. 세션 생성 줄을 바꾸는 일은 D번이 한다.
 
 ## 할 일
 

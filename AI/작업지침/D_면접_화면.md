@@ -1,6 +1,6 @@
-# 에이전트 4: 면접 화면 개편
+# 에이전트 D: 면접 화면 개편
 
-먼저 `AI/아키텍처.md`의 "면접 화면" 절과 `AI/작업지침/00_팀장_분배와_계약.md`를 읽는다. 2-1(창 프레임워크)이 끝난 뒤 시작한다. 2-2(문서 창)와 1번(스테이지)은 같이 진행돼도 된다.
+먼저 `AI/아키텍처.md`의 "면접 화면" 절과 `AI/작업지침/00_팀장_분배와_계약.md`를 읽는다. B-1(창 프레임워크)이 끝난 뒤 시작한다. B-2(문서 창)와 A번(스테이지)은 같이 진행돼도 된다.
 
 ## 목표
 
@@ -12,7 +12,7 @@
 - `Assets/Resources/Interview/**` (신규)
 - `Assets/Scenes/InterviewScene.unity` (가능하면 건드리지 않는다)
 
-`Interview/UI/Windows/**`는 2번 소유다.
+`Interview/UI/Windows/**`는 B번 소유다.
 
 ## 에셋
 
@@ -57,7 +57,7 @@
 
 ### 1. 세션 생성
 
-`STAGE-HOOK`. 1번 작업이 있으면 `new InterviewSession(StageCatalog.Get(StageSelection.Current))`. 없으면 기존 `PrototypeCatalog` 생성자를 쓰고 주석을 남긴다.
+`STAGE-HOOK`. A번 작업이 있으면 `new InterviewSession(StageCatalog.Get(StageSelection.Current))`. 없으면 기존 `PrototypeCatalog` 생성자를 쓰고 주석을 남긴다.
 
 ### 2. 레이어 순서
 
@@ -102,7 +102,7 @@
 ## 하지 않는 것
 
 - 세션 규칙, 판정, 결과 계산.
-- 창 프레임워크 자체. 버그는 2번에게 보고한다.
+- 창 프레임워크 자체. 버그는 B번에게 보고한다.
 
 ## 끝났다는 기준
 

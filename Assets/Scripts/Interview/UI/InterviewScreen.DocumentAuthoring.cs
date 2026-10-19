@@ -97,7 +97,6 @@ namespace Ohabjizol.Interview
             appsLayout.childForceExpandWidth = appsLayout.childForceExpandHeight = false;
             LayoutElement appsSize = fixedHost.GetComponent<LayoutElement>();
             if (!appsSize) appsSize = fixedHost.AddComponent<LayoutElement>();
-            appsSize.minWidth = appsSize.preferredWidth = 344f;
             appsSize.minHeight = appsSize.preferredHeight = 52f;
             Transform libraryLauncher = bar.Find("DocumentLibraryButton");
             if (libraryLauncher) libraryLauncher.SetParent(fixedHost.transform, false);
@@ -140,6 +139,7 @@ namespace Ohabjizol.Interview
             view.ConfigureEditor(content, itemPrefab, _windowParent);
             _workspace.ConfigureTaskbarEditor(view);
             if (_teamWindow) BakeTeamWindow();
+            RecalculateFixedAppsWidthEditor((RectTransform)fixedHost.transform);
             UnityEditor.EditorUtility.SetDirty(_workspace);
             UnityEditor.EditorUtility.SetDirty(this);
         }

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ebe6968e5819645832e85ec1dcfa4d, type: 3}
+  m_Name: MainMenuEnvironmentSettings
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::MainMenuEnvironmentAuthoring
+  settings:
+    sourceModel: Assets/Art/Background/Source~/Models/Desk.blend
+    geometryConfirmed: 1
+    monitorMeshPath: Cube.005
+    wallpaperRelativePath: Wallpaper
+    deskPosition: {x: 0, y: 0, z: 0}
+    deskEuler: {x: -0, y: 0, z: 0}
+    deskScale: {x: 1, y: 1, z: 1}
+    screenLocalPosition: {x: -0.00028915345, y: -1.0747547e-10, z: -8.881784e-18}
+    screenLocalEuler: {x: -0.0000034150946, y: 270, z: 270}
+    displaySize: {x: 0.014717666, y: 0.0070111314}
+    canvasSize: {x: 1600, y: 762.2003}
+    introPosition: {x: -4.3933835, y: 2.8079708, z: 0.0349428}
+    introEuler: {x: 9.604806, y: 90.00001, z: 0.000001731824}
+    desktopPosition: {x: -1.7472446, y: 2.198172, z: 0}
+    desktopEuler: {x: -0, y: 90, z: 0}
+    cameraFov: 26.991467
+    sourceRoomMeshPath: Plane
+    roomPosition: {x: 1.0149668, y: 2.7686436, z: -0.00000047683716}
+    roomEuler: {x: -0.0000026944465, y: 90, z: 0}
+    roomScale: {x: 13.504277, y: 7.6047444, z: 1}
+    glowPosition: {x: 0.33793283, y: 2.198172, z: 0}
+    glowEuler: {x: -0, y: 90, z: 0}
+    glowScale: {x: 2.354827, y: 1.2620038, z: 1}
+    lightPosition: {x: 0.33793283, y: 2.198172, z: 0}
+    glowColor: {r: 0.15, g: 0.5, b: 1, a: 1}
+    lightRange: 2.9435337
+    lightIntensity: 1.5
+    binPosition: {x: 36, y: -260}
+    binSize: {x: 144, y: 144}

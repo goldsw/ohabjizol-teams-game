@@ -1,98 +1,112 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 namespace Ohabjizol.Interview
 {
-    public sealed class DownloadPanelView : MonoBehaviour
+    public sealed partial class DownloadPanelView : MonoBehaviour
     {
         [SerializeField] RectTransform _panelRect;
-        [SerializeField] Button _applicationButton;
-        [SerializeField] Button _portfolioButton;
+        [SerializeField, HideInInspector] Button _applicationButton;
+        [SerializeField, HideInInspector] Button _portfolioButton;
         [SerializeField] Button _closeButton;
+        [SerializeField] DownloadItemView[] _items = Array.Empty<DownloadItemView>();
         [SerializeField] Vector2 _closedPosition = new Vector2(1400, 0);
         [SerializeField] Vector2 _openPosition = Vector2.zero;
         [SerializeField, Min(0f)] float _slideSeconds = .25f;
-        [SerializeField] Image _applicationFill;
-        [SerializeField] Image _portfolioFill;
-        [SerializeField, Range(.2f, 1f)] float _minimumDownloadSeconds = .2f;
-        [SerializeField, Range(.2f, 1f)] float _maximumDownloadSeconds = 1f;
+        [SerializeField, HideInInspector] Image _applicationFill;
+        [SerializeField, HideInInspector] Image _portfolioFill;
+        [SerializeField, HideInInspector] float _minimumDownloadSeconds = .2f;
+        [SerializeField, HideInInspector] float _maximumDownloadSeconds = 1f;
         Coroutine _slide;
-        readonly DocumentDownloadController _downloads = new DocumentDownloadController();
+        string _context;
+        uint _revision;
+        bool _initialized;
+        public IReadOnlyList<DownloadItemView> Items => Array.AsReadOnly(_items ?? Array.Empty<DownloadItemView>());
         public event Action<DocumentDownloadRequest> DownloadCompleted;
-
-        public void ConfigureProgressEditor(Image applicationFill, Image portfolioFill)
+        public event Action ApplicationRequested;
+        public event Action PortfolioRequested;
+        public bool HasAuthoredUi => _panelRect && _closeButton && ValidItems();
+        bool ValidItems()
         {
-            _applicationFill = applicationFill;
-            _portfolioFill = portfolioFill;
-            RenderProgress();
+            if (_items == null || _items.Length != 2) return false;
+            var kinds = new HashSet<DocumentKind>();
+            var buttons = new HashSet<Button>();
+            foreach (var item in _items)
+                if (!item || !item.HasAuthoredUi || !item.transform.IsChildOf(transform) ||
+                    (item.Kind != DocumentKind.Application && item.Kind != DocumentKind.Portfolio) ||
+                    !kinds.Add(item.Kind) || !buttons.Add(item.Button)) return false;
+            return true;
         }
-
-        public void BindContext(string key) { _downloads.BindContext(key); RenderProgress(); }
-        public bool IsCurrent(DocumentDownloadRequest request) => _downloads.IsCurrent(request);
-        public void CancelPending() { _downloads.CancelPending(); RenderProgress(); }
-        public void TickDownloads(float deltaTime) { _downloads.Tick(deltaTime); RenderProgress(); }
-
-        void RenderProgress()
+        bool Initialize()
         {
-            SetProgress(_applicationFill, _downloads.Progress(DocumentKind.Application));
-            SetProgress(_portfolioFill, _downloads.Progress(DocumentKind.Portfolio));
+            if (_initialized) return true;
+            if (!HasAuthoredUi) return false;
+            _initialized = true;
+            foreach (var item in _items)
+            {
+                item.Completed -= OnDownloadCompleted;
+                item.Completed += OnDownloadCompleted;
+                item.BindContext(_context);
+            }
+            _closeButton.onClick.AddListener(Close);
+            return true;
         }
-
+        public void BindContext(string key)
+        {
+            if (!string.Equals(_context, key, StringComparison.Ordinal) || key == null) ++_revision;
+            _context = key;
+            if (!Initialize()) return;
+            foreach (var item in _items) if (item) item.BindContext(key);
+        }
+        public bool IsCurrent(DocumentDownloadRequest request)
+        {
+            if (request == null || (request.Kind != DocumentKind.Application && request.Kind != DocumentKind.Portfolio) || !Initialize()) return false;
+            foreach (var item in _items)
+                if (item && item.Kind == request.Kind) return item.IsCurrent(request);
+            return false;
+        }
+        public void CancelPending()
+        {
+            ++_revision;
+            if (!Initialize()) return;
+            foreach (var item in _items) if (item) item.CancelPending();
+        }
+        public void TickDownloads(float deltaTime)
+        {
+            if (!Initialize()) return;
+            uint revision = _revision;
+            foreach (var item in _items)
+            {
+                if (item) item.TickDownloads(deltaTime);
+                if (revision != _revision) break;
+            }
+        }
         void OnDownloadCompleted(DocumentDownloadRequest request)
         {
+            if (!IsCurrent(request)) return;
             DownloadCompleted?.Invoke(request);
             if (!IsCurrent(request)) return;
             if (request.Kind == DocumentKind.Application) ApplicationRequested?.Invoke();
-            else PortfolioRequested?.Invoke();
-        }
-
-        static void SetProgress(Image fill, float progress)
-        {
-            if (!fill) return;
-            fill.raycastTarget = false;
-            RectTransform rect = fill.rectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = new Vector2(Mathf.Clamp01(progress), 1f);
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
-        }
-
-        void BeginDownload(DocumentKind kind)
-        {
-            if (!isActiveAndEnabled) return;
-            float minimum = Mathf.Clamp(_minimumDownloadSeconds, .2f, 1f);
-            float maximum = Mathf.Clamp(_maximumDownloadSeconds, minimum, 1f);
-            _downloads.Begin(kind, UnityEngine.Random.Range(minimum, maximum));
-            RenderProgress();
-        }
-        public event Action ApplicationRequested;
-        public event Action PortfolioRequested;
-        public bool HasAuthoredUi => _panelRect && _applicationButton && _portfolioButton && _closeButton;
-        public void Configure(RectTransform panel, Button application, Button portfolio, Button close, Vector2 closedPosition, Vector2 openPosition, float duration)
-        {
-            _panelRect = panel; _applicationButton = application; _portfolioButton = portfolio; _closeButton = close;
-            _closedPosition = closedPosition; _openPosition = openPosition; _slideSeconds = duration;
+            else if (request.Kind == DocumentKind.Portfolio) PortfolioRequested?.Invoke();
         }
         void Awake()
         {
-            if (!HasAuthoredUi) { Debug.LogError("DownloadPanelView: missing authored references.", this); enabled = false; return; }
-            _downloads.Completed += OnDownloadCompleted;
-            _applicationButton.onClick.AddListener(RequestApplication);
-            _portfolioButton.onClick.AddListener(RequestPortfolio);
-            _closeButton.onClick.AddListener(Close);
+            if (!Initialize()) { Debug.LogError("DownloadPanelView: missing or duplicate authored items.", this); enabled = false; }
         }
+        void OnDisable() { CloseImmediate(); }
         void OnDestroy()
         {
-            _downloads.CancelPending();
-            _downloads.Completed -= OnDownloadCompleted;
-            if (_applicationButton) _applicationButton.onClick.RemoveListener(RequestApplication);
-            if (_portfolioButton) _portfolioButton.onClick.RemoveListener(RequestPortfolio);
+            ++_revision;
+            if (_items != null) foreach (var item in _items)
+            {
+                if (!item) continue;
+                item.CancelPending();
+                item.Completed -= OnDownloadCompleted;
+            }
             if (_closeButton) _closeButton.onClick.RemoveListener(Close);
         }
-        void OnEnable() { RenderProgress(); }
-        void OnDisable() { CloseImmediate(); }
-        void RequestApplication() => BeginDownload(DocumentKind.Application);
-        void RequestPortfolio() => BeginDownload(DocumentKind.Portfolio);
         public void Open() => MoveTo(_openPosition);
         public void Close() { MoveTo(_closedPosition); }
         public void CloseImmediate()

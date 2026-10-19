@@ -22,6 +22,7 @@ namespace Ohabjizol.Interview
 
         public StageContext Context { get; }
         public InterviewSession Session { get; }
+        public StageNotepad Notes { get; } = new StageNotepad();
         public bool IsDeciding => _deciding;
         public bool CompletionPending => Session.IsFinished && Result == null;
         public Exception CompletionError { get; private set; }
@@ -67,14 +68,20 @@ namespace Ohabjizol.Interview
             _completing = true;
             try
             {
-                _complete(Context.RunId, Session.Result);
+                // Only persistence errors are completion failures; observers run outside this catch.
+                try
+                {
+                    _complete(Context.RunId, Session.Result);
+                }
+                catch (Exception error)
+                {
+                    CompletionError = error;
+                    CompletionFailed?.Invoke(error);
+                    return;
+                }
                 Result = Session.Result;
                 CompletionError = null;
-            }
-            catch (Exception error)
-            {
-                CompletionError = error;
-                CompletionFailed?.Invoke(error);
+                Notes.Clear();
             }
             finally
             {

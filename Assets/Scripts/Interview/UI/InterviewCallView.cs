@@ -9,6 +9,12 @@ namespace Ohabjizol.Interview
         [SerializeField] Text _dots;
         [SerializeField] Image speechBubble;
         bool _talking;
+        [SerializeField] InterviewTeamSlotView _participant;
+        [SerializeField] Text _participantCaption;
+#if UNITY_EDITOR
+        public void ConfigureParticipantEditor(InterviewTeamSlotView participant, Text caption)
+        { _participant = participant; _participantCaption = caption; }
+#endif
         [SerializeField] ApplicantVisualCatalog _visualCatalog;
         public ApplicantVisualCatalog VisualCatalog => _visualCatalog;
         public RectTransform PortraitRect => _portrait ? _portrait.rectTransform : null;
@@ -25,6 +31,12 @@ namespace Ohabjizol.Interview
             SetAnswering(false, 0);
             if (_name) _name.text = applicant == null ? "" : applicant.Name + " · " + JobRoleText.Korean(applicant.PrimaryRole);
             if (_portrait) _portrait.enabled = applicant != null;
+            if (_participant)
+            {
+                _participant.BindCharacterPortrait(applicant == null ? null : applicant.CharacterId, _visualCatalog);
+                _participant.gameObject.SetActive(applicant != null);
+            }
+            if (_participantCaption) _participantCaption.text = applicant == null ? "" : applicant.Name + " · " + JobRoleText.Korean(applicant.PrimaryRole);
         }
         public void SetThinking(string text)
         {

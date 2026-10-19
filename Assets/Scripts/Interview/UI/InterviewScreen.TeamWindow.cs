@@ -10,7 +10,87 @@ namespace Ohabjizol.Interview
         [Header("Current team window")]
         [SerializeField] InterviewTeamWindow _teamWindow;
         [SerializeField] InterviewTeamLauncher _teamLauncher;
+        public InterviewTeamWindow TeamWindow => _teamWindow;
 #if UNITY_EDITOR
+        public static Sprite LoadTeamProfileSpriteEditor()
+        {
+            const string path = "Assets/Art/Discord/Source/Aseprite/오합지졸-디코/profile.aseprite";
+            Sprite profile = null;
+            int count = 0;
+            foreach (UnityEngine.Object asset in UnityEditor.AssetDatabase.LoadAllAssetsAtPath(path))
+            {
+                if (!(asset is Sprite sprite) || sprite.name != "profile") continue;
+                profile = sprite;
+                count++;
+            }
+            if (count != 1)
+                throw new InvalidOperationException(
+                    "Team profile requires exactly one Sprite named 'profile' at " + path + "; found " + count + ".");
+            return profile;
+        }
+
+        public void BakeTeamProfilesEditor()
+        {
+            if (Application.isPlaying || !_teamWindow || !_applicantStats)
+                throw new InvalidOperationException("Team profiles require EditMode, an existing team window and ApplicantStats reference.");
+            var profile = LoadTeamProfileSpriteEditor();
+            var catalog = UnityEditor.AssetDatabase.LoadAssetAtPath<ApplicantVisualCatalog>("Assets/Art/Applicants/ApplicantVisualCatalog.asset");
+            if (!profile || !catalog)
+                throw new InvalidOperationException("Team profiles require the native profile Sprite and ApplicantVisualCatalog.asset assets.");
+            _teamWindow.InitializeAuthored();
+            var team = _teamWindow.Info ? _teamWindow.Info.Find("TeamSummary") : null;
+            if (!team || _slotLabels == null || _slotLabels.Length != 6 || !_currentLabel || !_requiredLabel)
+                throw new InvalidOperationException("TeamSummary and its six existing slot/current/required Text references are required.");
+            if (_currentLabel.transform.parent != team || _requiredLabel.transform.parent != team)
+                throw new InvalidOperationException("Current/Required must remain children of TeamSummary.");
+            var uniqueLabels = new System.Collections.Generic.HashSet<Text>();
+            for (int i = 0; i < 6; i++)
+            {
+                if (!uniqueLabels.Add(_slotLabels[i]) || _slotLabels[i] == _currentLabel || _slotLabels[i] == _requiredLabel)
+                    throw new InvalidOperationException("Team slot Text references must be distinct from each other and Current/Required.");
+                InterviewTeamSlotView.PreflightEditor(_slotLabels[i], team, i);
+            }
+            UnityEditor.Undo.IncrementCurrentGroup();
+            int undoGroup = UnityEditor.Undo.GetCurrentGroup();
+            UnityEditor.Undo.SetCurrentGroupName("Bake team profiles");
+            try
+            {
+                var infoImage = _teamWindow.Info.GetComponent<Image>();
+                if (!infoImage)
+                    throw new InvalidOperationException("Team window Info requires Image.");
+                UnityEditor.Undo.RecordObject(infoImage, "Use solid team panel background");
+                infoImage.sprite = null;
+                infoImage.overrideSprite = null;
+                infoImage.type = Image.Type.Simple;
+                infoImage.color = new Color(.08f, .08f, .10f, 1);
+                infoImage.preserveAspect = false;
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(infoImage);
+                UnityEditor.EditorUtility.SetDirty(infoImage);
+                var slots = new InterviewTeamSlotView[6];
+                UnityEditor.Undo.RecordObject(this, "Reconnect team captions");
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    slots[i] = InterviewTeamSlotView.AuthorEditor(_slotLabels[i], team, i, profile);
+                    _slotLabels[i] = slots[i].transform.Find("Caption").GetComponent<Text>();
+                    AuthorRowLayoutEditor((RectTransform)slots[i].transform);
+                }
+                AuthorTeamLayoutEditor((RectTransform)team);
+                UnityEditor.EditorUtility.SetDirty(this);
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(this);
+                _teamWindow.ConfigureProfilesEditor(slots, catalog);
+                UnityEditor.Undo.RecordObject(_applicantStats.gameObject, "Hide applicant stats");
+                _applicantStats.gameObject.SetActive(false);
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(_applicantStats.gameObject);
+                UnityEditor.EditorUtility.SetDirty(_applicantStats.gameObject);
+                UnityEditor.Undo.CollapseUndoOperations(undoGroup);
+            }
+            catch
+            {
+                UnityEditor.Undo.RevertAllDownToGroup(undoGroup);
+                throw;
+            }
+        }
+
         public void BakeTeamWindow()
         {
             if (Application.isPlaying || !_windowParent || !_itemParent)
@@ -29,10 +109,15 @@ namespace Ohabjizol.Interview
                     new Vector2(center.x, center.y + WindowToolbar.ToolbarHeight * .5f));
             }
             _teamWindow.InitializeAuthored();
-            team.SetParent(_teamWindow.Info, false);
-            team.anchorMin = Vector2.zero; team.anchorMax = Vector2.one;
-            team.offsetMin = team.offsetMax = Vector2.zero;
-            team.localScale = Vector3.one;
+            if (team.parent != _teamWindow.Info)
+            {
+                UnityEditor.Undo.SetTransformParent(team, _teamWindow.Info, "Move team summary");
+                UnityEditor.Undo.RecordObject(team, "Place team summary");
+                team.anchorMin = Vector2.zero; team.anchorMax = Vector2.one;
+                team.offsetMin = team.offsetMax = Vector2.zero;
+                team.localScale = Vector3.one;
+                UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(team);
+            }
             team.gameObject.SetActive(true);
             RectTransform controls = _teamWindow.Controls;
             controls.sizeDelta = new Vector2(WindowToolbar.ToolbarHeight * 2, 0);

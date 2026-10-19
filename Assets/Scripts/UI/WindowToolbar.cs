@@ -68,10 +68,12 @@ namespace Ohabjizol.UI
         public virtual void CaptureEditorReferences()
         {
 #if UNITY_EDITOR
+            if (Application.isPlaying || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
+            UnityEditor.Undo.RecordObject(this, "Capture window controls");
             _root = GetComponent<RectTransform>();
-            _toolbar = Toolbar;
-            _controls = Controls;
-            _info = Info;
+            _toolbar = Toolbar != null ? Toolbar : (_toolbar != null ? _toolbar : transform.Find("Toolbar") as RectTransform);
+            _controls = Controls != null ? Controls : (_controls != null ? _controls : _toolbar?.Find("Controls") as RectTransform);
+            _info = Info != null ? Info : (_info != null ? _info : transform.Find("Info") as RectTransform);
             if (_toolbar != null)
             {
                 _dragHandle = _toolbar.GetComponentInChildren<WindowDragHandle>(true);
@@ -83,8 +85,144 @@ namespace Ohabjizol.UI
                 _closeButton = _controls.Find("Close")?.GetComponent<Button>();
                 _minimizeButton = _controls.Find("Minimize")?.GetComponent<Button>();
             }
+            EnsureControlsEditor();
 #endif
         }
+
+#if UNITY_EDITOR
+        /// <summary>Explicit Edit Mode authoring; never called by runtime initialization.</summary>
+        public void EnsureControlsEditor()
+        {
+            if (Application.isPlaying || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Window controls can only be authored in Edit Mode.");
+
+            UnityEditor.Undo.RecordObject(this, "Author window controls");
+            _root = GetComponent<RectTransform>();
+            _toolbar = _toolbar != null ? _toolbar : (Toolbar != null ? Toolbar : transform.Find("Toolbar") as RectTransform);
+            if (_toolbar == null) return;
+            _controls = _controls != null ? _controls : (Controls != null ? Controls : _toolbar.Find("Controls") as RectTransform);
+            if (_controls == null) _controls = CreateControlObjectEditor("Controls", _toolbar);
+            Root = _root;
+            Toolbar = _toolbar;
+            Controls = _controls;
+            RecordControlEditor(_controls);
+            RecordControlEditor(_controls.gameObject);
+            _controls.gameObject.SetActive(true);
+            _controls.anchorMin = new Vector2(1f, 0f);
+            _controls.anchorMax = Vector2.one;
+            _controls.pivot = new Vector2(1f, 0.5f);
+            _controls.sizeDelta = new Vector2(80f, 0f);
+            _controls.anchoredPosition = Vector2.zero;
+            SaveControlEditor(_controls);
+            SaveControlEditor(_controls.gameObject);
+
+            _closeButton = _closeButton != null ? _closeButton : _controls.Find("Close")?.GetComponent<Button>();
+            _minimizeButton = _minimizeButton != null ? _minimizeButton : _controls.Find("Minimize")?.GetComponent<Button>();
+            if (_closeButton == null) _closeButton = CreateControlButtonEditor("Close", null);
+            if (_minimizeButton == null) _minimizeButton = CreateControlButtonEditor("Minimize", _closeButton);
+            AuthorControlButtonEditor(_minimizeButton, "-", 0f, 0.5f);
+            AuthorControlButtonEditor(_closeButton, "X", 0.5f, 1f);
+
+            _titleLabel = _titleLabel != null ? _titleLabel : _toolbar.Find("Title")?.GetComponent<Text>();
+            ReserveControlsEditor(_titleLabel != null ? _titleLabel.rectTransform : null);
+            ReserveControlsEditor(_toolbar.Find("Drag") as RectTransform);
+            _authoredInitialized = false;
+            SaveControlEditor(this);
+        }
+
+        static void RecordControlEditor(UnityEngine.Object target)
+        {
+            UnityEditor.Undo.RecordObject(target, "Author window controls");
+        }
+
+        static void SaveControlEditor(UnityEngine.Object target)
+        {
+            UnityEditor.EditorUtility.SetDirty(target);
+            UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+        }
+
+        static RectTransform CreateControlObjectEditor(string name, Transform parent)
+        {
+            var instance = new GameObject(name, typeof(RectTransform));
+            UnityEditor.Undo.RegisterCreatedObjectUndo(instance, "Create window control");
+            UnityEditor.Undo.SetTransformParent(instance.transform, parent, "Parent window control");
+            var rect = (RectTransform)instance.transform;
+            rect.localScale = Vector3.one;
+            rect.localRotation = Quaternion.identity;
+            return rect;
+        }
+
+        Button CreateControlButtonEditor(string name, Button source)
+        {
+            var rect = CreateControlObjectEditor(name, _controls);
+            var image = UnityEditor.Undo.AddComponent<Image>(rect.gameObject);
+            var sourceImage = source != null ? source.targetGraphic as Image : null;
+            image.color = sourceImage != null ? sourceImage.color : Color.white;
+            image.sprite = sourceImage != null ? sourceImage.sprite : null;
+            image.raycastTarget = true;
+            var button = UnityEditor.Undo.AddComponent<Button>(rect.gameObject);
+            button.targetGraphic = image;
+            if (source != null) button.colors = source.colors;
+            else UiKit.Paint(button, CloseNormal);
+            var navigation = button.navigation;
+            navigation.mode = Navigation.Mode.None;
+            button.navigation = navigation;
+            return button;
+        }
+
+        static void AuthorControlButtonEditor(Button button, string glyph, float left, float right)
+        {
+            var rect = (RectTransform)button.transform;
+            RecordControlEditor(rect);
+            RecordControlEditor(button);
+            RecordControlEditor(button.gameObject);
+            rect.anchorMin = new Vector2(left, 0f);
+            rect.anchorMax = new Vector2(right, 1f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            button.enabled = true;
+            button.gameObject.SetActive(true);
+            var label = button.GetComponentInChildren<Text>(true);
+            if (label == null)
+            {
+                var labelRect = CreateControlObjectEditor("Label", rect);
+                label = UnityEditor.Undo.AddComponent<Text>(labelRect.gameObject);
+                label.color = TitleColor;
+                label.fontSize = 20;
+            }
+            RecordControlEditor(label);
+            RecordControlEditor(label.rectTransform);
+            RecordControlEditor(label.gameObject);
+            if (label.transform.parent != rect)
+                UnityEditor.Undo.SetTransformParent(label.transform, rect, "Parent window glyph");
+            label.text = glyph;
+            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            label.alignment = TextAnchor.MiddleCenter;
+            label.horizontalOverflow = HorizontalWrapMode.Overflow;
+            label.verticalOverflow = VerticalWrapMode.Overflow;
+            label.raycastTarget = false;
+            label.enabled = true;
+            label.gameObject.SetActive(true);
+            label.rectTransform.localScale = Vector3.one;
+            label.rectTransform.localRotation = Quaternion.identity;
+            UiKit.Stretch(label.rectTransform, 0f);
+            SaveControlEditor(rect);
+            SaveControlEditor(button);
+            SaveControlEditor(button.gameObject);
+            SaveControlEditor(label);
+            SaveControlEditor(label.rectTransform);
+            SaveControlEditor(label.gameObject);
+        }
+
+        static void ReserveControlsEditor(RectTransform rect)
+        {
+            if (rect == null) return;
+            RecordControlEditor(rect);
+            var offset = rect.offsetMax;
+            offset.x = -80f;
+            rect.offsetMax = offset;
+            SaveControlEditor(rect);
+        }
+#endif
 
         public virtual void Minimize()
         {
@@ -207,11 +345,13 @@ namespace Ohabjizol.UI
             colors.pressedColor = ClosePressed;
             colors.selectedColor = CloseNormal;
             close.colors = colors;
-            close.onClick.AddListener(Close);
 
             if (GetComponent<WindowPointerFocus>() == null) gameObject.AddComponent<WindowPointerFocus>();
             OnBuilt();
             CaptureEditorReferences();
+#if UNITY_EDITOR
+            EnsureControlsEditor();
+#endif
         }
 
         /// <summary>

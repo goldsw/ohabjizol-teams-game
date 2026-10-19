@@ -69,7 +69,7 @@ namespace Ohabjizol.Interview
             get
             {
                 if (!_discordViewRoot || !_discordButton || !_acceptButton || !_rejectButton || !_chatButton
-                    || !_unreadMark || !_notification || !_response || !_titleLabel || !_stageLabel || !_finishedLabel
+                    || !_unreadMark || !_notification || !_response || !_titleLabel || !_finishedLabel
                     || !_currentLabel || !_requiredLabel || !_call || !_call.HasAuthoredUi
                     || !_downloadPanel || !_downloadPanel.HasAuthoredUi || !_workspace || !_itemParent
                     || !_windowParent || !_itemPrefab || !_viewerPrefab || !_portfolioCatalog || !_questionCatalog

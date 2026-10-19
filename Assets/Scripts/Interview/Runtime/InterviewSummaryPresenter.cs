@@ -37,7 +37,7 @@ namespace Ohabjizol.Interview
                 _applicantStats.Bind(session.IsFinished || session.Current == null
                     ? null : session.Current.DisplayedSkills);
             _title.text = definition.DisplayName + (theme == null ? "" : " · 주제 " + theme.DisplayName);
-            _stageLabel.text = definition.DisplayName;
+            if (_stageLabel) _stageLabel.text = definition.DisplayName;
             var selectedTeam = session.ReadSelectedTeam();
             var members = selectedTeam.Members;
             for (int i = 0; i < _slots.Length; i++)

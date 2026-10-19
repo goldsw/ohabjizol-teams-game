@@ -11,11 +11,11 @@ namespace Ohabjizol.Presentation
 {
     public sealed class MainMenuController : MonoBehaviour
     {
-        [SerializeField] string loadingSceneName = "LoadingScene";
+        [SerializeField] string interviewSceneName = "InterviewScene";
         [SerializeField] string endingSceneName = "EndingScene";
         [SerializeField] Transform viewRoot;
         [SerializeField] MainMenuCameraController cameraController;
-        [SerializeField] float connectDelay = 1f;
+        [SerializeField] float connectDelay = 0f;
         [SerializeField] DesktopLayout desktopLayout = new DesktopLayout();
         [SerializeField] DesktopInitialState initialWindows = new DesktopInitialState();
         [SerializeField] DesktopView _desktop;
@@ -26,13 +26,22 @@ namespace Ohabjizol.Presentation
         [SerializeField] MonitorClickHandler monitorClick;
         [SerializeField] float introMoveDuration = 1f;
         [SerializeField] float bootDuration = 1.5f;
+        [SerializeField] Image bootProgressImage;
+        [SerializeField] Text bootProgressText;
+        [SerializeField] float minimumLoadingDuration = 1.5f;
+        [SerializeField] float loadingProgressSpeed = 0.5f;
+        [SerializeField] float loadingCompleteHold = 0.5f;
+        [SerializeField] ComputerTransitionController transition;
+        [SerializeField] LoadingUiPresenter loadingPresenter;
         public Action onPlay;
         [SerializeField] PhysicsRaycaster monitorPhysicsRaycaster;
         bool _monitorPickingCaptured, _monitorOriginallyEnabled;
         MenuPhase _phase;
         bool _accepted;
+        bool _alignmentCompleted, _zoomStarted, _activationRequested, _callbacksAllowed;
+        SceneLaunchFlow _launchFlow;
         static bool _introCompleted;
-        public enum MenuPhase { MainMenu3D, Zooming, Booting, DesktopReady, Launching }
+        public enum MenuPhase { MainMenu3D = 0, Zooming = 1, Booting = 2, DesktopReady = 3, Launching = 4, Loading = 5, FillZoom = 6, Activating = 7 }
         public MenuPhase Phase
         {
             get => _phase;
@@ -40,7 +49,8 @@ namespace Ohabjizol.Presentation
         }
         public bool HasAuthoredUi => _desktop != null && _desktop.HasAuthoredUi &&
             _generatedDesktopRoot != null && bootOverlay != null && introStart != null &&
-            zoomTarget != null && cameraController != null && monitorClick != null;
+            zoomTarget != null && cameraController != null && monitorClick != null &&
+            bootProgressImage != null && bootProgressText != null && transition != null && loadingPresenter != null;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetSession() { _introCompleted = false; }
@@ -50,14 +60,23 @@ namespace Ohabjizol.Presentation
             if (!Application.isPlaying) return;
             if (!HasAuthoredUi)
             {
-                Debug.LogError("MainMenu requires baked Desktop/window references, camera poses, monitor click handler and EventSystem. Run BakeAuthoredUi in Edit Mode and save.", this);
+                Debug.LogError("MainMenu requires authored Desktop, camera poses, monitor handler, boot progress Image/Text, ComputerTransitionController and LoadingUiPresenter references. Run editor authoring and save before Play.", this);
+                enabled = false;
+                return;
+            }
+            if (!loadingPresenter.Bind(out var presenterError))
+            {
+                Debug.LogError(presenterError, this);
                 enabled = false;
                 return;
             }
             if (!_desktop.Bind(connectDelay, Launch)) { enabled = false; return; }
             monitorClick.Bind(this);
+            _callbacksAllowed = true;
+            _launchFlow = new SceneLaunchFlow(minimumLoadingDuration, loadingProgressSpeed, loadingCompleteHold);
             onPlay = AlignCenter;
             bootOverlay.SetActive(false);
+            loadingPresenter.Hide();
             _generatedDesktopRoot.gameObject.SetActive(false);
             if (_introCompleted)
             {
@@ -69,6 +88,7 @@ namespace Ohabjizol.Presentation
                 cameraController.SetAuthoredPose(introStart);
                 Phase = MenuPhase.MainMenu3D;
             }
+            cameraController.SetLookEnabled(true);
         }
 
         void OnEnable()
@@ -100,8 +120,13 @@ namespace Ohabjizol.Presentation
             _monitorPickingCaptured = false;
         }
 
-        void OnDisable() { RestoreMonitorPicking(); }
-        void OnDestroy() { RestoreMonitorPicking(); }
+        void OnDisable()
+        {
+            _callbacksAllowed = false;
+            StopAllCoroutines();
+            RestoreMonitorPicking();
+        }
+        void OnDestroy() { _callbacksAllowed = false; RestoreMonitorPicking(); }
 
         void Start()
         {
@@ -123,9 +148,21 @@ namespace Ohabjizol.Presentation
         IEnumerator Boot()
         {
             yield return cameraController.MoveToAuthoredPose(zoomTarget, introMoveDuration);
+            if (!_callbacksAllowed || !isActiveAndEnabled) yield break;
             Phase = MenuPhase.Booting;
+            cameraController.SetLookEnabled(true);
             bootOverlay.SetActive(true);
-            yield return new WaitForSecondsRealtime(Mathf.Max(0f, bootDuration));
+            float elapsed = 0f;
+            float duration = Mathf.Max(0f, bootDuration);
+            SetBootProgress(0f);
+            while (elapsed < duration)
+            {
+                yield return null;
+                if (!_callbacksAllowed || !isActiveAndEnabled) yield break;
+                elapsed += Time.unscaledDeltaTime;
+                SetBootProgress(Mathf.Clamp01(elapsed / duration));
+            }
+            SetBootProgress(1f);
             bootOverlay.SetActive(false);
             _introCompleted = true;
             Ready();
@@ -134,13 +171,14 @@ namespace Ohabjizol.Presentation
         void Ready()
         {
             Phase = MenuPhase.DesktopReady;
+            cameraController.SetLookEnabled(true);
             _generatedDesktopRoot.gameObject.SetActive(true);
             _desktop.RefreshAuthoredContent();
         }
 
         public void Launch(StageId ignored)
         {
-            if (_accepted || Phase != MenuPhase.DesktopReady) return;
+            if (!isActiveAndEnabled || !_callbacksAllowed || _accepted || Phase != MenuPhase.DesktopReady) return;
             var run = CampaignRunStore.Load();
             if (run.IsComplete)
             {
@@ -156,24 +194,77 @@ namespace Ohabjizol.Presentation
 
         public void StartNewRun()
         {
-            if (_accepted || Phase != MenuPhase.DesktopReady) return;
+            if (!isActiveAndEnabled || !_callbacksAllowed || _accepted || Phase != MenuPhase.DesktopReady) return;
             CampaignRunStore.StartNewRun();
             _desktop.RefreshAuthoredContent();
         }
 
         public void Play()
         {
-            if (_accepted || Phase != MenuPhase.DesktopReady) return;
+            if (!isActiveAndEnabled || !_callbacksAllowed || _accepted || Phase != MenuPhase.DesktopReady) return;
             _accepted = true;
             Phase = MenuPhase.Launching;
             _desktop.Lock();
             if (onPlay != null) onPlay.Invoke(); else OpenAfterCenter();
         }
-        void AlignCenter() { cameraController.AlignToCenter(OpenAfterCenter); }
+        void AlignCenter()
+        {
+            if (!transition.isActiveAndEnabled || MenuCamera() != Camera.main ||
+                !transition.TryComputeCenteredPose(MenuCamera(), out _, out _, out _) ||
+                !transition.TryComputeAlignedPose(MenuCamera(), out _, out _, out _))
+            {
+                Debug.LogError("MainMenu launch requires an enabled transition, the menu camera tagged MainCamera and a valid authored display frame/fill pose.", this);
+                return;
+            }
+            transition.AlignToCenter(OpenAfterCenter);
+        }
         void OpenAfterCenter()
         {
-            ComputerTransitionController.RememberPose(MenuCamera());
-            SceneManager.LoadScene(loadingSceneName, LoadSceneMode.Single);
+            if (!_callbacksAllowed || !isActiveAndEnabled || !_accepted ||
+                Phase != MenuPhase.Launching || _alignmentCompleted) return;
+            _alignmentCompleted = true;
+            cameraController.SetLookEnabled(false);
+            if (EventSystem.current == null || !EventSystem.current.isActiveAndEnabled ||
+                transition == null || loadingPresenter == null || string.IsNullOrWhiteSpace(interviewSceneName))
+            {
+                Debug.LogError("MainMenu launch requires an active authored EventSystem, transition, loading presenter and Interview scene name.", this);
+                return;
+            }
+            if (!_launchFlow.TryStart(interviewSceneName, out var error))
+            {
+                Debug.LogError("MainMenu scene launch failed: " + error, this);
+                return;
+            }
+            Phase = MenuPhase.Loading;
+            loadingPresenter.Show();
+            loadingPresenter.Render(_launchFlow.Snapshot);
+        }
+
+        void Update()
+        {
+            if (!_callbacksAllowed || _launchFlow == null ||
+                (Phase != MenuPhase.Loading && Phase != MenuPhase.FillZoom)) return;
+            _launchFlow.Tick(Time.unscaledDeltaTime);
+            loadingPresenter.Render(_launchFlow.Snapshot);
+            if (Phase != MenuPhase.Loading || _zoomStarted || !_launchFlow.CanBeginZoom) return;
+            _zoomStarted = true;
+            Phase = MenuPhase.FillZoom;
+            transition.Begin(ActivateInterview);
+        }
+
+        void ActivateInterview()
+        {
+            if (!_callbacksAllowed || !isActiveAndEnabled || Phase != MenuPhase.FillZoom || _activationRequested) return;
+            _activationRequested = true;
+            Phase = MenuPhase.Activating;
+            if (!_launchFlow.TryActivate())
+                Debug.LogError("MainMenu scene activation was rejected; launch remains locked.", this);
+        }
+
+        void SetBootProgress(float progress)
+        {
+            bootProgressImage.fillAmount = progress;
+            bootProgressText.text = $"시작하는 중… {Mathf.RoundToInt(progress * 100f)}%";
         }
         Camera MenuCamera() => cameraController != null ? cameraController.GetComponent<Camera>() : Camera.main;
 
@@ -223,6 +314,33 @@ namespace Ohabjizol.Presentation
                 UiKit.Stretch(label.rectTransform, 0f);
                 bootOverlay = boot.gameObject;
             }
+            if (bootProgressImage == null)
+            {
+                Image track = UiKit.Image(bootOverlay.transform, "BootProgressTrack", new Color32(0x42, 0x28, 0x18, 0xFF));
+                track.rectTransform.anchorMin = new Vector2(0.2f, 0.25f);
+                track.rectTransform.anchorMax = new Vector2(0.8f, 0.29f);
+                track.rectTransform.offsetMin = track.rectTransform.offsetMax = Vector2.zero;
+                bootProgressImage = UiKit.Image(track.transform, "BootProgress", Color.white);
+                UiKit.Stretch(bootProgressImage.rectTransform, 0f);
+                // Filled Image requires a sprite; reuse Unity's built-in white UI sprite.
+                bootProgressImage.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+                bootProgressImage.type = Image.Type.Filled;
+                bootProgressImage.fillMethod = Image.FillMethod.Horizontal;
+                bootProgressImage.fillOrigin = 0;
+                bootProgressImage.fillAmount = 0f;
+                track.raycastTarget = bootProgressImage.raycastTarget = false;
+            }
+            if (bootProgressText == null)
+            {
+                bootProgressText = UiKit.Text(bootOverlay.transform, "BootProgressText", 24, FontStyle.Normal, TextAnchor.MiddleCenter);
+                bootProgressText.rectTransform.anchorMin = new Vector2(0.2f, 0.15f);
+                bootProgressText.rectTransform.anchorMax = new Vector2(0.8f, 0.24f);
+                bootProgressText.rectTransform.offsetMin = bootProgressText.rectTransform.offsetMax = Vector2.zero;
+                bootProgressText.text = "시작하는 중… 0%";
+                bootProgressText.raycastTarget = false;
+            }
+            if (transition == null) transition = FindFirstObjectByType<ComputerTransitionController>();
+            if (loadingPresenter == null) loadingPresenter = FindFirstObjectByType<LoadingUiPresenter>();
             if (introStart == null) introStart = CreatePose("IntroStart", camera.transform.position, camera.transform.rotation);
             if (zoomTarget == null)
             {

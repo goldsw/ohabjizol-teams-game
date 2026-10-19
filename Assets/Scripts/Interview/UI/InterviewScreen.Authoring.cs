@@ -18,7 +18,13 @@ namespace Ohabjizol.Interview
             }
             if (!_questionCatalog)
                 throw new InvalidOperationException("Bake prerequisite: parent-created and seeded QuestionCatalog.asset.");
-            if (HasAuthoredUi) { BakeTeamWindow(); return; }
+            if (HasAuthoredUi)
+            {
+                BakeTeamWindow();
+                BakeTeamProfilesEditor();
+                BakeNotepadWindowEditor();
+                return;
+            }
             if (_discordViewRoot) throw new InvalidOperationException("Existing authored view is incomplete. Assign missing references before baking again.");
             var itemAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/InterviewRefresh/Documents/PdfTaskbarItem.prefab");
             _itemPrefab = itemAsset ? itemAsset.GetComponent<DocumentTaskbarItem>() : null;
@@ -115,6 +121,8 @@ namespace Ohabjizol.Interview
             _itemParent = Rect(taskbar.transform, "DownloadedItems", .29f, .1f, .79f, .9f);
             _stageLabel = Label(taskbar.transform, "Stage", "Stage", .8f, .1f, .99f, .9f, 18);
             BakeTeamWindow();
+            BakeTeamProfilesEditor();
+            BakeNotepadWindowEditor();
             SetDiscordVisible(discordVisible);
             UnityEditor.EditorUtility.SetDirty(this);
         }
