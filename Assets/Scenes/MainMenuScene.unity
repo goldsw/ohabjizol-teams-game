@@ -880,7 +880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 36, y: -260}
+  m_AnchoredPosition: {x: 36, y: -431}
   m_SizeDelta: {x: 144, y: 144}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &47065588
@@ -4020,6 +4020,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1049548883655584924, guid: 49a5bab6be0d2f940834de326059714e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1049548883655584924, guid: 49a5bab6be0d2f940834de326059714e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1049548883655584924, guid: 49a5bab6be0d2f940834de326059714e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 137.79968
+      objectReference: {fileID: 0}
     - target: {fileID: 1429219665509630812, guid: 49a5bab6be0d2f940834de326059714e, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -4159,6 +4171,10 @@ PrefabInstance:
     - target: {fileID: 9130248088512976872, guid: 49a5bab6be0d2f940834de326059714e, type: 3}
       propertyPath: m_Name
       value: AuthoredDesktopRoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130248088512976872, guid: 49a5bab6be0d2f940834de326059714e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
