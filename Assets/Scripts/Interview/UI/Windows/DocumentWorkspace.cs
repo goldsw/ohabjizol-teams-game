@@ -82,6 +82,18 @@ namespace Ohabjizol.Interview
             viewer.Initialize(document, taskbarView.Queue);
             viewer.Maximize();
         }
+        public bool TryGetViewer(DocumentKind kind, out PdfDocumentViewer viewer)
+        {
+            viewer = null;
+            if (packet == null || (kind != DocumentKind.Application && kind != DocumentKind.Portfolio)) return false;
+            var key = new DocumentKey(packet.ApplicantKey, kind);
+            if (!viewers.TryGetValue(key, out PdfDocumentViewer candidate) || !candidate ||
+                candidate.IsClosed || !candidate.IsOpen || candidate.IsMinimized || taskbarView == null ||
+                !taskbarView.Queue.TryGetWindow(key, out IManagedWindow owned) || !ReferenceEquals(owned, candidate))
+                return false;
+            viewer = candidate;
+            return true;
+        }
         public DocumentViewerState GetState(DocumentKind kind) => packet == null ? DocumentViewerState.Closed :
             GetState(new DocumentKey(packet.ApplicantKey, kind));
         public DocumentViewerState GetState(DocumentKey key)

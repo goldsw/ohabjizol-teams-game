@@ -59,23 +59,31 @@ namespace Ohabjizol.Presentation
     [Serializable]
     public sealed class ChungkangCodeAppHandler : DesktopAppHandler
     {
+        [NonSerialized] Action _newGameRequested;
         public override bool HasAuthoredContent(InfoWindow window) =>
             window is ChungkangCodeWindow code && code.HasAuthoredContent;
         public override void Activate(InfoWindow window, DesktopAppContext context)
         {
             var code = (ChungkangCodeWindow)window;
             code.Open();
-            code.Connect(context.ConnectDelay(), context.Launch);
         }
         public override void Attach(InfoWindow window, DesktopAppContext context)
         {
             var code = (ChungkangCodeWindow)window;
             code.RunReset -= context.Refresh;
             code.RunReset += context.Refresh;
+            code.NewGameRequested -= _newGameRequested;
+            _newGameRequested = () => code.Connect(context.ConnectDelay(), context.Launch);
+            code.NewGameRequested += _newGameRequested;
         }
         public override void Detach(InfoWindow window, DesktopAppContext context)
         {
-            if (window is ChungkangCodeWindow code && context != null) code.RunReset -= context.Refresh;
+            if (window is ChungkangCodeWindow code && context != null)
+            {
+                code.RunReset -= context.Refresh;
+                code.NewGameRequested -= _newGameRequested;
+                _newGameRequested = null;
+            }
         }
     }
     [Serializable]
@@ -93,6 +101,11 @@ namespace Ohabjizol.Presentation
     [Serializable]
     public sealed class TutorialAppHandler : DesktopAppHandler
     {
+        public override void Activate(InfoWindow window, DesktopAppContext context)
+        {
+            ((TutorialWindow)window).ConfigureMode(false);
+            window.Open();
+        }
         public override bool HasAuthoredContent(InfoWindow window) =>
             window is TutorialWindow tutorial && tutorial.HasAuthoredContent;
     }

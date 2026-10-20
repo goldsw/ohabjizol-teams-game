@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Ohabjizol.Tutorial;
 using UnityEngine;
 
 namespace Ohabjizol.Interview
@@ -22,18 +23,19 @@ namespace Ohabjizol.Interview
         bool _subscribed;
         bool _started;
         bool _disposed;
+        bool _allowDecisions = true;
 
         // Recovery and snapshot capture must finish before constructing a new session.
         public static InterviewRuntime Create(InterviewScreen screen, InterviewViewReferences views)
+            => Create(screen, views, new CampaignInterviewSessionHost());
+
+        public static InterviewRuntime Create(InterviewScreen screen, InterviewViewReferences views, IInterviewSessionHost host)
         {
             if (screen == null) throw new ArgumentNullException(nameof(screen));
             if (views == null) throw new ArgumentNullException(nameof(views));
-            StageCompletionService.RecoverPending();
-            string runId = CampaignRunStore.Load().RunId;
-            StageDefinition definition = StageCatalog.Get(StageSelection.Current);
-            var context = new StageContext(runId, definition);
-            int productionDays = views.ScheduleConfig != null ? views.ScheduleConfig.GetProductionDays(definition.Id) : 15;
-            var manager = new StageManager(context, StageCompletionService.Complete, productionDays);
+            if (host == null) throw new ArgumentNullException(nameof(host));
+            var manager = host.CreateStage(views);
+            var definition = manager.Context.StageDefinition;
             var questions = new QuestionController(screen.FakePortfolioAnswerChance, manager.Session.RandomSource);
             if (views.CalendarWindow != null)
                 views.CalendarWindow.Bind(new StageCalendarState(manager.Session.ProjectSchedule), definition.DisplayName);
@@ -48,7 +50,7 @@ namespace Ohabjizol.Interview
                 views.Current, views.Required, views.Slots, views.Accept, views.Reject, views.Chat, views.ApplicantStats);
             if (screen.NotepadWindow != null) screen.NotepadWindow.Bind(manager.Notes);
             return new InterviewRuntime(screen, manager, questions, questionView, applicant, documents, notification, summary,
-                views.CalendarWindow, views.CalendarButton);
+                views.CalendarWindow, views.CalendarButton) { _allowDecisions = host.AllowDecisions };
         }
         public InterviewRuntime(InterviewScreen screen, StageManager stage, QuestionController questions,
             InterviewQuestionPresenter questionView, InterviewApplicantPresenter applicant,
@@ -74,7 +76,7 @@ namespace Ohabjizol.Interview
             _subscribed = true;
             if (_calendarButton != null) _calendarButton.onClick.AddListener(OpenCalendar);
             _screen.QuestionRequested += Ask;
-            _screen.DecisionRequested += _decision.Request;
+            _screen.DecisionRequested += RequestDecision;
             _screen.DocumentPanelRequested += OpenDocuments;
             _screen.CompletionRetryRequested += RetryCompletion;
             _stage.ApplicantChanging += ClearApplicant;
@@ -113,7 +115,7 @@ namespace Ohabjizol.Interview
             _documents.Unsubscribe();
             _questionView.Unsubscribe();
             _screen.QuestionRequested -= Ask;
-            _screen.DecisionRequested -= _decision.Request;
+            _screen.DecisionRequested -= RequestDecision;
             _screen.DocumentPanelRequested -= OpenDocuments;
             _screen.CompletionRetryRequested -= RetryCompletion;
             _stage.ApplicantChanging -= ClearApplicant;
@@ -152,6 +154,7 @@ namespace Ohabjizol.Interview
 
         void RenderSummary()
         {
+            _summary.AllowDecisions = _allowDecisions;
             _summary.Render();
             if (_screen.TeamWindow)
                 _screen.TeamWindow.BindTeam(_stage.Session.ReadSelectedTeam());
@@ -162,12 +165,13 @@ namespace Ohabjizol.Interview
             bool blocked = _decision.IsPending;
             if (!blocked) _applicant.CancelDecision();
             _questionView.SetInputBlocked(blocked);
+            _summary.AllowDecisions = _allowDecisions;
             _summary.SetInputBlocked(blocked);
         }
 
         void RetryCompletion()
         {
-            if (_disposed || !_subscribed || _decision.IsPending) return;
+            if (!_allowDecisions || _disposed || !_subscribed || _decision.IsPending) return;
             _stage.RetryCompletion();
         }
 
@@ -177,12 +181,16 @@ namespace Ohabjizol.Interview
             if (_calendar != null) _calendar.Restore();
         }
 
-        void Ask(int index)
+        void RequestDecision(bool accepted)
         {
-            if (!_disposed && _subscribed && !_decision.IsPending
-                && !_stage.IsDeciding && !_stage.Session.IsFinished
-                && _questions.Applicant == _stage.Session.Current) _questionView.Ask(index);
+            if (_allowDecisions && !_disposed && _subscribed) _decision.Request(accepted);
         }
+
+        public bool CanAskQuestion(int index) => !_disposed && _subscribed && !_decision.IsPending
+            && !_stage.IsDeciding && !_stage.Session.IsFinished
+            && _questions.Applicant == _stage.Session.Current && _questions.CanAsk(index);
+
+        void Ask(int index) { if (CanAskQuestion(index)) _questionView.Ask(index); }
 
         void OpenDocuments()
         {

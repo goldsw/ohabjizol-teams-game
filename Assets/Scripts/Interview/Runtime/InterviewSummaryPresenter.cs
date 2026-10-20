@@ -11,6 +11,7 @@ namespace Ohabjizol.Interview
         readonly Button _accept, _reject, _chat;
         readonly string _finishedText;
         bool _inputBlocked;
+        public bool AllowDecisions { get; set; } = true;
 
         public InterviewSummaryPresenter(StageManager stage, Text title, Text stageLabel, Text finished,
             Text current, Text required, Text[] slots, Button accept, Button reject, Button chat,
@@ -50,8 +51,8 @@ namespace Ohabjizol.Interview
             _required.text = SkillLine("요구", theme == null ? null : theme.RequiredSkills);
             bool open = !_inputBlocked && !session.IsFinished && session.Current != null && !_stage.IsDeciding;
             bool retry = _stage.CompletionPending && _stage.CompletionError != null;
-            _accept.interactable = !_inputBlocked && (open || retry);
-            _reject.interactable = !_inputBlocked && (open || retry);
+            _accept.interactable = AllowDecisions && !_inputBlocked && (open || retry);
+            _reject.interactable = AllowDecisions && !_inputBlocked && (open || retry);
             _chat.interactable = open;
             _finished.gameObject.SetActive(session.IsFinished);
             _finished.text = retry ? "저장 대기 · 합격/불합격 버튼으로 재시도" : _finishedText;

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +13,6 @@ namespace Ohabjizol.Interview
         [SerializeField] Button[] _questions = new Button[5];
         [SerializeField] float _startAngle = 90f;
         [SerializeField, Min(0f)] float _radius = 180f;
-        [SerializeField] float _rotationDegreesPerSecond = 100f;
         [SerializeField] RadialQuestionWindow _window;
         [SerializeField] RadialQuestionLauncher _fixedLauncher;
         float _phase;
@@ -19,6 +20,9 @@ namespace Ohabjizol.Interview
         bool _available;
 
         public bool IsExpanded => _expanded;
+        public event Action<bool> ExpansionChanged;
+        public RectTransform OptionsRoot => _optionsRoot;
+        public IReadOnlyList<Button> QuestionButtons => Array.AsReadOnly(_questions ?? Array.Empty<Button>());
 
         public void ConfigureEditor(Button launcher, RectTransform optionsRoot,
             RectTransform portrait, Button[] questions)
@@ -41,17 +45,19 @@ namespace Ohabjizol.Interview
 
         void OnEnable()
         {
+            _phase = Mathf.Repeat(_startAngle, 360f);
             if (_launcher)
             {
                 _launcher.onClick.RemoveListener(ToggleExpanded);
                 _launcher.onClick.AddListener(ToggleExpanded);
+                _launcher.interactable = _available;
             }
         }
 
         void OnDisable()
         {
             if (_launcher) _launcher.onClick.RemoveListener(ToggleExpanded);
-            SetAvailable(false);
+            if (_launcher) _launcher.interactable = false;
             ResetCollapsed();
         }
 
@@ -63,36 +69,57 @@ namespace Ohabjizol.Interview
 
         public void CollapseContent()
         {
+            bool changed = _expanded;
             _expanded = false;
             if (_optionsRoot) _optionsRoot.gameObject.SetActive(false);
+            if (changed) ExpansionChanged?.Invoke(false);
         }
 
         public void SetAvailable(bool available)
         {
             _available = available;
-            if (_launcher) _launcher.interactable = available;
+            if (_launcher) _launcher.interactable = available && isActiveAndEnabled;
         }
 
         public void ShowQuestions()
         {
-            if (!_available || !_optionsRoot || !_portrait) return;
+            if (!isActiveAndEnabled || !_available || !_optionsRoot || !_portrait) return;
+            bool changed = !_expanded;
             _expanded = true;
             PositionQuestions();
+            BringToFront();
             _optionsRoot.gameObject.SetActive(true);
+            if (changed) ExpansionChanged?.Invoke(true);
         }
 
         public void ToggleExpanded()
         {
-            if (!_available || !_optionsRoot || !_portrait) return;
-            _expanded = !_expanded;
-            if (_expanded) PositionQuestions();
-            _optionsRoot.gameObject.SetActive(_expanded);
+            if (_expanded) CollapseContent();
+            else ShowQuestions();
         }
 
-        void Update()
+        void BringToFront()
+        {
+            // Raise the authored branch alongside WindowLayer without reparenting.
+            Transform branch = _optionsRoot;
+            while (branch.parent)
+            {
+                Transform parent = branch.parent;
+                for (int i = 0; i < parent.childCount; i++)
+                {
+                    if (parent.GetChild(i).name != "WindowLayer") continue;
+                    branch.SetAsLastSibling();
+                    _optionsRoot.SetAsLastSibling();
+                    return;
+                }
+                branch = parent;
+            }
+            _optionsRoot.SetAsLastSibling();
+        }
+
+        void LateUpdate()
         {
             if (!_expanded || !_optionsRoot || !_portrait) return;
-            _phase = Mathf.Repeat(_phase - Mathf.Abs(_rotationDegreesPerSecond) * Time.unscaledDeltaTime, 360f);
             PositionQuestions();
         }
 

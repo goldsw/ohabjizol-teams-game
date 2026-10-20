@@ -210,7 +210,7 @@ namespace Ohabjizol.Interview
                 _lineIds[i] = line.Id;
                 _lineLabels[i].text = chosen ? "의심  " + line.Sentence : line.Sentence;
                 _lineLabels[i].color = Color.black;
-                UiKit.Paint(_lineButtons[i], chosen ? SuspicionSelectedColor : SuspicionColor);
+                ButtonActiveBackground.Ensure(_lineButtons[i]).SetActiveState(chosen);
                 _lineButtons[i].interactable = interactive;
                 _lineButtons[i].gameObject.SetActive(true);
             }

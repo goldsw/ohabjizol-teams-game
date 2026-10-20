@@ -9,7 +9,7 @@ namespace Ohabjizol.Interview
         public void ConfigureEditor(DocumentWorkspace authoredWorkspace) { workspace = authoredWorkspace; }
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
+            if (eventData.button == PointerEventData.InputButton.Left)
                 workspace?.OpenLibrary();
         }
     }

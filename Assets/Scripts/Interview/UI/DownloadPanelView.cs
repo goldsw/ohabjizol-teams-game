@@ -25,6 +25,8 @@ namespace Ohabjizol.Interview
         bool _initialized;
         public IReadOnlyList<DownloadItemView> Items => Array.AsReadOnly(_items ?? Array.Empty<DownloadItemView>());
         public event Action<DocumentDownloadRequest> DownloadCompleted;
+        public bool IsOpen { get; private set; }
+        public event Action<bool> VisibilityChanged;
         public event Action ApplicationRequested;
         public event Action PortfolioRequested;
         public bool HasAuthoredUi => _panelRect && _closeButton && ValidItems();
@@ -107,13 +109,30 @@ namespace Ohabjizol.Interview
             }
             if (_closeButton) _closeButton.onClick.RemoveListener(Close);
         }
-        public void Open() => MoveTo(_openPosition);
-        public void Close() { MoveTo(_closedPosition); }
+        public void Open()
+        {
+            if (!HasAuthoredUi || !isActiveAndEnabled) return;
+            MoveTo(_openPosition);
+            SetOpenTarget(true);
+        }
+        public void Close()
+        {
+            if (!HasAuthoredUi || !isActiveAndEnabled) return;
+            MoveTo(_closedPosition);
+            SetOpenTarget(false);
+        }
         public void CloseImmediate()
         {
             if (_slide != null) StopCoroutine(_slide);
             _slide = null;
             if (_panelRect) _panelRect.anchoredPosition = _closedPosition;
+            SetOpenTarget(false);
+        }
+        void SetOpenTarget(bool open)
+        {
+            if (IsOpen == open) return;
+            IsOpen = open;
+            VisibilityChanged?.Invoke(open);
         }
         void MoveTo(Vector2 target)
         {

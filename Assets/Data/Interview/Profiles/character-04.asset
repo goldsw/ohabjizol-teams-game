@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: character-04
   m_EditorClassIdentifier: Assembly-CSharp::Ohabjizol.Interview.ApplicantProfileAsset
   characterId: character-04
-  displayName: "\uCE90\uB9AD\uD130 04"
+  displayName: "\uC724\uC138\uC544"
   sourceSheet: Sheet1
   sourceRow: 60
   roleProfiles:

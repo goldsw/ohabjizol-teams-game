@@ -1,5 +1,6 @@
 using System;
 using Ohabjizol.UI;
+using Ohabjizol.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +45,19 @@ namespace Ohabjizol.Interview
         public float FakePortfolioAnswerChance => fakePortfolioAnswerChance;
         [SerializeField, HideInInspector] bool discordVisible = true;
         InterviewRuntime _runtime;
+        IInterviewSessionHost _sessionHost;
+        bool _awakeStarted;
+        public void SetSessionHost(IInterviewSessionHost host)
+        {
+            if (_awakeStarted || _sessionHost != null) throw new InvalidOperationException("SetSessionHost must be called once before Awake.");
+            _sessionHost = host ?? throw new ArgumentNullException(nameof(host));
+        }
+        public void DisposeSession()
+        {
+            UnsubscribeInputs();
+            _runtime?.Dispose();
+            _runtime = null;
+        }
         readonly UnityEngine.Events.UnityAction[] _questionHandlers = new UnityEngine.Events.UnityAction[5];
         bool _inputsSubscribed;
         public event Action<int> QuestionRequested;
@@ -58,11 +72,11 @@ namespace Ohabjizol.Interview
         public DocumentWorkspace Documents => _workspace;
         public bool InboxUnread => _runtime != null && _runtime.InboxUnread;
         public void AskQuestion(int index) { if (isActiveAndEnabled) QuestionRequested?.Invoke(index); }
-        public void AcceptApplicant() { if (isActiveAndEnabled) DecisionRequested?.Invoke(true); }
-        public void RejectApplicant() { if (isActiveAndEnabled) DecisionRequested?.Invoke(false); }
+        public void AcceptApplicant() { if (isActiveAndEnabled && (_sessionHost == null || _sessionHost.AllowDecisions)) DecisionRequested?.Invoke(true); }
+        public void RejectApplicant() { if (isActiveAndEnabled && (_sessionHost == null || _sessionHost.AllowDecisions)) DecisionRequested?.Invoke(false); }
         public void OpenDocumentPanel() { if (isActiveAndEnabled) DocumentPanelRequested?.Invoke(); }
-        public void RetryCompletion() { if (isActiveAndEnabled) CompletionRetryRequested?.Invoke(); }
-        public string HandoffSceneName => Result != null ? ResultSceneName : null;
+        public void RetryCompletion() { if (isActiveAndEnabled && (_sessionHost == null || _sessionHost.AllowDecisions)) CompletionRetryRequested?.Invoke(); }
+        public string HandoffSceneName => (_sessionHost == null || _sessionHost.AllowResultHandoff) && Result != null ? ResultSceneName : null;
         public InterviewResult Result => _runtime?.Result;
         public bool HasAuthoredUi
         {
@@ -75,7 +89,7 @@ namespace Ohabjizol.Interview
                     || !_windowParent || !_itemPrefab || !_viewerPrefab || !_portfolioCatalog || !_questionCatalog
                     || !_workspace.HasAuthoredLibrary || !_calendarWindow || !_scheduleConfig || !_calendarButton
                     || _questions == null || _questions.Length != 5 || _slotLabels == null
-                    || _slotLabels.Length < StageExecutionPolicy.TeamCapacity(StageSelection.Current))
+                    || _slotLabels.Length < (_sessionHost != null && !_sessionHost.AllowDecisions ? 6 : StageExecutionPolicy.TeamCapacity(StageSelection.Current)))
                     return false;
                 foreach (var question in _questions) if (!question || !question.HasAuthoredUi) return false;
                 foreach (var slot in _slotLabels) if (!slot) return false;
@@ -84,6 +98,7 @@ namespace Ohabjizol.Interview
         }
         void Awake()
         {
+            _awakeStarted = true;
             if (!HasAuthoredUi)
             {
                 Debug.LogError("InterviewScreen: authored UI references/templates missing. Run BakeAuthoredUi in EditMode and save the prefab/scene.", this);
@@ -97,7 +112,7 @@ namespace Ohabjizol.Interview
                     _notification, _unreadMark, _titleLabel, _stageLabel, _finishedLabel, _currentLabel,
                     _requiredLabel, _slotLabels, _acceptButton, _rejectButton, _chatButton,
                     _calendarWindow, _scheduleConfig, _calendarButton, _radialQuestions, _applicantStats);
-                _runtime = InterviewRuntime.Create(this, views);
+                _runtime = InterviewRuntime.Create(this, views, _sessionHost ?? new CampaignInterviewSessionHost());
                 discordVisible = _discordViewRoot.gameObject.activeSelf;
                 for (int i = 0; i < _questionHandlers.Length; i++)
                 {

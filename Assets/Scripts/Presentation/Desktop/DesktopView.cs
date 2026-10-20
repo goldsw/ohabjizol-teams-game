@@ -47,6 +47,16 @@ namespace Ohabjizol.Presentation
         bool _locked;
 
         public void Lock() { _locked = true; if (_startMenu != null) _startMenu.Close(); }
+        public TutorialWindow Tutorial => _tutorial;
+        public void Unlock() { _locked = false; }
+        public void ResetConnection() { if (_code != null) _code.ResetConnection(); }
+        public void ShowTutorialPrompt(bool allowSkip)
+        {
+            if (_tutorial == null) return;
+            ClearSelection();
+            _tutorial.ConfigureMode(allowSkip);
+            _tutorial.Open();
+        }
         public void ClearSelection()
         {
             if (_startMenu != null) _startMenu.Close();
@@ -111,6 +121,8 @@ namespace Ohabjizol.Presentation
                     Debug.LogError("Desktop window frame missing. Capture and save the prefab.", binding.Window);
                     return false;
                 }
+                if (binding.Icon.TryGetComponent<Button>(out var appButton))
+                    ButtonActiveBackground.Ensure(appButton).TrackVisibleContent(binding.Window.Info.gameObject);
             }
             if (_settings == null) _settings = SettingsApplier.LoadAndApply();
             _appContext = new DesktopAppContext(_settings, () => _connectDelay, Launch, RefreshAuthoredContent);

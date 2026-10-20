@@ -100,11 +100,12 @@ namespace Ohabjizol.UI
             label.text = caption ?? string.Empty;
             label.color = PaperColor;
             Stretch(label.rectTransform, 8f);
+            ButtonActiveBackground.Ensure(button);
             return button;
         }
 
         /// <summary>
-        /// Same color block as the interview screen: white highlight, dark press, dim disabled.
+        /// Preserve base color across focus and availability; retain press feedback.
         /// </summary>
         public static void Paint(Button button, Color color)
         {
@@ -113,10 +114,10 @@ namespace Ohabjizol.UI
 
             ColorBlock block = button.colors;
             block.normalColor = color;
-            block.highlightedColor = Color.Lerp(color, Color.white, 0.22f);
+            block.highlightedColor = color;
             block.pressedColor = Color.Lerp(color, Color.black, 0.18f);
             block.selectedColor = color;
-            block.disabledColor = new Color(color.r * 0.4f, color.g * 0.4f, color.b * 0.4f, 0.65f);
+            block.disabledColor = color;
             block.colorMultiplier = 1f;
             block.fadeDuration = 0.05f;
             button.colors = block;

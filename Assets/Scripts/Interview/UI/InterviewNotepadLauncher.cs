@@ -1,3 +1,4 @@
+using Ohabjizol.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,9 +50,7 @@ namespace Ohabjizol.Interview
 
         void RefreshColor()
         {
-            if (!_surface || !_window) return;
-            Color color = _window.IsMinimized ? _minimized : _normal;
-            if (_surface.color != color) _surface.color = color;
+            if (_button) ButtonActiveBackground.Ensure(_button).SetActiveState(_window && _window.IsOpen);
         }
 
 #if UNITY_EDITOR

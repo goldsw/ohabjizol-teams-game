@@ -18,6 +18,11 @@ namespace Ohabjizol.EditorTools
         const string Original = "Logs/UIEffects/20261015-MainMenuStats/character-stats-source.json";
         const string CatalogPath = Root + "/ApplicantCatalog.asset";
         const string StagesPath = Root + "/StageStatsCatalog.asset";
+        static readonly string[] DisplayNames =
+        {
+            "강서윤", "차도현", "백하린", "윤세아", "한유진", "서도윤",
+            "정미소", "이가은", "백시현", "임태오", "김재하", "오지안"
+        };
         [Serializable] sealed class Source { public Character[] characters; }
         [Serializable] sealed class Character { public string name, sourceSheet; public int sourceRow; public Role[] roles; }
         [Serializable] sealed class Role { public string role, roleCell; public SkillRanges baseStats, fakeStats; }
@@ -114,6 +119,20 @@ namespace Ohabjizol.EditorTools
             var source = JsonUtility.FromJson<Source>(normalized);
             var cells = ReadCells(original);
             if (source?.characters == null || source.characters.Length != 13) throw new InvalidDataException("Exactly thirteen characters required.");
+            // Preserve the ID-ordered display names when legacy Logs inputs take precedence.
+            int nameIndex = 0;
+            normalized = Regex.Replace(normalized, @"(""name""\s*:\s*)""(?:\\.|[^""\\])*""", match =>
+            {
+                int index = nameIndex++;
+                return index < DisplayNames.Length ? match.Groups[1].Value + "\"" + DisplayNames[index] + "\"" : match.Value;
+            });
+            for (int i = 0; i < DisplayNames.Length; i++)
+            {
+                source.characters[i].name = DisplayNames[i];
+                string nameCell = "B" + source.characters[i].sourceRow.ToString(CultureInfo.InvariantCulture);
+                original = Regex.Replace(original, "(\"cell\"\\s*:\\s*\"" + nameCell + "\"\\s*,\\s*\"value\"\\s*:\\s*)\"(?:\\\\.|[^\"\\\\])*\"",
+                    match => match.Groups[1].Value + "\"" + DisplayNames[i] + "\"");
+            }
             var names = new HashSet<string>();
             foreach (var character in source.characters)
             {

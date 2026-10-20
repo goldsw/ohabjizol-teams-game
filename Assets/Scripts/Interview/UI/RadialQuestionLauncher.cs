@@ -37,8 +37,7 @@ namespace Ohabjizol.Interview
 
         void RefreshColor()
         {
-            if (_button && _button.image)
-                _button.image.color = _questions && _questions.IsExpanded ? _expandedColor : _collapsedColor;
+            if (_button) ButtonActiveBackground.Ensure(_button).SetActiveState(_questions && _questions.IsExpanded);
         }
 
         void OnEnable()

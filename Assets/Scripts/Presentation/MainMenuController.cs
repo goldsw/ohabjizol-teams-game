@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Ohabjizol.Interview;
+using Ohabjizol.Tutorial;
 using Ohabjizol.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +10,7 @@ using UnityEngine.UI;
 
 namespace Ohabjizol.Presentation
 {
+    [DefaultExecutionOrder(-1000)]
     public sealed class MainMenuController : MonoBehaviour
     {
         [SerializeField] string interviewSceneName = "InterviewScene";
@@ -40,6 +42,10 @@ namespace Ohabjizol.Presentation
         bool _accepted;
         bool _alignmentCompleted, _zoomStarted, _activationRequested, _callbacksAllowed;
         SceneLaunchFlow _launchFlow;
+        string _launchSceneName;
+        TutorialWindow _tutorialWindow;
+        bool _tutorialPromptOpen;
+        bool _titleWasBlocking;
         static bool _introCompleted;
         public enum MenuPhase { MainMenu3D = 0, Zooming = 1, Booting = 2, DesktopReady = 3, Launching = 4, Loading = 5, FillZoom = 6, Activating = 7 }
         public MenuPhase Phase
@@ -58,6 +64,8 @@ namespace Ohabjizol.Presentation
         void Awake()
         {
             if (!Application.isPlaying) return;
+            bool tutorialReturn = TutorialSceneFlow.ConsumeReturn();
+            if (tutorialReturn) MainMenuTitleOverlay.SuppressForSession();
             if (!HasAuthoredUi)
             {
                 Debug.LogError("MainMenu requires authored Desktop, camera poses, monitor handler, boot progress Image/Text, ComputerTransitionController and LoadingUiPresenter references. Run editor authoring and save before Play.", this);
@@ -71,6 +79,8 @@ namespace Ohabjizol.Presentation
                 return;
             }
             if (!_desktop.Bind(connectDelay, Launch)) { enabled = false; return; }
+            _tutorialWindow = _desktop.Tutorial;
+            SubscribeTutorial();
             monitorClick.Bind(this);
             _callbacksAllowed = true;
             _launchFlow = new SceneLaunchFlow(minimumLoadingDuration, loadingProgressSpeed, loadingCompleteHold);
@@ -78,7 +88,7 @@ namespace Ohabjizol.Presentation
             bootOverlay.SetActive(false);
             loadingPresenter.Hide();
             _generatedDesktopRoot.gameObject.SetActive(false);
-            if (_introCompleted)
+            if (_introCompleted || tutorialReturn)
             {
                 cameraController.SetAuthoredPose(zoomTarget);
                 Ready();
@@ -88,12 +98,14 @@ namespace Ohabjizol.Presentation
                 cameraController.SetAuthoredPose(introStart);
                 Phase = MenuPhase.MainMenu3D;
             }
-            cameraController.SetLookEnabled(true);
+            _titleWasBlocking = MainMenuTitleOverlay.IsBlocking;
+            cameraController.SetLookEnabled(!_titleWasBlocking);
         }
 
         void OnEnable()
         {
             if (!Application.isPlaying) return;
+            SubscribeTutorial();
             if (!monitorPhysicsRaycaster)
             {
                 var cam = MenuCamera() ?? Camera.main;
@@ -110,7 +122,8 @@ namespace Ohabjizol.Presentation
         void ApplyMonitorPicking()
         {
             if (_monitorPickingCaptured && monitorPhysicsRaycaster)
-                monitorPhysicsRaycaster.enabled = _monitorOriginallyEnabled && enabled && Phase == MenuPhase.MainMenu3D;
+                monitorPhysicsRaycaster.enabled = _monitorOriginallyEnabled && enabled &&
+                    Phase == MenuPhase.MainMenu3D && !MainMenuTitleOverlay.IsBlocking;
         }
 
         void RestoreMonitorPicking()
@@ -122,11 +135,28 @@ namespace Ohabjizol.Presentation
 
         void OnDisable()
         {
+            UnsubscribeTutorial();
             _callbacksAllowed = false;
             StopAllCoroutines();
             RestoreMonitorPicking();
         }
-        void OnDestroy() { _callbacksAllowed = false; RestoreMonitorPicking(); }
+        void OnDestroy() { UnsubscribeTutorial(); _callbacksAllowed = false; RestoreMonitorPicking(); }
+
+        void SubscribeTutorial()
+        {
+            if (_tutorialWindow == null) return;
+            _tutorialWindow.StartRequested -= StartTutorial;
+            _tutorialWindow.SkipRequested -= SkipTutorial;
+            _tutorialWindow.StartRequested += StartTutorial;
+            _tutorialWindow.SkipRequested += SkipTutorial;
+        }
+
+        void UnsubscribeTutorial()
+        {
+            if (_tutorialWindow == null) return;
+            _tutorialWindow.StartRequested -= StartTutorial;
+            _tutorialWindow.SkipRequested -= SkipTutorial;
+        }
 
         void Start()
         {
@@ -140,6 +170,7 @@ namespace Ohabjizol.Presentation
 
         public void MonitorClicked()
         {
+            if (MainMenuTitleOverlay.IsBlocking) return;
             if (!enabled || Phase != MenuPhase.MainMenu3D || _accepted) return;
             Phase = MenuPhase.Zooming;
             StartCoroutine(Boot());
@@ -178,18 +209,60 @@ namespace Ohabjizol.Presentation
 
         public void Launch(StageId ignored)
         {
-            if (!isActiveAndEnabled || !_callbacksAllowed || _accepted || Phase != MenuPhase.DesktopReady) return;
+            RequestPlay();
+        }
+
+        public void Play() { RequestPlay(); }
+
+        public void RequestPlay()
+        {
+            if (!CanRequestLaunch()) return;
+            if (!TutorialProgress.Seen)
+            {
+                if (_tutorialWindow == null || !_tutorialWindow.HasAuthoredContent)
+                {
+                    RecoverBeforeLoad("Tutorial prompt requires authored Start/Skip controls.");
+                    return;
+                }
+                _desktop.ShowTutorialPrompt(true);
+                _tutorialPromptOpen = true;
+                return;
+            }
             var run = CampaignRunStore.Load();
             if (run.IsComplete)
             {
-                _accepted = true;
-                Phase = MenuPhase.Launching;
-                _desktop.Lock();
-                SceneManager.LoadScene(endingSceneName, LoadSceneMode.Single);
+                try
+                {
+                    _accepted = true;
+                    Phase = MenuPhase.Launching;
+                    _desktop.Lock();
+                    SceneManager.LoadScene(endingSceneName, LoadSceneMode.Single);
+                }
+                catch (Exception exception) { RecoverBeforeLoad(exception.Message); }
                 return;
             }
             StageSelection.Set(run.NextStage);
-            Play();
+            BeginLaunch(interviewSceneName);
+        }
+
+        bool CanRequestLaunch() => !MainMenuTitleOverlay.IsBlocking && isActiveAndEnabled &&
+            _callbacksAllowed && !_accepted && Phase == MenuPhase.DesktopReady;
+
+        public void StartTutorial()
+        {
+            if (!CanRequestLaunch()) return;
+            try { TutorialSceneFlow.Start(BeginLaunch); }
+            catch (Exception exception) { RecoverBeforeLoad(exception.Message); }
+        }
+
+        public void SkipTutorial()
+        {
+            if (!CanRequestLaunch() || !_tutorialPromptOpen) return;
+            TutorialProgress.MarkSeen();
+            _tutorialPromptOpen = false;
+            _tutorialWindow.Close();
+            _desktop.ResetConnection();
+            _desktop.ClearSelection();
         }
 
         public void StartNewRun()
@@ -199,13 +272,23 @@ namespace Ohabjizol.Presentation
             _desktop.RefreshAuthoredContent();
         }
 
-        public void Play()
+        void BeginLaunch(string sceneName)
         {
-            if (!isActiveAndEnabled || !_callbacksAllowed || _accepted || Phase != MenuPhase.DesktopReady) return;
+            if (!CanRequestLaunch()) return;
+            if (string.IsNullOrWhiteSpace(sceneName))
+            {
+                RecoverBeforeLoad("Scene name is missing.");
+                return;
+            }
+            _launchSceneName = sceneName;
             _accepted = true;
             Phase = MenuPhase.Launching;
             _desktop.Lock();
-            if (onPlay != null) onPlay.Invoke(); else OpenAfterCenter();
+            try
+            {
+                if (onPlay != null) onPlay.Invoke(); else OpenAfterCenter();
+            }
+            catch (Exception exception) { RecoverBeforeLoad(exception.Message); }
         }
         void AlignCenter()
         {
@@ -213,7 +296,7 @@ namespace Ohabjizol.Presentation
                 !transition.TryComputeCenteredPose(MenuCamera(), out _, out _, out _) ||
                 !transition.TryComputeAlignedPose(MenuCamera(), out _, out _, out _))
             {
-                Debug.LogError("MainMenu launch requires an enabled transition, the menu camera tagged MainCamera and a valid authored display frame/fill pose.", this);
+                RecoverBeforeLoad("MainMenu launch requires an enabled transition, the menu camera tagged MainCamera and a valid authored display frame/fill pose.");
                 return;
             }
             transition.AlignToCenter(OpenAfterCenter);
@@ -225,16 +308,21 @@ namespace Ohabjizol.Presentation
             _alignmentCompleted = true;
             cameraController.SetLookEnabled(false);
             if (EventSystem.current == null || !EventSystem.current.isActiveAndEnabled ||
-                transition == null || loadingPresenter == null || string.IsNullOrWhiteSpace(interviewSceneName))
+                transition == null || loadingPresenter == null || string.IsNullOrWhiteSpace(_launchSceneName))
             {
-                Debug.LogError("MainMenu launch requires an active authored EventSystem, transition, loading presenter and Interview scene name.", this);
+                RecoverBeforeLoad("MainMenu launch requires an active authored EventSystem, transition, loading presenter and scene name.");
                 return;
             }
-            if (!_launchFlow.TryStart(interviewSceneName, out var error))
+            try
             {
-                Debug.LogError("MainMenu scene launch failed: " + error, this);
-                return;
+                if (!_launchFlow.TryStart(_launchSceneName, out var error))
+                {
+                    RecoverBeforeLoad("MainMenu scene launch failed: " + error);
+                    return;
+                }
             }
+            catch (Exception exception) { RecoverBeforeLoad(exception.Message); return; }
+            _tutorialPromptOpen = false;
             Phase = MenuPhase.Loading;
             loadingPresenter.Show();
             loadingPresenter.Render(_launchFlow.Snapshot);
@@ -242,6 +330,22 @@ namespace Ohabjizol.Presentation
 
         void Update()
         {
+            bool titleBlocking = MainMenuTitleOverlay.IsBlocking;
+            if (_titleWasBlocking != titleBlocking)
+            {
+                _titleWasBlocking = titleBlocking;
+                ApplyMonitorPicking();
+                if (cameraController != null)
+                    cameraController.SetLookEnabled(!titleBlocking &&
+                        (Phase == MenuPhase.MainMenu3D || Phase == MenuPhase.DesktopReady || Phase == MenuPhase.Booting));
+            }
+            if (_tutorialPromptOpen && _tutorialWindow != null && _tutorialWindow.Root != null &&
+                !_tutorialWindow.Root.gameObject.activeInHierarchy)
+            {
+                _tutorialPromptOpen = false;
+                _desktop.ResetConnection();
+                _desktop.ClearSelection();
+            }
             if (!_callbacksAllowed || _launchFlow == null ||
                 (Phase != MenuPhase.Loading && Phase != MenuPhase.FillZoom)) return;
             _launchFlow.Tick(Time.unscaledDeltaTime);
@@ -250,6 +354,27 @@ namespace Ohabjizol.Presentation
             _zoomStarted = true;
             Phase = MenuPhase.FillZoom;
             transition.Begin(ActivateInterview);
+        }
+
+        void RecoverBeforeLoad(string error)
+        {
+            // Once an async load is accepted its target and lock must remain intact.
+            if (Phase == MenuPhase.Loading || Phase == MenuPhase.FillZoom || Phase == MenuPhase.Activating)
+            {
+                Debug.LogError(error, this);
+                return;
+            }
+            _accepted = false;
+            _alignmentCompleted = _zoomStarted = _activationRequested = false;
+            _launchSceneName = null;
+            _launchFlow = new SceneLaunchFlow(minimumLoadingDuration, loadingProgressSpeed, loadingCompleteHold);
+            _desktop.Unlock();
+            _desktop.ResetConnection();
+            _desktop.ClearSelection();
+            loadingPresenter.Hide();
+            cameraController.SetAuthoredPose(zoomTarget);
+            Ready();
+            Debug.LogError(error, this);
         }
 
         void ActivateInterview()
@@ -302,6 +427,7 @@ namespace Ohabjizol.Presentation
                 _desktop.Build(_generatedDesktopRoot, desktopLayout, connectDelay, null, initialWindows);
             }
             _desktop.CaptureEditorReferences();
+            if (_desktop.Tutorial != null) _desktop.Tutorial.BakePromptEditor();
             UnityEditor.EditorUtility.SetDirty(screen);
             UnityEditor.EditorUtility.SetDirty(camera);
             if (EventSystem.current != null) UnityEditor.EditorUtility.SetDirty(EventSystem.current.gameObject);

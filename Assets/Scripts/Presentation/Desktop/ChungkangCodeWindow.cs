@@ -38,6 +38,7 @@ namespace Ohabjizol.Presentation
 
         [SerializeField] Button _newGame;
         public event Action RunReset;
+        public event Action NewGameRequested;
         public bool HasAuthoredContent => _servers != null && _servers.Length == StageCatalog.All.Count &&
             Array.TrueForAll(_servers, slot => slot != null && slot.HasReferences) &&
             _serverName != null && _heading != null && _detail != null && _status != null && _newGame != null;
@@ -49,12 +50,12 @@ namespace Ohabjizol.Presentation
         }
         void NewGame()
         {
-            if (_connect != null) StopCoroutine(_connect);
-            _connect = null;
-            _connected = false;
+            if (_connect != null || _connected) return;
+            ResetConnection();
             CampaignRunStore.StartNewRun();
             Refresh();
             RunReset?.Invoke();
+            NewGameRequested?.Invoke();
         }
         protected override void BuildInfo(RectTransform info)
         {
@@ -147,6 +148,7 @@ namespace Ohabjizol.Presentation
             _status.rectTransform.offsetMin = new Vector2(18f, 0f);
             _status.rectTransform.offsetMax = new Vector2(-180f, 0f);
             _newGame = UiKit.Button(plateRect, "NewGame", "새 게임", DesktopUi.DiscordAccent, 22);
+            _newGame.onClick.AddListener(NewGame);
             var newRect = _newGame.GetComponent<RectTransform>();
             newRect.anchorMin = new Vector2(1f, 0f);
             newRect.anchorMax = Vector2.one;
@@ -167,7 +169,7 @@ namespace Ohabjizol.Presentation
             {
                 _serverName.text = "면접 완료";
                 _heading.text = "# 엔딩";
-                _detail.text = "모든 면접을 마쳤습니다.\n총 별점: " + (run.TotalHalfStars / 2f) + "\n청강코드 아이콘으로 엔딩 보기 · 새 게임으로 다시 시작";
+                _detail.text = "모든 면접을 마쳤습니다.\n총 별점: " + (run.TotalHalfStars / 2f) + "\n새 게임으로 다시 시작";
                 _status.text = "엔딩 준비 완료";
                 return;
             }
@@ -177,7 +179,7 @@ namespace Ohabjizol.Presentation
             int best = _progress.BestAccuracy(next);
             _detail.text = stage.DisplayName + " 서버\n\n주제: " + stage.Theme.DisplayName +
                 "\n지원자: " + stage.Applicants.Count + "명\n최고 기록: " + (best < 0 ? "기록 없음" : best + "%");
-            _status.text = "서버 정보를 불러오는 중…";
+            _status.text = "새 게임을 눌러 접속하세요.";
         }
         /// <summary>
         /// After <paramref name="delay"/> seconds, shows the connecting line and passes
@@ -193,19 +195,37 @@ namespace Ohabjizol.Presentation
 
         IEnumerator ConnectAfter(float delay, Action<StageId> connected)
         {
+            // Always yield once: StartCoroutine must assign the handle before completion clears it.
+            yield return null;
             if (delay > 0f)
                 yield return new WaitForSecondsRealtime(delay);
 
             _connect = null;
             _connected = true;
             _status.text = "접속 중…";
-            if (connected != null)
-                connected(NextStage);
+            try
+            {
+                // The menu owns campaign routing, after its tutorial gate.
+                connected?.Invoke(default(StageId));
+            }
+            catch (Exception exception)
+            {
+                ResetConnection();
+                Debug.LogException(exception, this);
+            }
+        }
+
+        public void ResetConnection()
+        {
+            if (_connect != null) StopCoroutine(_connect);
+            _connect = null;
+            _connected = false;
+            Refresh();
         }
 
         void OnDisable()
         {
-            _connect = null;
+            ResetConnection();
         }
 
         [Serializable]

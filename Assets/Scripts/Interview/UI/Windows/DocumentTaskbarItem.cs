@@ -35,7 +35,7 @@ namespace Ohabjizol.Interview
         }
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
+            if (eventData.button == PointerEventData.InputButton.Left)
                 activate?.Invoke();
         }
 
