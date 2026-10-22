@@ -21,6 +21,7 @@ namespace Ohabjizol.Interview
             if (font == null || rowAsset == null) throw new InvalidOperationException("Bake PDF row and font first.");
             if (AssetDatabase.LoadAssetAtPath<GameObject>(LibraryPath) == null)
                 BuildLibrary(font, rowAsset.GetComponent<DocumentTaskbarItem>());
+            DocumentLibrarySpriteBake.EnsurePrefab();
             if (AssetDatabase.LoadAssetAtPath<GameObject>(ButtonPath) == null) BuildButton(font);
         }
 

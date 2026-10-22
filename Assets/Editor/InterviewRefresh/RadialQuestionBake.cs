@@ -23,13 +23,14 @@ namespace Ohabjizol.Interview
                 var windowParent = serialized.FindProperty("_windowParent").objectReferenceValue as RectTransform;
                 var itemParent = serialized.FindProperty("_itemParent").objectReferenceValue as RectTransform;
                 var source = serialized.FindProperty("_questions");
-                if (!call || !call.PortraitRect || !windowParent || !itemParent || source.arraySize != 5)
-                    throw new InvalidOperationException("Authored portrait, window/taskbar parents and five questions required.");
-                var buttons = new Button[5];
+                if (!call || !call.PortraitRect || !windowParent || !itemParent || source.arraySize < InterviewQuestionCatalog.QuestionCount)
+                    throw new InvalidOperationException("Authored portrait, window/taskbar parents and two questions required.");
+                var buttons = new Button[InterviewQuestionCatalog.QuestionCount];
                 for (int i = 0; i < buttons.Length; i++)
                 {
                     var view = source.GetArrayElementAtIndex(i).objectReferenceValue as InterviewQuestionView;
                     if (!view || !view.Button) throw new InvalidOperationException("Question button missing at index " + i);
+                    view.EnsureUsedOverlayEditor();
                     buttons[i] = view.Button;
                 }
                 var radial = serialized.FindProperty("_radialQuestions").objectReferenceValue as RadialQuestionView;
@@ -49,17 +50,13 @@ namespace Ohabjizol.Interview
                     Transform existing = windowParent.Find("RadialQuestionWindow");
                     if (existing) window = existing.GetComponent<RadialQuestionWindow>();
                 }
-                var center = binding.FindProperty("_portrait").objectReferenceValue as RectTransform;
-                if (!center || center == call.PortraitRect || center.name != "ApplicantCenter")
-                    center = window ? window.transform.Find("Info/ApplicantCenter") as RectTransform : null;
-                if (!center || center == call.PortraitRect)
+                var center = call.PortraitRect;
+                for (int i = buttons.Length; i < source.arraySize; i++)
                 {
-                    center = Rect("ApplicantCenter", windowParent);
-                    center.anchorMin = center.anchorMax = center.pivot = new Vector2(.5f, .5f);
-                    center.sizeDelta = Vector2.zero;
-                    center.position = call.PortraitRect.TransformPoint(call.PortraitRect.rect.center);
+                    var unused = source.GetArrayElementAtIndex(i).objectReferenceValue as InterviewQuestionView;
+                    if (unused) unused.gameObject.SetActive(false);
                 }
-                center.SetParent(windowParent, true);
+                source.arraySize = buttons.Length;
                 if (!options) options = Rect("OptionsRoot", windowParent);
                 if (options.parent != windowParent) options.SetParent(windowParent, false);
                 options.localScale = Vector3.one;

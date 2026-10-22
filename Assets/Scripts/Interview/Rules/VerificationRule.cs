@@ -2,23 +2,19 @@ namespace Ohabjizol.Interview
 {
     public static class VerificationRule
     {
-        // PROTOTYPE ONLY
-        // 최종 기획 확정 후 교체 예정
-
-        // PROTOTYPE RULE
-        // Final verification scoring is not yet defined.
+        // Document evidence is evaluated against the portfolio state saved for this session.
         public static VerificationOutcome Evaluate(Applicant applicant, string selectedLineId)
         {
             if (applicant == null)
                 return VerificationOutcome.Failure;
 
-            if (IsCorrectLine(applicant, selectedLineId))
+            if (applicant.HasFalsePortfolio && IsCorrectLine(applicant, selectedLineId))
                 return VerificationOutcome.Success;
 
             if (!string.IsNullOrWhiteSpace(selectedLineId))
                 return VerificationOutcome.Failure;
 
-            if (applicant.Kind == ApplicantKind.Fraud)
+            if (applicant.HasFalsePortfolio)
                 return VerificationOutcome.Failure;
 
             return VerificationOutcome.None;

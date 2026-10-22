@@ -14,7 +14,9 @@ namespace Ohabjizol.Interview
         public void Clear() { Unread = false; Render(); }
         public void Render()
         {
-            _notification.text = Unread ? "새 면접자 서류입니다." : "";
+            _notification.text = Unread ? "면접자 자료 보냈습니다." : "";
+            var bubble = _notification.GetComponent<InterviewNotificationBubble>();
+            if (bubble != null) bubble.SetVisible(Unread);
             _unreadMark.SetActive(Unread);
         }
     }

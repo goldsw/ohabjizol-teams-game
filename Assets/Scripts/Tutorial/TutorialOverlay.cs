@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -20,8 +21,20 @@ namespace Ohabjizol.Tutorial
         [SerializeField] Image supervisorPortrait;
         [SerializeField] CanvasGroup supervisorFade;
         [SerializeField] Sprite supervisorIdle;
+        [SerializeField] Sprite supervisorTalk;
+        [SerializeField, Min(1f)] float charactersPerSecond = 35f;
+        const float SpeechFrameDuration = .12f;
+        string _dialogue = string.Empty;
+        int[] _textElements = Array.Empty<int>();
+        int _visibleElements;
+        float _speechElapsed;
+        bool _typing;
         [SerializeField] float fadeDuration = .25f;
+        [SerializeField, Min(.01f)] float highlightBlinkPeriod = .8f;
+        CanvasGroup _highlightFade;
+        float _blinkElapsed;
         readonly List<RectTransform> _targets = new List<RectTransform>();
+        readonly List<RectTransform> _emphasis = new List<RectTransform>();
         readonly Vector3[] _corners = new Vector3[4];
         readonly RectTransform[] _screenBounds = new RectTransform[1];
         EventSystem _events;
@@ -66,6 +79,7 @@ namespace Ohabjizol.Tutorial
 
         void OnDisable()
         {
+            CompleteSpeech();
             if (_events)
             {
                 _events.sendNavigationEvents = _previousNavigation;
@@ -75,11 +89,19 @@ namespace Ohabjizol.Tutorial
 
         public void Show(string text, bool explanation, params RectTransform[] targets)
         {
-            caption.text = text;
+            _dialogue = text ?? string.Empty;
+            _textElements = StringInfo.ParseCombiningCharacters(_dialogue);
+            _visibleElements = 0;
+            _speechElapsed = 0;
+            _typing = _textElements.Length > 0;
+            caption.text = string.Empty;
+            SetIdlePortrait();
             _explanation = explanation;
             _released = false;
             _enteredFrame = Time.frameCount;
             _targets.Clear();
+            _emphasis.Clear();
+            _blinkElapsed = 0;
             TargetsAvailable = true;
             if (targets != null) _targets.AddRange(targets);
             if (next) next.gameObject.SetActive(false);
@@ -87,7 +109,48 @@ namespace Ohabjizol.Tutorial
             if (_events) _events.SetSelectedGameObject(null);
         }
 
-        public void SetSupervisor(bool visible) { _supervisorAlpha = visible ? 1 : 0; }
+        /// <summary>Outlines only these rects while the spotlight still reveals every Show target.</summary>
+        public void SetEmphasis(params RectTransform[] targets)
+        {
+            _emphasis.Clear();
+            if (targets != null) foreach (var target in targets) if (target) _emphasis.Add(target);
+        }
+
+        public void SetSupervisor(bool visible)
+        {
+            _supervisorAlpha = visible ? 1 : 0;
+            if (!visible) CompleteSpeech();
+        }
+
+        void SetIdlePortrait()
+        {
+            if (supervisorPortrait) supervisorPortrait.sprite = supervisorIdle;
+        }
+
+        void CompleteSpeech()
+        {
+            _typing = false;
+            if (caption) caption.text = _dialogue;
+            SetIdlePortrait();
+        }
+
+        void UpdateSpeech()
+        {
+            if (!_typing) return;
+            _speechElapsed += Time.unscaledDeltaTime;
+            int count = Mathf.Min(_textElements.Length,
+                Mathf.FloorToInt(_speechElapsed * Mathf.Max(1f, charactersPerSecond)));
+            if (count >= _textElements.Length) { CompleteSpeech(); return; }
+            if (count != _visibleElements)
+            {
+                _visibleElements = count;
+                caption.text = _dialogue.Substring(0, _textElements[count]);
+            }
+            if (supervisorPortrait)
+                supervisorPortrait.sprite = _supervisorAlpha > 0 && supervisorTalk &&
+                    Mathf.FloorToInt(_speechElapsed / SpeechFrameDuration) % 2 != 0
+                    ? supervisorTalk : supervisorIdle;
+        }
 
         public bool IsRaycastLocationValid(Vector2 point, Camera camera)
         {
@@ -108,6 +171,13 @@ namespace Ohabjizol.Tutorial
         void Continue()
         {
             if (!_explanation || !_released || Time.frameCount <= _enteredFrame) return;
+            if (_typing)
+            {
+                CompleteSpeech();
+                _released = false;
+                _enteredFrame = Time.frameCount;
+                return;
+            }
             _released = false;
             ContinueRequested?.Invoke();
         }
@@ -119,6 +189,7 @@ namespace Ohabjizol.Tutorial
 
         void LateUpdate()
         {
+            UpdateSpeech();
             CaptureEventSystem();
             if (!_released && Time.frameCount > _enteredFrame && !Held()) _released = true;
             if (_events)
@@ -148,8 +219,26 @@ namespace Ohabjizol.Tutorial
                     return;
                 }
             // Follow the targets without changing their hierarchy or layout order.
-            Follow(highlight, _targets);
+            Follow(highlight, EmphasisVisible() ? _emphasis : _targets);
+            UpdateBlink();
             UpdateSpotlight(true);
+        }
+
+        bool EmphasisVisible()
+        {
+            if (_emphasis.Count == 0) return false;
+            foreach (var target in _emphasis)
+                if (!target || !target.gameObject.activeInHierarchy) return false;
+            return true;
+        }
+
+        void UpdateBlink()
+        {
+            if (!_highlightFade && !highlight.TryGetComponent(out _highlightFade))
+                _highlightFade = highlight.gameObject.AddComponent<CanvasGroup>();
+            _blinkElapsed += Time.unscaledDeltaTime;
+            float half = highlightBlinkPeriod * .5f;
+            _highlightFade.alpha = Mathf.Lerp(1f, 0f, Mathf.PingPong(_blinkElapsed / half, 1f));
         }
 
         void UpdateSpotlight(bool revealTargets)
@@ -204,6 +293,14 @@ namespace Ohabjizol.Tutorial
             supervisorPortrait.sprite = idle;
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.EditorUtility.SetDirty(supervisorPortrait);
+        }
+
+        public void SetSupervisorSpeechEditor(Sprite idle, Sprite talk)
+        {
+            if (!talk) throw new InvalidOperationException("Tutorial supervisor Talk is required.");
+            SetSupervisorIdleEditor(idle);
+            supervisorTalk = talk;
+            UnityEditor.EditorUtility.SetDirty(this);
         }
 
         public void ConfigureEditor(RectTransform border, Text label, Button nextButton, RectTransform panel,

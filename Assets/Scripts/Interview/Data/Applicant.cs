@@ -79,5 +79,6 @@ namespace Ohabjizol.Interview
         public ApplicantKind Kind { get; }
         public PortfolioDisplayState TruePortfolioQuality { get; }
         public PortfolioDisplayState? FakePortfolioQuality { get; }
+        public bool HasFalsePortfolio => FakePortfolioQuality.HasValue;
     }
 }

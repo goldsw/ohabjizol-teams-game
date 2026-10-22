@@ -275,7 +275,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 979bc9ec1dafb7545a0253b28d8663a3, type: 3}
+    m_Font: {fileID: 12800000, guid: 5e963d966ff3ecc4cb82a3640805bb28, type: 3}
     m_FontSize: 22
     m_FontStyle: 0
     m_BestFit: 0
@@ -597,6 +597,8 @@ MonoBehaviour:
   supervisorPortrait: {fileID: 1979783902}
   supervisorFade: {fileID: 14537400}
   supervisorIdle: {fileID: 21300000, guid: e82e3a09c305fb748bf822e5085fc1af, type: 3}
+  supervisorTalk: {fileID: 21300000, guid: 07aca798375016b4084be65b25bcec1a, type: 3}
+  charactersPerSecond: 35
   fadeDuration: 0.25
 --- !u!224 &498310842
 RectTransform:
@@ -791,8 +793,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.12, y: 0.035}
   m_AnchorMax: {x: 0.88, y: 0.18}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 21.770054}
+  m_SizeDelta: {x: 0, y: -43.539894}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &745272249
 MonoBehaviour:
@@ -979,7 +981,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 979bc9ec1dafb7545a0253b28d8663a3, type: 3}
+    m_Font: {fileID: 12800000, guid: 5e963d966ff3ecc4cb82a3640805bb28, type: 3}
     m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
@@ -1365,7 +1367,8 @@ MonoBehaviour:
   - "\uBB38\uC11C\uD568 \uC544\uC774\uCF58\uC744 \uB20C\uB7EC\uBD10."
   - "\uC798\uD588\uC5B4. \uC774\uACF3\uC5D0\uB294 \uB124\uAC00 \uB2E4\uC6B4\uBC1B\uC740
     \uBB38\uC11C\uB4E4\uC774 \uC815\uB9AC\uB418\uC5B4 \uC788\uC9C0."
-  - "\uBB38\uC11C\uD568\uC744 \uB2EB\uC544\uBCF4\uC790\uACE0."
+  - "\uC774\uC81C \uBB38\uC11C\uD568\uACFC \uC9C0\uC6D0\uC11C, \uD3EC\uD2B8\uD3F4\uB9AC\uC624
+    \uCC3D\uC744 \uBAA8\uB450 \uB2EB\uC544\uBCF4\uC790\uACE0."
   - "\uC790, \uC774\uC81C \uD55C\uBC88 \uBA74\uC811\uC790\uC5D0\uAC8C \uC9C8\uBB38\uC744
     \uD574\uBCFC\uAE4C?"
   - "\uC774\uAC78\uB85C \uD3EC\uD2B8\uD3F4\uB9AC\uC624\uC5D0 \uAD00\uD574 \uC9C8\uBB38\uD560
@@ -2380,7 +2383,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 979bc9ec1dafb7545a0253b28d8663a3, type: 3}
+    m_Font: {fileID: 12800000, guid: 5e963d966ff3ecc4cb82a3640805bb28, type: 3}
     m_FontSize: 26
     m_FontStyle: 0
     m_BestFit: 0
@@ -2599,7 +2602,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 979bc9ec1dafb7545a0253b28d8663a3, type: 3}
+    m_Font: {fileID: 12800000, guid: 5e963d966ff3ecc4cb82a3640805bb28, type: 3}
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
@@ -2611,7 +2614,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC0C1\uC0AC"
+  m_Text: "\uC120\uBC30"
 --- !u!222 &1973401237
 CanvasRenderer:
   m_ObjectHideFlags: 0

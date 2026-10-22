@@ -60,12 +60,12 @@ namespace Ohabjizol.Interview
             foreach (var reference in references)
                 if (!reference || !reference.transform.IsChildOf(owner.transform))
                     throw new InvalidOperationException("Tutorial target is missing or references another Screen hierarchy.");
-            if (_questionButtons == null || _questionButtons.Length != 5)
-                throw new InvalidOperationException("Tutorial requires five question buttons in Screen order.");
+            if (_questionButtons == null || _questionButtons.Length != InterviewQuestionCatalog.QuestionCount)
+                throw new InvalidOperationException("Tutorial requires two question buttons in Screen order.");
             var unique = new HashSet<Button>();
             for (int i = 0; i < _questionButtons.Length; i++)
                 if (!_questionButtons[i] || !_questionButtons[i].transform.IsChildOf(owner.transform) ||
-                    !unique.Add(_questionButtons[i]) || _questions.QuestionButtons.Count != 5 ||
+                    !unique.Add(_questionButtons[i]) || _questions.QuestionButtons.Count != InterviewQuestionCatalog.QuestionCount ||
                     _questions.QuestionButtons[i] != _questionButtons[i])
                     throw new InvalidOperationException("Tutorial question references must match the authored radial buttons.");
         }

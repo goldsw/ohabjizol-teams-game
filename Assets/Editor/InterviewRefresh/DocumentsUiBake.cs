@@ -13,7 +13,7 @@ namespace Ohabjizol.Interview
         public const string Folder = "Assets/Prefabs/InterviewRefresh/Documents";
         public const string TaskbarItemPath = Folder + "/PdfTaskbarItem.prefab";
         public const string ViewerPath = Folder + "/PdfViewer.prefab";
-        public const string FontPath = "Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf";
+        public const string FontPath = Ohabjizol.UI.UiKit.FontAssetPath;
 
         public static void BuildAssets()
         {
@@ -27,6 +27,7 @@ namespace Ohabjizol.Interview
                 BuildTaskbar(font);
             if (AssetDatabase.LoadAssetAtPath<GameObject>(ViewerPath) == null)
                 BuildViewer(font);
+            ApplicationDocumentBake.EnsurePrefab();
             DocumentLibraryBake.BuildAssets();
             TaskbarWindowBake.BuildAssets();
         }

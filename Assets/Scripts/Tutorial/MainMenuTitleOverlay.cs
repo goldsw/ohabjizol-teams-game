@@ -22,6 +22,8 @@ namespace Ohabjizol.Tutorial
         private bool showing;
         private bool dismissing;
 
+        public static event System.Action Dismissed;
+
         public static bool IsBlocking =>
             StartupLogoSequence.IsBlocking || (active != null && active.showing && !active.dismissing)
             || Time.frameCount <= blockedThroughFrame;
@@ -41,6 +43,7 @@ namespace Ohabjizol.Tutorial
             seen = false;
             active = null;
             blockedThroughFrame = -1;
+            Dismissed = null;
         }
 
         public static void SuppressForSession()
@@ -86,6 +89,7 @@ namespace Ohabjizol.Tutorial
                     SetVisible(false);
                     if (active == this)
                         active = null;
+                    Dismissed?.Invoke();
                 }
                 return;
             }

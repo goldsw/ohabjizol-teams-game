@@ -177,7 +177,7 @@ namespace Ohabjizol.Presentation
             _serverName.text = stage.DisplayName;
             _heading.text = "# 면접실";
             int best = _progress.BestAccuracy(next);
-            _detail.text = stage.DisplayName + " 서버\n\n주제: " + stage.Theme.DisplayName +
+            _detail.text = stage.DisplayName + " 서버\n\n주제: " + GameThemeCatalog.ForRun(run.RunId).DisplayName +
                 "\n지원자: " + stage.Applicants.Count + "명\n최고 기록: " + (best < 0 ? "기록 없음" : best + "%");
             _status.text = "새 게임을 눌러 접속하세요.";
         }

@@ -17,7 +17,7 @@ namespace Ohabjizol.Interview
                     throw new InvalidOperationException("InterviewScreen tutorial targets are not authored.");
                 _tutorialTargets.Validate(this);
                 if (_tutorialTargets.Downloads != _downloadPanel || _tutorialTargets.Questions != _radialQuestions ||
-                    _questions == null || _questions.Length != 5)
+                    _questions == null || _questions.Length != InterviewQuestionCatalog.QuestionCount)
                     throw new InvalidOperationException("Tutorial targets do not match their Screen views.");
                 for (int i = 0; i < _questions.Length; i++)
                     if (!_questions[i] || _questions[i].Button != _tutorialTargets.QuestionButtons[i])
@@ -34,13 +34,13 @@ namespace Ohabjizol.Interview
             if (Application.isPlaying || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
                 throw new InvalidOperationException("Tutorial target authoring requires EditMode.");
             if (!_downloadPanel || !_workspace || !_workspace.Library || !_radialQuestions || !_call ||
-                !_calendarWindow || !_notepadWindow || _questions == null || _questions.Length != 5)
+                !_calendarWindow || !_notepadWindow || _questions == null || _questions.Length != InterviewQuestionCatalog.QuestionCount)
                 throw new InvalidOperationException("Author the Screen views before binding tutorial targets.");
 
             var teamLauncher = UniqueTutorialComponentEditor<InterviewTeamLauncher>();
             var teamWindow = TutorialReferenceEditor<InterviewTeamWindow>(teamLauncher, "_window");
             var fixedLauncher = TutorialReferenceEditor<RadialQuestionLauncher>(_radialQuestions, "_fixedLauncher");
-            var questionButtons = new Button[5];
+            var questionButtons = new Button[InterviewQuestionCatalog.QuestionCount];
             for (int i = 0; i < questionButtons.Length; i++)
             {
                 if (!_questions[i] || !_questions[i].Button)

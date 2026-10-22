@@ -27,7 +27,10 @@ namespace Ohabjizol.UI
 
                 _font = Resources.Load<Font>(FontResourcePath);
                 if (_font == null)
+                {
+                    Debug.LogError("Missing canonical UI font: " + FontAssetPath);
                     _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                }
                 return _font;
             }
         }

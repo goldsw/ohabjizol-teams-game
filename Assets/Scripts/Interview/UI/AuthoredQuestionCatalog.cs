@@ -30,7 +30,7 @@ namespace Ohabjizol.Interview
         {
             if (_entries != null && _entries.Length != 0) return;
             JobRole[] roles = { JobRole.Planning, JobRole.Programming, JobRole.Graphics };
-            var entries = new List<Entry>(15);
+            var entries = new List<Entry>(roles.Length * InterviewQuestionCatalog.QuestionCount);
             foreach (JobRole role in roles)
             {
                 var definitions = InterviewQuestionCatalog.GetQuestions(role);
@@ -55,19 +55,19 @@ namespace Ohabjizol.Interview
 
         public IReadOnlyList<QuestionDefinition> GetQuestions(JobRole role)
         {
-            var questions = new List<QuestionDefinition>(5);
+            var questions = new List<QuestionDefinition>(InterviewQuestionCatalog.QuestionCount);
             foreach (Entry entry in _entries)
                 if (entry != null && entry.Role == role)
                     questions.Add(new QuestionDefinition(entry.Id, entry.Prompt));
-            if (questions.Count != 5)
-                throw new InvalidOperationException("AuthoredQuestionCatalog requires five questions for " + role + ".");
+            if (questions.Count != InterviewQuestionCatalog.QuestionCount)
+                throw new InvalidOperationException("AuthoredQuestionCatalog requires two questions for " + role + ".");
             return questions.AsReadOnly();
         }
 
         public string GetResponse(Applicant applicant, int questionIndex)
         {
             if (applicant == null) throw new ArgumentNullException(nameof(applicant));
-            if (questionIndex < 0 || questionIndex >= 5) throw new ArgumentOutOfRangeException(nameof(questionIndex));
+            if (questionIndex < 0 || questionIndex >= InterviewQuestionCatalog.QuestionCount) throw new ArgumentOutOfRangeException(nameof(questionIndex));
             if (normalMinimum < 0 || goodMinimum < normalMinimum)
                 throw new InvalidOperationException("AuthoredQuestionCatalog thresholds require 0 <= normalMinimum <= goodMinimum.");
             int index = 0;
@@ -81,6 +81,31 @@ namespace Ohabjizol.Interview
             }
             throw new InvalidOperationException("AuthoredQuestionCatalog response entry missing.");
         }
+
+#if UNITY_EDITOR
+        public void PruneQuestionsEditor()
+        {
+            if (Application.isPlaying || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Question catalog pruning requires EditMode.");
+            if (_entries == null || _entries.Length == 0) return;
+            var retained = new List<Entry>(_entries.Length);
+            foreach (Entry entry in _entries)
+            {
+                if (entry == null || (entry.Role != JobRole.Planning && entry.Role != JobRole.Programming
+                    && entry.Role != JobRole.Graphics)) continue;
+                foreach (var definition in InterviewQuestionCatalog.GetQuestions(entry.Role))
+                {
+                    if (!string.Equals(entry.Id, definition.Id, StringComparison.Ordinal)) continue;
+                    retained.Add(entry);
+                    break;
+                }
+            }
+            if (retained.Count == _entries.Length) return;
+            UnityEditor.Undo.RecordObject(this, "Prune unused interview questions");
+            _entries = retained.ToArray();
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
 
         static Applicant DefaultApplicant(JobRole role, int skill)
         {

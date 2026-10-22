@@ -10,7 +10,7 @@ namespace Ohabjizol.Interview
             {
                 var member = snapshot.Members[i];
                 actual = actual.Add(member.ActualSkills);
-                if (member.Kind == ApplicantKind.Fraud)
+                if (member.HasFalsePortfolio)
                     fraudCount++;
             }
 

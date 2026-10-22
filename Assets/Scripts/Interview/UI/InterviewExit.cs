@@ -29,6 +29,7 @@ namespace Ohabjizol.Interview
             if (string.IsNullOrEmpty(sceneName))
                 return;
 
+            sceneName = ProductionProgressView.RouteBeforeResult(sceneName, result);
             _opened = true;
             ResultCarry.Put(result);
             SceneManager.LoadScene(sceneName);

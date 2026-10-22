@@ -35,6 +35,7 @@ namespace Ohabjizol.UI
         [SerializeField] WindowDragHandle _dragHandle;
         bool _authoredInitialized;
         public bool IsMinimized { get; private set; }
+        public Button CloseButton => _closeButton;
 
         protected virtual void Awake() { InitializeAuthored(); }
 

@@ -10,7 +10,7 @@ namespace Ohabjizol.Interview
         public void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
-                workspace?.OpenLibrary();
+                workspace?.ToggleLibrary();
         }
     }
 }

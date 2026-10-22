@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 namespace Ohabjizol.Interview
 {
-    public sealed class EndingBoard : MonoBehaviour
+    public sealed partial class EndingBoard : MonoBehaviour
     {
         [SerializeField] RectTransform authoredRoot;
         [SerializeField] GameObject goodPanel;
@@ -15,8 +15,8 @@ namespace Ohabjizol.Interview
         [SerializeField] Text pendingText;
         [SerializeField] Text totalStarsText;
         [SerializeField] Button newRunButton;
-        [SerializeField] int goodHalfStarThreshold = 36;
-        [SerializeField] int normalHalfStarThreshold = 28;
+        [SerializeField, Range(0, 100)] int goodPercentThreshold = 85;
+        [SerializeField, Range(0, 100)] int normalPercentThreshold = 50;
         [SerializeField] bool useFixedKind;
         [SerializeField] EndingKind fixedKind;
         [SerializeField, TextArea] string goodTemplate = "좋음\n함께 만든 프로젝트가 멋진 결실을 맺었습니다.";
@@ -28,25 +28,32 @@ namespace Ohabjizol.Interview
         public string GoodTemplate => goodTemplate;
         public string NormalTemplate => normalTemplate;
         public string BadTemplate => badTemplate;
+        public bool UsesReferenceDesign => GetComponent<EndingResultStatsView>() != null;
         public bool HasAuthoredUi => authoredRoot != null && goodPanel != null && normalPanel != null
             && badPanel != null && goodText != null && normalText != null && badText != null
-            && pendingText != null && totalStarsText != null && newRunButton != null;
+            && pendingText != null && newRunButton != null;
         void Awake()
         {
+            var completedResult = ResultCarry.Take();
             if (!HasAuthoredUi) return;
             newRunButton.onClick.AddListener(StartNewRun);
             var run = CampaignRunStore.Load();
             bool complete = run.IsComplete;
-            var ending = useFixedKind ? fixedKind : run.ResolveEnding(goodHalfStarThreshold, normalHalfStarThreshold);
+            var ending = useFixedKind ? fixedKind : run.ResolveEnding(goodPercentThreshold, normalPercentThreshold);
             bool showArtwork = complete || useFixedKind;
             goodPanel.SetActive(showArtwork && ending == EndingKind.Good);
             normalPanel.SetActive(showArtwork && ending == EndingKind.Normal);
             badPanel.SetActive(showArtwork && ending == EndingKind.Bad);
             pendingText.gameObject.SetActive(!showArtwork);
             pendingText.text = "엔딩 준비중";
-            goodText.text = goodTemplate; normalText.text = normalTemplate; badText.text = badTemplate;
+            if (!UsesReferenceDesign)
+            {
+                goodText.text = goodTemplate; normalText.text = normalTemplate; badText.text = badTemplate;
+            }
             int halves = run.TotalHalfStars;
-            totalStarsText.text = useFixedKind && !complete ? "" : "누적 " + (halves / 2) + (halves % 2 == 0 ? "" : ".5") + " / " + (StageExecutionPolicy.ActiveStages.Count * 5) + "별";
+            if (totalStarsText)
+                totalStarsText.text = useFixedKind && !complete ? "" : "누적 " + (halves / 2) + (halves % 2 == 0 ? "" : ".5") + " / " + (StageExecutionPolicy.ActiveStages.Count * 5) + "별";
+            ShowResultSummary(completedResult, halves);
         }
         void OnDestroy()
         {
@@ -54,6 +61,7 @@ namespace Ohabjizol.Interview
         }
         void StartNewRun()
         {
+            ResultCarry.Clear();
             CampaignRunStore.StartNewRun();
             SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
         }
@@ -78,6 +86,7 @@ namespace Ohabjizol.Interview
 #if UNITY_EDITOR
         public void ConfigureArtworkEditor(Sprite good, Sprite normal, Sprite bad)
         {
+            if (UsesReferenceDesign) return;
             ConfigurePanelArtwork(goodPanel, good);
             ConfigurePanelArtwork(normalPanel, normal);
             ConfigurePanelArtwork(badPanel, bad);
@@ -104,6 +113,7 @@ namespace Ohabjizol.Interview
 
         public void ConfigureFixedKindEditor(EndingKind kind)
         {
+            if (UsesReferenceDesign) return;
             if (!HasAuthoredUi) throw new System.InvalidOperationException("Ending authored UI required.");
             UnityEditor.Undo.RecordObject(this, "Configure fixed ending");
             useFixedKind = true;

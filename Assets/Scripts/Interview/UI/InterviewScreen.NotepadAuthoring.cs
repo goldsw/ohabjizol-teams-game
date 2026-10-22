@@ -175,12 +175,12 @@ namespace Ohabjizol.Interview
                 {
                     Font font = text.font;
                     if (font && EditorUtility.IsPersistent(font)
-                        && font.name.IndexOf("NotoSansKR", StringComparison.OrdinalIgnoreCase) >= 0)
+                        && font == Ohabjizol.UI.UiKit.Font)
                         return font;
                 }
-            Font asset = AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf");
+            Font asset = AssetDatabase.LoadAssetAtPath<Font>(Ohabjizol.UI.UiKit.FontAssetPath);
             if (asset && EditorUtility.IsPersistent(asset)) return asset;
-            throw new InvalidOperationException("Notepad preflight: persistent NotoSansKR font missing from DocumentLibrary and Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf.");
+            throw new InvalidOperationException("Notepad preflight: persistent PFStardustBold font missing from DocumentLibrary and Assets/Resources/Fonts/PFStardustBold.ttf.");
         }
 
         static RectTransform NotepadRectEditor(Transform parent, string name)

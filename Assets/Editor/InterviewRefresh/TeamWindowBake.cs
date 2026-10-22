@@ -23,7 +23,7 @@ namespace Ohabjizol.Interview
                 InterviewScreen screen = root.GetComponentInChildren<InterviewScreen>(true);
                 if (!screen) throw new InvalidOperationException("InterviewScreen missing: " + prefabPath);
                 screen.BakeTeamWindow();
-                var font = AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf");
+                var font = AssetDatabase.LoadAssetAtPath<Font>(Ohabjizol.UI.UiKit.FontAssetPath);
                 if (!font || !EditorUtility.IsPersistent(font))
                     throw new InvalidOperationException("Persistent Korean UI font required.");
                 var bindings = new SerializedObject(screen);

@@ -4,7 +4,8 @@ namespace Ohabjizol.Interview
     public sealed class ApplicantDocumentPacket
     {
         public ApplicantDocumentPacket(string applicantKey, string displayName, JobRole role,
-            string applicationText, string portfolioText, PortfolioDisplayState displayState, SkillSet displayedSkills = null)
+            string applicationText, string portfolioText, PortfolioDisplayState displayState,
+            SkillSet displayedSkills = null, string characterId = null)
         {
             if (string.IsNullOrWhiteSpace(applicantKey)) throw new ArgumentException("An applicant needs a key.", nameof(applicantKey));
             if (!Enum.IsDefined(typeof(JobRole), role)) throw new ArgumentOutOfRangeException(nameof(role));
@@ -16,8 +17,10 @@ namespace Ohabjizol.Interview
             PortfolioText = portfolioText ?? string.Empty;
             DisplayState = displayState;
             DisplayedSkills = displayedSkills;
+            CharacterId = characterId ?? string.Empty;
         }
         public string ApplicantKey { get; }
+        public string CharacterId { get; }
         public string DisplayName { get; }
         public JobRole Role { get; }
         public string ApplicationText { get; }

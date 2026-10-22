@@ -15,7 +15,7 @@ public static class InterviewRefreshValidation
         Check(!EditorApplication.isPlayingOrWillChangePlaymode, "Static validation requires Edit Mode.");
         Check(StarRatingRule.HalfUnits(0) == 0 && StarRatingRule.HalfUnits(65) == 7 && StarRatingRule.HalfUnits(70) == 7 && StarRatingRule.HalfUnits(75) == 8 && StarRatingRule.HalfUnits(100) == 10, "Half-star boundaries failed.");
         Check(!StageAccuracyRule.IsClear(65) && StageAccuracyRule.IsClear(70), "Clear threshold changed.");
-        foreach (int percent in new[] { 40, 60, 80 })
+        foreach (int percent in new[] { 40, 60, 90 })
         {
             var run = new CampaignRunProgress("validation-" + percent);
             for (int i = 0; i < 4; i++)
@@ -31,10 +31,10 @@ public static class InterviewRefreshValidation
         foreach (JobRole role in Enum.GetValues(typeof(JobRole)))
         {
             var questions = InterviewQuestionCatalog.GetQuestions(role);
-            Check(questions != null && questions.Count == 5 && questions.Select(question => question.Id).Distinct().Count() == 5, "Role question catalog invalid.");
+            Check(questions != null && questions.Count == InterviewQuestionCatalog.QuestionCount && questions.Select(question => question.Id).Distinct().Count() == InterviewQuestionCatalog.QuestionCount, "Role question catalog invalid.");
         }
         var authoredQuestions = AssetDatabase.LoadAssetAtPath<AuthoredQuestionCatalog>("Assets/Art/InterviewRefresh/QuestionCatalog.asset");
-        Check(authoredQuestions != null && authoredQuestions.QuestionCount == 15 && authoredQuestions.ResponseCount == 45, "Authored questions/responses missing.");
+        Check(authoredQuestions != null && authoredQuestions.QuestionCount == 3 * InterviewQuestionCatalog.QuestionCount && authoredQuestions.ResponseCount == 3 * InterviewQuestionCatalog.QuestionCount * 3, "Authored questions/responses missing.");
         Check(!typeof(ApplicantDocumentPacket).GetProperties().Any(property => property.Name.Contains("Actual") || property.Name.Contains("True")), "Hidden data exposed through public document packet.");
         var catalog = AssetDatabase.LoadAssetAtPath<PortfolioSpriteCatalog>("Assets/Art/InterviewRefresh/PortfolioCatalog.asset");
         Check(catalog != null, "Portfolio catalog missing.");

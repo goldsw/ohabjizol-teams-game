@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <summary>One-time, editor-only authoring of editable public portfolio documents.</summary>
 public static class PortfolioUiBake
 {
-    public const string FontAssetPath = "Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf";
+    public const string FontAssetPath = Ohabjizol.UI.UiKit.FontAssetPath;
     public const string CatalogAssetPath = "Assets/Art/InterviewRefresh/PortfolioCatalog.asset";
     public const string PrefabFolder = "Assets/Prefabs/InterviewRefresh/Portfolio";
     static readonly Color Ink = new Color32(53, 43, 36, 255);

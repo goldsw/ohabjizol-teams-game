@@ -10,12 +10,12 @@ namespace Ohabjizol.Interview
         [SerializeField] Button _launcher;
         [SerializeField] RectTransform _optionsRoot;
         [SerializeField] RectTransform _portrait;
-        [SerializeField] Button[] _questions = new Button[5];
-        [SerializeField] float _startAngle = 90f;
-        [SerializeField, Min(0f)] float _radius = 180f;
+        [SerializeField] Button[] _questions = new Button[InterviewQuestionCatalog.QuestionCount];
+        [SerializeField] Vector2 questionSize = new Vector2(300f, 56f);
+        [SerializeField, Min(0f)] float questionSpacing = 12f;
+        [SerializeField, Min(0f)] float portraitGap = 24f;
         [SerializeField] RadialQuestionWindow _window;
         [SerializeField] RadialQuestionLauncher _fixedLauncher;
-        float _phase;
         bool _expanded;
         bool _available;
 
@@ -31,7 +31,8 @@ namespace Ohabjizol.Interview
             _launcher = launcher;
             _optionsRoot = optionsRoot;
             _portrait = portrait;
-            _questions = questions == null ? new Button[0] : (Button[])questions.Clone();
+            _questions = new Button[questions == null ? 0 : Mathf.Min(questions.Length, InterviewQuestionCatalog.QuestionCount)];
+            if (questions != null) Array.Copy(questions, _questions, _questions.Length);
             if (isActiveAndEnabled && _launcher) _launcher.onClick.AddListener(ToggleExpanded);
             ResetCollapsed();
             SetAvailable(false);
@@ -45,7 +46,6 @@ namespace Ohabjizol.Interview
 
         void OnEnable()
         {
-            _phase = Mathf.Repeat(_startAngle, 360f);
             if (_launcher)
             {
                 _launcher.onClick.RemoveListener(ToggleExpanded);
@@ -63,7 +63,6 @@ namespace Ohabjizol.Interview
 
         public void ResetCollapsed()
         {
-            _phase = Mathf.Repeat(_startAngle, 360f);
             CollapseContent();
         }
 
@@ -126,18 +125,40 @@ namespace Ohabjizol.Interview
         void PositionQuestions()
         {
             if (_questions == null || _questions.Length == 0) return;
-            Vector3 worldCenter = _portrait.TransformPoint(_portrait.rect.center);
-            Vector3 center = _optionsRoot.InverseTransformPoint(worldCenter);
-            float step = 360f / _questions.Length;
-            for (int i = 0; i < _questions.Length; i++)
+            // Follow the visible portrait rectangle, including preserve-aspect letterboxing.
+            Rect visible = _portrait.rect;
+            var image = _portrait.GetComponent<Image>();
+            var sprite = image ? image.overrideSprite : null;
+            if (image && image.preserveAspect && sprite && sprite.rect.width > 0 && sprite.rect.height > 0 && visible.width > 0 && visible.height > 0)
+            {
+                float aspect = sprite.rect.width / sprite.rect.height;
+                if (aspect > visible.width / visible.height)
+                {
+                    float height = visible.width / aspect;
+                    visible.y += (visible.height - height) * _portrait.pivot.y;
+                    visible.height = height;
+                }
+                else
+                {
+                    float width = visible.height * aspect;
+                    visible.x += (visible.width - width) * _portrait.pivot.x;
+                    visible.width = width;
+                }
+            }
+            var left = _optionsRoot.InverseTransformPoint(_portrait.TransformPoint(new Vector3(visible.xMin, visible.center.y, 0)));
+            int count = Mathf.Min(_questions.Length, InterviewQuestionCatalog.QuestionCount);
+            float heightPerButton = Mathf.Max(1f, questionSize.y);
+            for (int i = 0; i < count; i++)
             {
                 if (!_questions[i]) continue;
                 var rect = _questions[i].transform as RectTransform;
                 if (!rect) continue;
-                rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
-                float angle = (_phase - step * i) * Mathf.Deg2Rad;
-                rect.localPosition = new Vector3(center.x + Mathf.Cos(angle) * _radius,
-                    center.y + Mathf.Sin(angle) * _radius, center.z);
+                rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
+                rect.pivot = new Vector2(1f, .5f);
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Max(1f, questionSize.x));
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, heightPerButton);
+                rect.localPosition = new Vector3(left.x - portraitGap,
+                    left.y + ((count - 1) * .5f - i) * (heightPerButton + questionSpacing), left.z);
                 rect.localRotation = Quaternion.identity;
             }
         }

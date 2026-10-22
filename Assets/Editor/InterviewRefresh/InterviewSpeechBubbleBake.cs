@@ -58,7 +58,7 @@ namespace Ohabjizol.Interview
                         createdDots.transform.SetParent(bubbleRect, false);
                         dots = createdDots.GetComponent<Text>();
                     }
-                    dots.font = AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf");
+                    dots.font = AssetDatabase.LoadAssetAtPath<Font>(Ohabjizol.UI.UiKit.FontAssetPath);
                 }
                 dots.rectTransform.SetParent(bubbleRect, false);
                 dots.rectTransform.anchorMin = Vector2.zero;

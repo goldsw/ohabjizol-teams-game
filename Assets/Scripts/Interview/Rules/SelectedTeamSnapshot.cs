@@ -49,6 +49,7 @@ namespace Ohabjizol.Interview
         internal ApplicantKind Kind { get; }
         internal PortfolioDisplayState TruePortfolioQuality { get; }
         internal PortfolioDisplayState? FakePortfolioQuality { get; }
+        internal bool HasFalsePortfolio => FakePortfolioQuality.HasValue;
 
         readonly MonthlySchedule _unavailableSchedule;
         internal MonthlySchedule UnavailableSchedule => SelectedScheduleSnapshot.Copy(_unavailableSchedule);

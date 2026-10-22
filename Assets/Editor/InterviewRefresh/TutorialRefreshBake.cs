@@ -58,6 +58,7 @@ public static class TutorialRefreshBake
                 bootstrap.RefreshEditor(profile, visual.Idle);
                 EnsureButtons(tutorial);
             }
+            AuthorSpeech(SingleInScene<TutorialOverlay>(tutorial, true));
             EditorSceneManager.MarkSceneDirty(tutorial);
             if (!EditorSceneManager.SaveScene(tutorial, TutorialPath))
                 throw new InvalidOperationException("TutorialScene save failed.");
@@ -84,6 +85,56 @@ public static class TutorialRefreshBake
                 if (opened[i].IsValid() && opened[i].isLoaded) EditorSceneManager.CloseScene(opened[i], true);
             if (active.IsValid() && active.isLoaded) SceneManager.SetActiveScene(active);
         }
+    }
+
+    [MenuItem("Tools/Interview Refresh/Apply Tutorial Speech")]
+    public static void ApplySpeech()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+            throw new InvalidOperationException("Tutorial authoring requires EditMode.");
+        Scene active = SceneManager.GetActiveScene();
+        var opened = new List<Scene>();
+        try
+        {
+            Scene tutorial = Open(TutorialPath, opened);
+            string backupDirectory = System.IO.Path.Combine("Library", "TutorialSpeechBackups",
+                DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fffffff"));
+            System.IO.Directory.CreateDirectory(backupDirectory);
+            if (System.IO.File.Exists(TutorialPath))
+                System.IO.File.Copy(TutorialPath, System.IO.Path.Combine(backupDirectory, "TutorialScene.disk.unity"));
+            if (tutorial.isDirty)
+            {
+                string copy = System.IO.Path.Combine(backupDirectory, "TutorialScene.dirty.unity").Replace('\\', '/');
+                if (!EditorSceneManager.SaveScene(tutorial, copy, true))
+                    throw new InvalidOperationException("Dirty TutorialScene backup failed.");
+            }
+            AuthorSpeech(SingleInScene<TutorialOverlay>(tutorial, true));
+            EditorSceneManager.MarkSceneDirty(tutorial);
+            if (!EditorSceneManager.SaveScene(tutorial, TutorialPath))
+                throw new InvalidOperationException("TutorialScene save failed.");
+            Debug.Log("Tutorial speech backup: " + System.IO.Path.GetFullPath(backupDirectory));
+        }
+        finally
+        {
+            if (active.IsValid() && active.isLoaded) SceneManager.SetActiveScene(active);
+            for (int i = opened.Count - 1; i >= 0; --i)
+                if (opened[i].IsValid() && opened[i].isLoaded) EditorSceneManager.CloseScene(opened[i], true);
+            if (active.IsValid() && active.isLoaded) SceneManager.SetActiveScene(active);
+        }
+    }
+
+    static void AuthorSpeech(TutorialOverlay overlay)
+    {
+        var idle = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Applicants/character-12/idle.png");
+        var talk = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Applicants/character-12/talk.png");
+        var panel = overlay.transform.Find("SupervisorCover");
+        var nameTransform = panel ? panel.Find("SupervisorName") : null;
+        var name = nameTransform ? nameTransform.GetComponent<Text>() : null;
+        if (!idle || !talk || !name)
+            throw new InvalidOperationException("Tutorial supervisor Idle, Talk and name are required.");
+        overlay.SetSupervisorSpeechEditor(idle, talk);
+        name.text = "선배";
+        EditorUtility.SetDirty(name);
     }
 
     [MenuItem("Tools/Interview Refresh/Apply Tutorial Spotlight")]
@@ -182,8 +233,8 @@ public static class TutorialRefreshBake
         SceneManager.MoveGameObjectToScene(events, scene);
         events.transform.SetParent(host.transform, false);
         events.SetActive(true);
-        var font = AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf");
-        if (!font) throw new InvalidOperationException("Tutorial requires the persistent NotoSansKR font.");
+        var font = AssetDatabase.LoadAssetAtPath<Font>(Ohabjizol.UI.UiKit.FontAssetPath);
+        if (!font) throw new InvalidOperationException("Tutorial requires the persistent PFStardustBold font.");
         var overlay = AuthorOverlay(host.transform, font, idle);
         var controller = host.AddComponent<TutorialController>();
         var bootstrap = host.AddComponent<TutorialSceneBootstrap>();
@@ -234,7 +285,7 @@ public static class TutorialRefreshBake
         var portrait = Image(supervisor.transform, "SupervisorPortrait", Color.white);
         portrait.sprite = idle; portrait.preserveAspect = true;
         Place(portrait.rectTransform, .05f, .12f, .95f, .97f);
-        var name = Label(supervisor.transform, "SupervisorName", "상사", font, 28);
+        var name = Label(supervisor.transform, "SupervisorName", "선배", font, 28);
         Place(name.rectTransform, .05f, .01f, .95f, .14f);
         var captionBack = Image(root.transform, "CaptionBackground", new Color(.06f, .07f, .1f, .97f));
         Place(captionBack.rectTransform, .12f, .035f, .88f, .18f);

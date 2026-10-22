@@ -113,7 +113,8 @@ namespace Ohabjizol.Interview
             if (!host.GetComponent<RectMask2D>()) host.AddComponent<RectMask2D>();
             Image hit = host.GetComponent<Image>();
             if (!hit) hit = host.AddComponent<Image>();
-            hit.color = Color.clear; hit.raycastTarget = true;
+            // Only taskbar items receive input; the empty viewport must not cover fixed launchers.
+            hit.color = Color.clear; hit.raycastTarget = false;
             ScrollRect scroll = host.GetComponent<ScrollRect>();
             if (!scroll) scroll = host.AddComponent<ScrollRect>();
             scroll.viewport = viewport; scroll.horizontal = true; scroll.vertical = false;

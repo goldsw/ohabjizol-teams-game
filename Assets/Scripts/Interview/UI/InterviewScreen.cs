@@ -25,7 +25,7 @@ namespace Ohabjizol.Interview
         [SerializeField] Text _requiredLabel;
         [SerializeField] ApplicantStatsView _applicantStats;
         [SerializeField] Text[] _slotLabels = new Text[6];
-        [SerializeField] InterviewQuestionView[] _questions = new InterviewQuestionView[5];
+        [SerializeField] InterviewQuestionView[] _questions = new InterviewQuestionView[InterviewQuestionCatalog.QuestionCount];
         [SerializeField] InterviewCallView _call;
         [SerializeField] RadialQuestionView _radialQuestions;
         [SerializeField] DownloadPanelView _downloadPanel;
@@ -41,8 +41,9 @@ namespace Ohabjizol.Interview
         [SerializeField] StageCalendarWindow _calendarWindow;
         [SerializeField] StageScheduleConfig _scheduleConfig;
         [SerializeField] Button _calendarButton;
-        [SerializeField, Range(0f, 1f)] float fakePortfolioAnswerChance = .5f;
-        public float FakePortfolioAnswerChance => fakePortfolioAnswerChance;
+        [SerializeField, Range(0f, 1f), InspectorName("허위 포트폴리오 확률")] float fakePortfolioAnswerChance = .5f;
+        public float FakePortfolioChance => fakePortfolioAnswerChance;
+        public float FakePortfolioAnswerChance => FakePortfolioChance;
         [SerializeField, HideInInspector] bool discordVisible = true;
         InterviewRuntime _runtime;
         IInterviewSessionHost _sessionHost;
@@ -58,7 +59,7 @@ namespace Ohabjizol.Interview
             _runtime?.Dispose();
             _runtime = null;
         }
-        readonly UnityEngine.Events.UnityAction[] _questionHandlers = new UnityEngine.Events.UnityAction[5];
+        readonly UnityEngine.Events.UnityAction[] _questionHandlers = new UnityEngine.Events.UnityAction[InterviewQuestionCatalog.QuestionCount];
         bool _inputsSubscribed;
         public event Action<int> QuestionRequested;
         public event Action<bool> DecisionRequested;
@@ -88,7 +89,7 @@ namespace Ohabjizol.Interview
                     || !_downloadPanel || !_downloadPanel.HasAuthoredUi || !_workspace || !_itemParent
                     || !_windowParent || !_itemPrefab || !_viewerPrefab || !_portfolioCatalog || !_questionCatalog
                     || !_workspace.HasAuthoredLibrary || !_calendarWindow || !_scheduleConfig || !_calendarButton
-                    || _questions == null || _questions.Length != 5 || _slotLabels == null
+                    || _questions == null || _questions.Length != InterviewQuestionCatalog.QuestionCount || _slotLabels == null
                     || _slotLabels.Length < (_sessionHost != null && !_sessionHost.AllowDecisions ? 6 : StageExecutionPolicy.TeamCapacity(StageSelection.Current)))
                     return false;
                 foreach (var question in _questions) if (!question || !question.HasAuthoredUi) return false;

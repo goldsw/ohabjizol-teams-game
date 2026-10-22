@@ -21,7 +21,7 @@ namespace Ohabjizol.EditorTools
         static readonly string[] DisplayNames =
         {
             "강서윤", "차도현", "백하린", "윤세아", "한유진", "서도윤",
-            "정미소", "이가은", "백시현", "임태오", "김재하", "오지안"
+            "정미소", "이가은", "백시현", "임태오", "김재하", "오지안", "유설아"
         };
         [Serializable] sealed class Source { public Character[] characters; }
         [Serializable] sealed class Character { public string name, sourceSheet; public int sourceRow; public Role[] roles; }

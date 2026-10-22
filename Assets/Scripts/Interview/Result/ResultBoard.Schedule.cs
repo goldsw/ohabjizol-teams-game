@@ -17,6 +17,11 @@ namespace Ohabjizol.Interview
 
         void ShowSchedule(InterviewResult value)
         {
+            if (calendarRoot != null)
+            {
+                ShowCalendar(value);
+                return;
+            }
             if (scheduleFitRoutine != null)
             {
                 StopCoroutine(scheduleFitRoutine);
@@ -73,6 +78,7 @@ namespace Ohabjizol.Interview
         // Shared by the runtime renderer and the editor presentation bake.
         public void FitScheduleLayout(int participantCount)
         {
+            if (calendarRoot != null) return;
             if (scheduleRoot == null || scheduleScroll == null || scheduleContent == null
                 || scheduleNames == null || scheduleDays == null) return;
 

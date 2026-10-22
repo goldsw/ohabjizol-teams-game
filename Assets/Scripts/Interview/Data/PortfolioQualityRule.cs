@@ -15,9 +15,15 @@ namespace Ohabjizol.Interview
                 default: throw new ArgumentOutOfRangeException(nameof(quality));
             }
         }
-        public static PortfolioDisplayState? CreateFake(PortfolioDisplayState actual, Random random)
+        public static PortfolioDisplayState? CreateFake(PortfolioDisplayState actual, Random random,
+            float fakePortfolioChance = .5f)
         {
             if (random == null) throw new ArgumentNullException(nameof(random));
+            if (float.IsNaN(fakePortfolioChance) || fakePortfolioChance < 0f || fakePortfolioChance > 1f)
+                throw new ArgumentOutOfRangeException(nameof(fakePortfolioChance));
+            Rank(actual);
+            if (actual == PortfolioDisplayState.Bad || random.NextDouble() >= fakePortfolioChance)
+                return null;
             switch (actual)
             {
                 case PortfolioDisplayState.Bad: return null;

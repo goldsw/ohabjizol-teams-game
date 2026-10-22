@@ -86,12 +86,14 @@ namespace Ohabjizol.Interview
             bool accepted = state == ApplicantMotionState.Accepted;
             _call.SetPose(accepted ? _visual?.Accepted : _visual?.Rejected);
             float duration = (accepted ? _visual?.AcceptedDuration : _visual?.RejectedDuration) ?? 3f;
-            return float.IsNaN(duration) || float.IsInfinity(duration) || duration < 0f ? 3f : duration;
+            if (float.IsNaN(duration) || float.IsInfinity(duration) || duration < 0f) duration = 3f;
+            return _call.BeginDeparture(accepted ? "감사합니다!" : "다음에는 꼭..!", accepted ? 1f : duration);
         }
 
         public void CancelDecision()
         {
             State = ApplicantMotionState.Idle;
+            _call.CancelDeparture();
             _call.SetAnswering(false, 0);
             _call.SetPose(_visual?.Idle);
         }

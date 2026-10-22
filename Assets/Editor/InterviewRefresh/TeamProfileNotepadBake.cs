@@ -38,9 +38,9 @@ namespace Ohabjizol.Interview
                 var screen = screens[0];
                 if (!InterviewScreen.LoadTeamProfileSpriteEditor() ||
                     !AssetDatabase.LoadAssetAtPath<ApplicantVisualCatalog>("Assets/Art/Applicants/ApplicantVisualCatalog.asset") ||
-                    !AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf") ||
+                    !AssetDatabase.LoadAssetAtPath<Font>(Ohabjizol.UI.UiKit.FontAssetPath) ||
                     !AssetDatabase.LoadAssetAtPath<GameObject>(ViewerPath))
-                    throw new InvalidOperationException("Required profile Sprite, visual catalog, Noto font or PDF viewer prefab missing.");
+                    throw new InvalidOperationException("Required profile Sprite, visual catalog, canonical UI font or PDF viewer prefab missing.");
                 Undo.IncrementCurrentGroup();
                 undo = Undo.GetCurrentGroup();
                 Undo.SetCurrentGroupName("Apply team profiles and notepad");

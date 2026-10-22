@@ -34,9 +34,9 @@ namespace Ohabjizol.Interview
             if (screen == null) throw new ArgumentNullException(nameof(screen));
             if (views == null) throw new ArgumentNullException(nameof(views));
             if (host == null) throw new ArgumentNullException(nameof(host));
-            var manager = host.CreateStage(views);
+            var manager = host.CreateStage(views, screen.FakePortfolioChance);
             var definition = manager.Context.StageDefinition;
-            var questions = new QuestionController(screen.FakePortfolioAnswerChance, manager.Session.RandomSource);
+            var questions = new QuestionController(manager.Session.RandomSource);
             if (views.CalendarWindow != null)
                 views.CalendarWindow.Bind(new StageCalendarState(manager.Session.ProjectSchedule), definition.DisplayName);
             views.Workspace.Configure(views.ItemParent, views.WindowParent, views.ItemPrefab,
@@ -45,7 +45,8 @@ namespace Ohabjizol.Interview
             var notification = new InterviewNotificationPresenter(views.Notification, views.UnreadMark);
             var applicant = new InterviewApplicantPresenter(manager, views.Call, documents, notification);
             var questionView = new InterviewQuestionPresenter(screen, questions, views.QuestionCatalog,
-                views.Questions, views.Call, views.Response, views.RadialQuestions, applicant);
+                views.Questions, views.Call, views.Response, views.RadialQuestions, applicant,
+                collapseOnAsk: !(host is TutorialInterviewSessionHost));
             var summary = new InterviewSummaryPresenter(manager, views.Title, views.StageLabel, views.Finished,
                 views.Current, views.Required, views.Slots, views.Accept, views.Reject, views.Chat, views.ApplicantStats);
             if (screen.NotepadWindow != null) screen.NotepadWindow.Bind(manager.Notes);
@@ -83,6 +84,7 @@ namespace Ohabjizol.Interview
             _stage.ApplicantChanged += BindApplicant;
             _stage.StateChanged += RenderSummary;
             _stage.CompletionFailed += ReportCompletionFailure;
+            _questions.Changed += RenderSummary;
             _questionView.Subscribe();
             _documents.Subscribe();
             _downloadTick = _screen.StartCoroutine(TickDownloads());
@@ -108,6 +110,7 @@ namespace Ohabjizol.Interview
             if (_downloadTick != null && _screen) _screen.StopCoroutine(_downloadTick);
             _downloadTick = null;
             if (!_subscribed) return;
+            _questions.Changed -= RenderSummary;
             _questionView.Cancel();
             _documents.Suspend();
             if (_calendar != null) _calendar.Close();
@@ -155,6 +158,7 @@ namespace Ohabjizol.Interview
         void RenderSummary()
         {
             _summary.AllowDecisions = _allowDecisions;
+            _summary.QuestionsComplete = _questions.Applicant == _stage.Session.Current && _questions.AllQuestionsAnswered;
             _summary.Render();
             if (_screen.TeamWindow)
                 _screen.TeamWindow.BindTeam(_stage.Session.ReadSelectedTeam());
@@ -178,12 +182,16 @@ namespace Ohabjizol.Interview
         void OpenCalendar()
         {
             if (_disposed || !_subscribed || _decision.IsPending) return;
-            if (_calendar != null) _calendar.Restore();
+            if (_calendar == null) return;
+            if (_calendar.IsOpen) _calendar.Minimize();
+            else _calendar.Restore();
         }
 
         void RequestDecision(bool accepted)
         {
-            if (_allowDecisions && !_disposed && _subscribed) _decision.Request(accepted);
+            if (_allowDecisions && !_disposed && _subscribed
+                && (_stage.Session.IsFinished || (_questions.Applicant == _stage.Session.Current && _questions.AllQuestionsAnswered)))
+                _decision.Request(accepted);
         }
 
         public bool CanAskQuestion(int index) => !_disposed && _subscribed && !_decision.IsPending

@@ -46,17 +46,21 @@ namespace Ohabjizol.Interview
                 return sum;
             }
         }
-        // A provisional ending until all active stages are complete.
-        // Thresholds use the original 40-half-unit scale, preserving 90%/70% defaults.
+        // A provisional ending until all active stages are complete. Incomplete stages count as 0%.
         public EndingKind Ending => ResolveEnding();
-        public EndingKind ResolveEnding(int goodHalfThreshold = 36, int normalHalfThreshold = 28)
+        public EndingKind ResolveEnding(int goodPercent = 85, int normalPercent = 50)
         {
-            if (normalHalfThreshold < 0 || goodHalfThreshold < normalHalfThreshold || goodHalfThreshold > 40)
-                throw new ArgumentOutOfRangeException(nameof(goodHalfThreshold));
-            int scaledTotal = TotalHalfStars * StageCount;
-            int activeCount = StageExecutionPolicy.ActiveStages.Count;
-            return scaledTotal >= goodHalfThreshold * activeCount ? EndingKind.Good
-                : scaledTotal >= normalHalfThreshold * activeCount ? EndingKind.Normal : EndingKind.Bad;
+            if (normalPercent < 0 || goodPercent < normalPercent || goodPercent > 100)
+                throw new ArgumentOutOfRangeException(nameof(goodPercent));
+            int total = 0;
+            var stages = StageExecutionPolicy.ActiveStages;
+            for (int i = 0; i < stages.Count; i++)
+            {
+                int index = (int)stages[i];
+                if (completed[index]) total += percentages[index];
+            }
+            return total >= goodPercent * stages.Count ? EndingKind.Good
+                : total >= normalPercent * stages.Count ? EndingKind.Normal : EndingKind.Bad;
         }
         public bool IsCompleted(StageId stage) => completed[Index(stage)];
         internal int Accuracy(StageId stage) => percentages[Index(stage)];

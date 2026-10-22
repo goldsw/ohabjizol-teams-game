@@ -11,6 +11,7 @@ namespace Ohabjizol.Interview
 
         void ShowInspection(InterviewResult value)
         {
+            ShowVisualInspection(value);
             if (selectedMemberRows != null)
                 for (int i = 0; i < selectedMemberRows.Length; i++)
                 {
@@ -109,6 +110,7 @@ namespace Ohabjizol.Interview
             PlaceScheduleRect((RectTransform)scheduleScroll.transform, 0f, 0f, 1f, .78f);
             FitScheduleLayout(6);
             PlaceScheduleRect((RectTransform)continueButton.transform, .35f, .015f, .65f, .095f);
+            BakeVisualUi();
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
         }

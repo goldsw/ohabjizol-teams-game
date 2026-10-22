@@ -24,20 +24,25 @@ namespace Ohabjizol.Interview
         public InterviewSession(StageDefinition stage)
             : this(stage, 15, null) { }
 
-        public InterviewSession(StageDefinition stage, int productionDays, Random random = null)
-            : this(Require(stage).Id, Require(stage).Theme, Require(stage).Applicants, productionDays, random) { }
+        public InterviewSession(StageDefinition stage, int productionDays, Random random = null,
+            float fakePortfolioChance = .5f)
+            : this(Require(stage).Id, Require(stage).Theme, Require(stage).Applicants,
+                productionDays, random, fakePortfolioChance) { }
 
-        InterviewSession(StageId stage, GameJamTheme theme, IReadOnlyList<Applicant> applicants, int productionDays = 15, Random random = null)
+        InterviewSession(StageId stage, GameJamTheme theme, IReadOnlyList<Applicant> applicants,
+            int productionDays = 15, Random random = null, float fakePortfolioChance = .5f)
         {
             if (theme == null)
                 throw new ArgumentNullException(nameof(theme));
+            if (float.IsNaN(fakePortfolioChance) || fakePortfolioChance < 0f || fakePortfolioChance > 1f)
+                throw new ArgumentOutOfRangeException(nameof(fakePortfolioChance));
 
             Stage = stage;
             _team = new TeamRoster(StageExecutionPolicy.TeamCapacity(stage));
             Theme = theme;
             RandomSource = random ?? new Random();
             ProjectSchedule = MonthlySchedule.CreateRandom(productionDays, RandomSource);
-            _applicants = CopyApplicants(applicants, RandomSource);
+            _applicants = CopyApplicants(applicants, RandomSource, fakePortfolioChance);
             if (_applicants.Length == 0)
             {
                 _cursor.Advance(0, 0, _team.Capacity);
@@ -187,7 +192,7 @@ namespace Ohabjizol.Interview
             return stage;
         }
 
-        static Applicant[] CopyApplicants(IReadOnlyList<Applicant> applicants, Random random)
+        static Applicant[] CopyApplicants(IReadOnlyList<Applicant> applicants, Random random, float fakePortfolioChance)
         {
             if (applicants == null || applicants.Count == 0)
                 return Array.Empty<Applicant>();
@@ -199,7 +204,7 @@ namespace Ohabjizol.Interview
                 var unavailable = MonthlySchedule.CreateRandom(random.Next(1, 3), random);
                 copy[i] = new Applicant(source.Name, source.PrimaryRole, source.ExpectedSkills, source.ActualSkills,
                     source.Documents, source.Kind, source.TruePortfolioQuality,
-                    PortfolioQualityRule.CreateFake(source.TruePortfolioQuality, random), unavailable,
+                    PortfolioQualityRule.CreateFake(source.TruePortfolioQuality, random, fakePortfolioChance), unavailable,
                     source.FakeSkills, source.FakeRoleMetadata, source.CharacterId);
             }
             for (int i = copy.Length - 1; i > 0; i--)

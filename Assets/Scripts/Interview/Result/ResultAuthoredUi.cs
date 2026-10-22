@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using Ohabjizol.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -7,7 +8,7 @@ namespace Ohabjizol.Interview
     // Used only by explicit editor baking; no runtime UI construction.
     internal static class ResultAuthoredUi
     {
-        internal static Font Font => AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf");
+        internal static Font Font => UiKit.Font;
         internal static RectTransform Rect(Transform parent, string name, Vector2 min, Vector2 max)
         {
             var go = new GameObject(name, typeof(RectTransform));

@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public static class InterviewRefreshBake
 {
     const string Prefabs = "Assets/Prefabs/InterviewRefresh";
-    const string FontPath = "Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf";
+    const string FontPath = Ohabjizol.UI.UiKit.FontAssetPath;
 
     public static void ApplyAndSave()
     {

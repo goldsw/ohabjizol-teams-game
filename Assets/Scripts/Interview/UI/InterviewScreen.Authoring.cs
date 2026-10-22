@@ -66,13 +66,14 @@ namespace Ohabjizol.Interview
             var nameLabel = Label(main, "Applicant", "지원자", .03f, 0, .97f, .12f, 24);
             var dots = Label(main, "AnsweringBubble", "", .76f, .8f, .97f, .96f, 32);
             _call.Configure(portrait, nameLabel, dots);
-            _questions = new InterviewQuestionView[5];
-            for (int i = 0; i < 5; i++)
+            _questions = new InterviewQuestionView[InterviewQuestionCatalog.QuestionCount];
+            for (int i = 0; i < InterviewQuestionCatalog.QuestionCount; i++)
             {
                 var button = UiKit.Button(_discordViewRoot, "Question" + i, "질문 " + (i + 1), new Color(.22f, .25f, .32f), 19);
                 UiKit.Place(button.GetComponent<RectTransform>(), .77f, .75f - i * .12f, .97f, .86f - i * .12f);
                 _questions[i] = button.gameObject.AddComponent<InterviewQuestionView>();
                 _questions[i].Configure(button, button.GetComponentInChildren<Text>());
+                _questions[i].EnsureUsedOverlayEditor();
             }
             string[] names = { "동료 면접관", "플레이어", "동료 면접관" };
             for (int i = 0; i < 3; i++)

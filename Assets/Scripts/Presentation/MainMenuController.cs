@@ -35,6 +35,7 @@ namespace Ohabjizol.Presentation
         [SerializeField] float loadingCompleteHold = 0.5f;
         [SerializeField] ComputerTransitionController transition;
         [SerializeField] LoadingUiPresenter loadingPresenter;
+        [SerializeField] bool forceTutorialOnTitleStart = true;
         public Action onPlay;
         [SerializeField] PhysicsRaycaster monitorPhysicsRaycaster;
         bool _monitorPickingCaptured, _monitorOriginallyEnabled;
@@ -46,6 +47,7 @@ namespace Ohabjizol.Presentation
         TutorialWindow _tutorialWindow;
         bool _tutorialPromptOpen;
         bool _titleWasBlocking;
+        bool _tutorialForced;
         static bool _introCompleted;
         public enum MenuPhase { MainMenu3D = 0, Zooming = 1, Booting = 2, DesktopReady = 3, Launching = 4, Loading = 5, FillZoom = 6, Activating = 7 }
         public MenuPhase Phase
@@ -106,6 +108,8 @@ namespace Ohabjizol.Presentation
         {
             if (!Application.isPlaying) return;
             SubscribeTutorial();
+            MainMenuTitleOverlay.Dismissed -= ForceTutorial;
+            MainMenuTitleOverlay.Dismissed += ForceTutorial;
             if (!monitorPhysicsRaycaster)
             {
                 var cam = MenuCamera() ?? Camera.main;
@@ -136,11 +140,26 @@ namespace Ohabjizol.Presentation
         void OnDisable()
         {
             UnsubscribeTutorial();
+            MainMenuTitleOverlay.Dismissed -= ForceTutorial;
             _callbacksAllowed = false;
             StopAllCoroutines();
             RestoreMonitorPicking();
         }
-        void OnDestroy() { UnsubscribeTutorial(); _callbacksAllowed = false; RestoreMonitorPicking(); }
+        void OnDestroy()
+        {
+            UnsubscribeTutorial();
+            MainMenuTitleOverlay.Dismissed -= ForceTutorial;
+            _callbacksAllowed = false;
+            RestoreMonitorPicking();
+        }
+
+        // Title start skips the monitor click and runs the boot, then launches the tutorial from the desktop.
+        void ForceTutorial()
+        {
+            if (!forceTutorialOnTitleStart || !enabled || Phase != MenuPhase.MainMenu3D) return;
+            _tutorialForced = true;
+            MonitorClicked();
+        }
 
         void SubscribeTutorial()
         {
@@ -205,6 +224,9 @@ namespace Ohabjizol.Presentation
             cameraController.SetLookEnabled(true);
             _generatedDesktopRoot.gameObject.SetActive(true);
             _desktop.RefreshAuthoredContent();
+            if (!_tutorialForced) return;
+            _tutorialForced = false;
+            StartTutorial();
         }
 
         public void Launch(StageId ignored)

@@ -86,7 +86,16 @@ namespace Ohabjizol.Interview
         void Continue()
         {
             var run = CampaignRunStore.Load();
-            SceneManager.LoadScene(result != null && run.IsComplete ? EndingSceneRoute.For(run.Ending) : "MainMenuScene", LoadSceneMode.Single);
+            if (result != null && run.IsComplete)
+            {
+                // The result scene has already consumed the first handoff.
+                ResultCarry.Put(result);
+                try { SceneManager.LoadScene(EndingSceneRoute.For(run.Ending), LoadSceneMode.Single); }
+                catch { ResultCarry.Clear(); throw; }
+                return;
+            }
+            ResultCarry.Clear();
+            SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
         }
         public void BakeAuthoredUi()
         {

@@ -31,8 +31,8 @@ namespace Ohabjizol.Interview
         public static Font CaptionFontEditor(Text source)
         {
             var font = source ? source.font : null;
-            if (!font || !AssetDatabase.GetAssetPath(font).Contains("NotoSansKR"))
-                throw new InvalidOperationException("Caption requires existing NotoSansKR font asset reference.");
+            if (!font || font != Ohabjizol.UI.UiKit.Font)
+                throw new InvalidOperationException("Caption requires existing PFStardustBold font asset reference.");
             return font;
         }
         internal static Text AuthorSlotCaptionEditor(Text original, Transform group, bool hideOriginal = true)

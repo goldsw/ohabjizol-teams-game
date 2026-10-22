@@ -17,18 +17,19 @@ namespace Ohabjizol.Interview
 
         readonly Random _random;
         readonly Dictionary<Applicant, string[]> _responses = new Dictionary<Applicant, string[]>();
-        readonly float _fakeAnswerChance;
         public QuestionController(float fakeAnswerChance = 0.5f)
             : this(fakeAnswerChance, null) { }
+
+        public QuestionController(Random random) : this(.5f, random) { }
 
         public QuestionController(float fakeAnswerChance, Random random)
         {
             _random = random ?? new Random();
             if (float.IsNaN(fakeAnswerChance) || fakeAnswerChance < 0f || fakeAnswerChance > 1f)
                 throw new ArgumentOutOfRangeException(nameof(fakeAnswerChance));
-            _fakeAnswerChance = fakeAnswerChance;
+            // Existing callers may supply this argument; fraud is now assigned once by InterviewSession.
         }
-        readonly bool[] _used = new bool[5];
+        readonly bool[] _used = new bool[InterviewQuestionCatalog.QuestionCount];
         int _version;
         int _pendingIndex = -1;
         public Applicant Applicant { get; private set; }
@@ -45,6 +46,19 @@ namespace Ohabjizol.Interview
             }
         }
         public event Action Changed;
+        public bool IsUsed(int index) => Applicant != null && index >= 0 && index < _used.Length && _used[index];
+
+        public bool AllQuestionsAnswered
+        {
+            get
+            {
+                if (Applicant == null || IsAnswering || Definitions == null) return false;
+                for (int i = 0; i < _used.Length && i < Definitions.Count; i++)
+                    if (Definitions[i] != null && !string.IsNullOrWhiteSpace(Definitions[i].Prompt) && !_used[i])
+                        return false;
+                return true;
+            }
+        }
 
         public void Bind(Applicant applicant, IReadOnlyList<QuestionDefinition> definitions)
         {
@@ -73,13 +87,11 @@ namespace Ohabjizol.Interview
             {
                 responseText = string.Empty;
                 if (index == 0)
-            {
-                var quality = Applicant.TruePortfolioQuality;
-                if (Applicant.FakePortfolioQuality.HasValue && _random.NextDouble() < _fakeAnswerChance)
-                    quality = Applicant.FakePortfolioQuality.Value;
-                responseText = PortfolioResponseCatalog.Pick(quality, _random);
-            }
-            else if (index == 1)
+                {
+                    var quality = Applicant.FakePortfolioQuality ?? Applicant.TruePortfolioQuality;
+                    responseText = PortfolioResponseCatalog.Pick(quality, _random);
+                }
+                else if (index == 1)
                 {
                     var days = Applicant.UnavailableSchedule.GetMarkedDays();
                     var labels = new string[days.Length];

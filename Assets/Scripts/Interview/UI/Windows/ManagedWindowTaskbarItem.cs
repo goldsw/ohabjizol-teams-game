@@ -34,7 +34,7 @@ namespace Ohabjizol.Interview
         void Click()
         {
             if (window == null || window.IsClosed) return;
-            if (window.IsActive) window.Minimize(); else window.Maximize();
+            if (window.IsVisible) window.Minimize(); else window.Maximize();
         }
         public void Dispose() { if (button) button.onClick.RemoveListener(Click); window = null; }
         void OnDestroy() { Dispose(); }

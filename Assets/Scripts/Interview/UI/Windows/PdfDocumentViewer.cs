@@ -12,6 +12,14 @@ namespace Ohabjizol.Interview
         [SerializeField] Text documentTitle;
         [SerializeField] RectTransform portfolioHost;
         [SerializeField] ApplicantStatsView applicantStats;
+        [SerializeField] ApplicationFormView applicationForm;
+        [SerializeField] Image portfolioBackground;
+        [SerializeField] Sprite portfolioBackgroundSprite;
+        [SerializeField] Text windowTitle;
+        [SerializeField] RectTransform documentViewport;
+        [SerializeField] Vector2 applicationWindowSize = new Vector2(540f, 763.31f);
+        [SerializeField] Vector2 portfolioWindowSize = new Vector2(640f, 740f);
+        public bool HasDocumentAppearance => portfolioBackground && windowTitle && documentViewport;
         ApplicantDocumentPacket packet;
         DocumentKind kind;
         PortfolioSpriteCatalog catalog;
@@ -131,19 +139,30 @@ namespace Ohabjizol.Interview
         public override void Refresh()
         {
             bool portfolio = packet != null && kind == DocumentKind.Portfolio;
+            bool application = kind == DocumentKind.Application;
+            bool useForm = applicationForm != null && applicationForm.HasAuthoredUi;
+            if (HasDocumentAppearance) ApplyDocumentAppearance(application && useForm);
+            if (applicationForm != null)
+            {
+                applicationForm.gameObject.SetActive(application && useForm);
+                if (application && useForm) applicationForm.Bind(packet);
+            }
             if (applicantStats != null)
             {
-                bool application = kind == DocumentKind.Application;
                 applicantStats.gameObject.SetActive(application);
                 applicantStats.Bind(application && packet != null ? packet.DisplayedSkills : null);
             }
             string heading = kind == DocumentKind.Application ? "지원서" : "포트폴리오";
             Title = heading;
             if (documentTitle != null)
-                documentTitle.text = packet == null ? heading : packet.DisplayName + " · " + heading;
+                documentTitle.text = packet == null || (application && useForm)
+                    ? heading : packet.DisplayName + " · " + heading;
             if (bodyText != null)
+            {
+                bodyText.gameObject.SetActive(!(application && useForm));
                 bodyText.text = packet == null ? string.Empty :
                     kind == DocumentKind.Application ? packet.ApplicationText : packet.PortfolioText;
+            }
             Sprite sprite = portfolio && catalog != null ? catalog.Get(packet.Role, packet.DisplayState) : null;
             bool hasCard = portfolio && catalog != null && catalog.GetCard(packet.Role, packet.DisplayState) != null;
             if (bodyImage != null)
@@ -154,7 +173,44 @@ namespace Ohabjizol.Interview
             if (portfolioHost != null) portfolioHost.gameObject.SetActive(hasCard);
         }
 
+        void ApplyDocumentAppearance(bool application)
+        {
+            // The application paper supplies its own sprite. Portfolio artwork is independent.
+            portfolioBackground.enabled = !application;
+            portfolioBackground.sprite = portfolioBackgroundSprite;
+            portfolioBackground.color = portfolioBackgroundSprite
+                ? Color.white : new Color32(255, 238, 215, 255);
+            windowTitle.gameObject.SetActive(!application);
+            if (documentTitle) documentTitle.gameObject.SetActive(!application);
+            var root = (RectTransform)transform;
+            Vector2 size = application ? applicationWindowSize : portfolioWindowSize;
+            root.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            root.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+            documentViewport.anchorMin = Vector2.zero;
+            documentViewport.anchorMax = Vector2.one;
+            documentViewport.offsetMin = application ? Vector2.zero : new Vector2(16f, 16f);
+            documentViewport.offsetMax = application ? Vector2.zero : new Vector2(-16f, -68f);
+        }
+
 #if UNITY_EDITOR
+        public void ConfigureDocumentAppearanceEditor(Image background, Text title,
+            RectTransform viewport, Vector2 applicationSize)
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Document authoring requires EditMode.");
+            portfolioBackground = background;
+            windowTitle = title;
+            documentViewport = viewport;
+            applicationWindowSize = applicationSize;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+
+        public void ConfigureApplicationFormEditor(ApplicationFormView form)
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Document authoring requires EditMode.");
+            applicationForm = form;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+
         /// <summary>Adds only a stats row block to the existing document scroll layout.</summary>
         public void BakeApplicantStatsUi(Font font)
         {

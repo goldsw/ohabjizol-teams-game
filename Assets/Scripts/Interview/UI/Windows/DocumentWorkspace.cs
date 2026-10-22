@@ -67,11 +67,17 @@ namespace Ohabjizol.Interview
             RefreshLibrary();
             library.Restore();
         }
+        public void ToggleLibrary()
+        {
+            if (library == null) return;
+            if (library.IsOpen) library.Minimize();
+            else OpenLibrary();
+        }
         public void OpenDocument(DocumentKey key)
         {
             if (taskbarView == null)
             { Debug.LogError("Document workspace requires an authored taskbar reference.", this); return; }
-            if (taskbarView.Queue.TryGetWindow(key, out IManagedWindow existing)) return;
+            if (taskbarView.Queue.TryGetWindow(key, out IManagedWindow existing)) { existing.Maximize(); return; }
             if (!store.TryGet(key, out DownloadedDocument document)) return;
             if (windowParent == null || viewerPrefab == null)
             { Debug.LogError("Document workspace requires authored viewer references.", this); return; }

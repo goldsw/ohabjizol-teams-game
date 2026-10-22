@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ohabjizol.Interview;
+using Ohabjizol.UI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -91,6 +92,7 @@ public static class ResultPresentationBake
             InterviewImeEndingBake.ConfigureEndingArtwork(legacy);
             Configure(legacy, false, EndingKind.Bad);
             NormalizeAuthored(legacy);
+            legacy.BakeSummaryUi();
             if (!legacy.HasAuthoredUi) throw new InvalidOperationException("Legacy EndingBoard template is incomplete.");
             Save(legacyScene, paths[1]);
             foreach (var kind in Kinds)
@@ -116,6 +118,7 @@ public static class ResultPresentationBake
                 InterviewImeEndingBake.ConfigureEndingArtwork(board);
                 Configure(board, true, kind);
                 NormalizeAuthored(board);
+                board.BakeSummaryUi();
                 if (!board.HasAuthoredUi) throw new InvalidOperationException("Incomplete ending UI: " + path);
                 Save(scene, path);
             }
@@ -227,7 +230,7 @@ public static class ResultPresentationBake
 
     static void NormalizeAuthored(Component board)
     {
-        const string fontPath = "Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf";
+        string fontPath = UiKit.FontAssetPath;
         var font = AssetDatabase.LoadAssetAtPath<Font>(fontPath);
         if (font == null || !EditorUtility.IsPersistent(font) ||
             !AssetDatabase.Contains(font) || AssetDatabase.GetAssetPath(font) != fontPath)
