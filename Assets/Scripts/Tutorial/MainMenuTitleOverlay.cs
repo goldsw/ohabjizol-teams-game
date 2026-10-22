@@ -23,7 +23,8 @@ namespace Ohabjizol.Tutorial
         private bool dismissing;
 
         public static bool IsBlocking =>
-            (active != null && active.showing && !active.dismissing) || Time.frameCount <= blockedThroughFrame;
+            StartupLogoSequence.IsBlocking || (active != null && active.showing && !active.dismissing)
+            || Time.frameCount <= blockedThroughFrame;
 
         public bool HasAuthoredUi => overlayCanvas != null && backdrop != null && prompt != null
             && overlayCanvas.gameObject == gameObject
@@ -32,7 +33,7 @@ namespace Ohabjizol.Tutorial
             && GetComponent<CanvasScaler>() != null && GetComponent<GraphicRaycaster>() != null
             && backdrop.transform.IsChildOf(transform) && backdrop.raycastTarget
             && prompt.transform.IsChildOf(transform) && prompt.font != null
-            && prompt.font.name == "NotoSansKR";
+            && prompt.font == Ohabjizol.UI.UiKit.Font;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetSession()
@@ -74,7 +75,7 @@ namespace Ohabjizol.Tutorial
 
         private void Update()
         {
-            if (!showing)
+            if (!showing || StartupLogoSequence.IsBlocking)
                 return;
 
             if (dismissing)
@@ -149,9 +150,9 @@ namespace Ohabjizol.Tutorial
                 throw new System.ArgumentNullException(nameof(parent));
 
             // Resolve the imported font before changing the hierarchy.
-            Font font = AssetDatabase.LoadAssetAtPath<Font>("Assets/Art/InterviewRefresh/Fonts/NotoSansKR.ttf");
+            Font font = AssetDatabase.LoadAssetAtPath<Font>(Ohabjizol.UI.UiKit.FontAssetPath);
             if (font == null)
-                throw new System.InvalidOperationException("Import NotoSansKR.ttf before authoring the title overlay.");
+                throw new System.InvalidOperationException("Import PFStardustBold.ttf before authoring the title overlay.");
 
             MainMenuTitleOverlay overlay = null;
             for (int i = 0; i < parent.childCount; i++)
@@ -186,7 +187,7 @@ namespace Ohabjizol.Tutorial
             overlay.prompt = Ensure<Text>(Child(overlay.backdrop.transform, "Prompt"));
             Undo.RecordObject(overlay.prompt, "Configure title prompt");
             overlay.prompt.font = font;
-            overlay.prompt.text = "아무 키나 눌러 시작 !";
+            overlay.prompt.text = "화면 터치하여 시작";
             overlay.prompt.fontSize = 48;
             overlay.prompt.alignment = TextAnchor.MiddleCenter;
             overlay.prompt.color = Color.white;

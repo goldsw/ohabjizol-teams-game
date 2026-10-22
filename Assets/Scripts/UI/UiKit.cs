@@ -12,6 +12,9 @@ namespace Ohabjizol.UI
     {
         static readonly Color PaperColor = new Color(0.93f, 0.95f, 0.92f, 1f);
 
+        public const string FontAssetPath = "Assets/Resources/Fonts/PFStardustBold.ttf";
+        public const string FontResourcePath = "Fonts/PFStardustBold";
+
         static Font _font;
         static Sprite _white;
 
@@ -22,7 +25,7 @@ namespace Ohabjizol.UI
                 if (_font != null)
                     return _font;
 
-                _font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "맑은 고딕", "Gulim" }, 40);
+                _font = Resources.Load<Font>(FontResourcePath);
                 if (_font == null)
                     _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
                 return _font;
