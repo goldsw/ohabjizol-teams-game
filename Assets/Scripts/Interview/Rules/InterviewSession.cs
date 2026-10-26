@@ -168,8 +168,8 @@ namespace Ohabjizol.Interview
         void BuildResult()
         {
             var snapshot = SelectedTeamQuery.Capture(_team);
-            var score = InterviewScoreProcessor.Process(snapshot, Theme);
             var schedule = InterviewScheduleProcessor.Process(snapshot, ProjectSchedule);
+            var score = InterviewScoreProcessor.Process(snapshot, Theme, schedule);
             Result = new InterviewResult(
                 score.ActualSum,
                 score.FulfillmentPercent,

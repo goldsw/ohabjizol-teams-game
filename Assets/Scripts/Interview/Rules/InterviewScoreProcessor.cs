@@ -2,7 +2,8 @@ namespace Ohabjizol.Interview
 {
     internal static class InterviewScoreProcessor
     {
-        internal static InterviewScoreSummary Process(SelectedTeamSnapshot snapshot, GameJamTheme theme)
+        internal static InterviewScoreSummary Process(SelectedTeamSnapshot snapshot, GameJamTheme theme,
+            InterviewScheduleResult schedule)
         {
             SkillSet actual = SkillSet.Zero;
             int fraudCount = 0;
@@ -16,6 +17,7 @@ namespace Ohabjizol.Interview
 
             SkillSet required = theme.RequiredSkills;
             double rawAccuracyPercent = StageAccuracyRule.RawPercent(actual, required);
+            rawAccuracyPercent = SchedulePenaltyRule.Apply(rawAccuracyPercent, schedule);
             int accuracyPercent = StageAccuracyRule.FloorPercent(rawAccuracyPercent);
             int fulfillmentPercent = FulfillmentRate.Percent(actual, required);
             ResultGrade grade = ResultGradeRule.Evaluate(actual, required, theme.CoreRole, fraudCount);
