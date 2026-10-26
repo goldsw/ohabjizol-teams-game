@@ -39,9 +39,9 @@ namespace Ohabjizol.Presentation
         [SerializeField] Button _newGame;
         public event Action RunReset;
         public event Action NewGameRequested;
-        public bool HasAuthoredContent => _servers != null && _servers.Length == StageCatalog.All.Count &&
-            Array.TrueForAll(_servers, slot => slot != null && slot.HasReferences) &&
-            _serverName != null && _heading != null && _detail != null && _status != null && _newGame != null;
+        // Stage decorations are optional; the launcher remains usable when that UI is hidden or removed.
+        public bool HasAuthoredContent => _serverName != null && _heading != null &&
+            _detail != null && _status != null && _newGame != null;
         protected override void OnAuthoredInitialized()
         {
             if (!HasAuthoredContent) { Debug.LogError("ChungkangCodeWindow authored content missing; bake in Edit Mode.", this); return; }
@@ -163,8 +163,12 @@ namespace Ohabjizol.Presentation
             _progress = StageProgressStore.Load();
             var run = CampaignRunStore.Load();
             StageId next = run.NextStage;
-            for (int i = 0; i < _servers.Length; i++)
-                _servers[i].Paint(_progress, next, run.IsCompleted(_servers[i].Id), run.IsComplete);
+            if (_servers != null)
+                for (int i = 0; i < _servers.Length; i++)
+                {
+                    var slot = _servers[i];
+                    if (slot != null) slot.Paint(_progress, next, run.IsCompleted(slot.Id), run.IsComplete);
+                }
             if (run.IsComplete)
             {
                 _serverName.text = "면접 완료";
@@ -273,14 +277,17 @@ namespace Ohabjizol.Presentation
             public bool HasReferences => _tile != null && _glyph != null && _pill != null && _badge != null && _caption != null;
             public void Paint(StageProgress progress, StageId next, bool completed, bool allComplete)
             {
+                if (_tile == null || !_tile.isActiveAndEnabled) return;
                 bool cleared = completed;
                 bool playable = completed || (!allComplete && _id == next);
                 bool current = !allComplete && _id == next;
 
                 _tile.color = current ? DesktopUi.DiscordAccent : playable ? DesktopUi.DiscordMain : LockedTile;
-                _glyph.color = playable ? Color.white : new Color(1f, 1f, 1f, 0.3f);
-                _pill.gameObject.SetActive(current);
-                _badge.gameObject.SetActive(cleared);
+                if (_glyph != null)
+                    _glyph.color = playable ? Color.white : new Color(1f, 1f, 1f, 0.3f);
+                if (_pill != null) _pill.gameObject.SetActive(current);
+                if (_badge != null) _badge.gameObject.SetActive(cleared);
+                if (_caption == null) return;
 
                 if (cleared)
                 {

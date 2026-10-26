@@ -281,6 +281,7 @@ namespace Ohabjizol.Presentation
         {
             if (!CanRequestLaunch() || !_tutorialPromptOpen) return;
             TutorialProgress.MarkSeen();
+            SceneBgmPlayer.UnlockLobbyMusicForSession();
             _tutorialPromptOpen = false;
             _tutorialWindow.Close();
             _desktop.ResetConnection();

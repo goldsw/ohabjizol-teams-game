@@ -1,0 +1,8 @@
+## Stage Phase Flow
+- Community ID: 56
+- Cohesion: 0.50
+- Nodes: 4
+- assets_scripts_managers_stagemanager_ohabjizol_managers_stagephase
+- assets_scripts_managers_stagemanager_ohabjizol_managers_stagephase_ended
+- assets_scripts_managers_stagemanager_ohabjizol_managers_stagephase_idle
+- assets_scripts_managers_stagemanager_ohabjizol_managers_stagephase_running

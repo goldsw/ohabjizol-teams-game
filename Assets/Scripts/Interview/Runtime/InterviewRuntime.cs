@@ -38,7 +38,7 @@ namespace Ohabjizol.Interview
             var definition = manager.Context.StageDefinition;
             var questions = new QuestionController(manager.Session.RandomSource);
             if (views.CalendarWindow != null)
-                views.CalendarWindow.Bind(new StageCalendarState(manager.Session.ProjectSchedule), definition.DisplayName);
+                views.CalendarWindow.Bind(new StageCalendarState(manager.Session.ProjectSchedule), definition.DisplayName, definition.Theme);
             views.Workspace.Configure(views.ItemParent, views.WindowParent, views.ItemPrefab,
                 views.ViewerPrefab, views.PortfolioCatalog);
             var documents = new InterviewDocumentPresenter(views.Workspace, views.Panel);
@@ -70,6 +70,7 @@ namespace Ohabjizol.Interview
         public int UsedQuestionCount => _questions.UsedQuestionCount;
         public bool InboxUnread => _notification.Unread;
         public InterviewResult Result => _stage.Result;
+        public SelectedTeamDisplaySnapshot SelectedTeam => _stage.Session.ReadSelectedTeam();
 
         public void Enable()
         {

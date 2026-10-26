@@ -12,6 +12,8 @@ namespace Ohabjizol.Interview
         readonly Dictionary<DocumentKey, DocumentTaskbarItem> rows = new Dictionary<DocumentKey, DocumentTaskbarItem>();
         public RectTransform Content => content;
         public bool HasAuthoredUi => content != null && rowPrefab != null;
+        public RectTransform GetDocumentTarget(DocumentKey key)
+            => rows.TryGetValue(key, out var row) && row ? row.transform as RectTransform : null;
         public void ConfigureEditor(RectTransform authoredContent, DocumentTaskbarItem authoredRow)
         { content = authoredContent; rowPrefab = authoredRow; }
         public void Bind(IReadOnlyList<DownloadedDocument> documents, Action<DocumentKey> open)

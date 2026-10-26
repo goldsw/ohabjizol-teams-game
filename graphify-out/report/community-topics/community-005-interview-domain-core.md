@@ -1,0 +1,56 @@
+## Interview Domain Core
+- Community ID: 5
+- Cohesion: 0.08
+- Nodes: 52
+- assets_scripts_interview_data_applicant
+- assets_scripts_interview_data_applicantdocument
+- assets_scripts_interview_data_applicantdocumentpacket
+- assets_scripts_interview_data_applicantpresentationfactory
+- assets_scripts_interview_data_documentline
+- assets_scripts_interview_data_gamejamtheme
+- assets_scripts_interview_data_interviewquestioncatalog
+- assets_scripts_interview_data_prototypecatalog
+- assets_scripts_interview_data_questiondefinition
+- assets_scripts_interview_data_skillset
+- assets_scripts_interview_rules_fulfillmentrate
+- assets_scripts_interview_rules_interviewresult
+- assets_scripts_interview_rules_interviewsession
+- assets_scripts_interview_rules_resultcarry
+- assets_scripts_interview_rules_resultgraderule
+- assets_scripts_interview_rules_starratingrule
+- assets_scripts_interview_rules_teammember
+- assets_scripts_interview_rules_teamroster
+- assets_scripts_interview_runtime_questioncontroller
+- assets_scripts_interview_runtime_stagecontext
+- assets_scripts_interview_runtime_stagemanager
+- assets_scripts_interview_stages_campaignrunprogress
+- assets_scripts_interview_stages_stageaccuracyrule
+- assets_scripts_interview_stages_stagecatalog
+- assets_scripts_interview_stages_stagedefinition
+- assets_scripts_interview_stages_stageprogress
+- assets_scripts_interview_stages_stageprototypedata
+- assets_scripts_interview_ui_authoredquestioncatalog
+- assets_scripts_interview_ui_documentinitialstate
+- assets_scripts_interview_ui_windows_portfoliospritecatalog
+- assets_scripts_interview_unity_applicantcatalogasset
+- assets_scripts_interview_unity_stagecompletionservice
+- assets_scripts_interview_unity_stageselection
+- assets_scripts_managers_gamemanager
+- assets_scripts_managers_resolution
+- assets_scripts_managers_scoresettlement
+- assets_scripts_managers_settingsmanager
+- assets_scripts_managers_soundmanager
+- assets_scripts_managers_soundobject
+- assets_scripts_managers_stagecontext
+- assets_scripts_managers_stageevent
+- assets_scripts_managers_stagemanager
+- assets_scripts_managers_vfxinstance
+- assets_scripts_managers_vfxmanager
+- assets_scripts_managers_windowmanager
+- assets_scripts_presentation_desktop_settingswindow
+- csharp_namespace:6297f48e077d684e
+- csharp_namespace:e4452f2639f98f2d
+- system
+- system_collections_generic
+- system_collections_objectmodel
+- system_text

@@ -23,7 +23,7 @@ namespace Ohabjizol.EditorTools
             var host = new GameObject("CalendarBake", typeof(RectTransform));
             try {
                 var window = WindowFactory.Create<StageCalendarWindow>(host.GetComponent<RectTransform>(),
-                    "프로젝트 일정표", new Vector2(460, 410), Vector2.zero);
+                    "프로젝트 일정표", new Vector2(460, 470), Vector2.zero);
                 window.CaptureEditorReferences();
                 PrefabUtility.SaveAsPrefabAsset(window.gameObject, WindowPath);
                 AssetDatabase.SaveAssets();

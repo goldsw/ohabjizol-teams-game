@@ -47,6 +47,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProductionProgressScene.unity
     guid: 4f64184d68ae8fa4291154058942612a
+  - enabled: 1
+    path: Assets/Scenes/CreditsScene.unity
+    guid: 94bb4fe1ec4226a4fbaceb6185e1f8a5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,0 +1,12 @@
+## Game State
+- Community ID: 49
+- Cohesion: 0.25
+- Nodes: 8
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamemanager
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamemanager_endgame
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamemanager_phase
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamemanager_startgame
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamephase
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamephase_ended
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamephase_idle
+- assets_scripts_managers_gamemanager_ohabjizol_managers_gamephase_running

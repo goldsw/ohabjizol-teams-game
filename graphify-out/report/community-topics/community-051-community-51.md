@@ -1,0 +1,11 @@
+## Community 51
+- Community ID: 51
+- Cohesion: 0.29
+- Nodes: 7
+- assets_scripts_managers_soundmanager_ohabjizol_managers_soundmanager_playbgm
+- assets_scripts_managers_soundmanager_ohabjizol_managers_soundmanager_stopbgm
+- assets_scripts_managers_soundobject_ohabjizol_managers_soundobject_copyparameters
+- assets_scripts_managers_stagecontext_ohabjizol_managers_stagecontext
+- assets_scripts_managers_stagecontext_ohabjizol_managers_stagecontext_bgm
+- assets_scripts_managers_stagecontext_ohabjizol_managers_stagecontext_stageid
+- assets_scripts_managers_stagemanager_ohabjizol_managers_stagemanager_startstage

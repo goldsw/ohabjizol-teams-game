@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Ohabjizol.Interview
 {
-    public sealed class InterviewTeamSlotView : MonoBehaviour
+    public sealed partial class InterviewTeamSlotView : MonoBehaviour
     {
         [SerializeField] Image _portrait;
         [SerializeField, InspectorName("Profile Background")] Image _placeholder;
@@ -29,7 +29,10 @@ namespace Ohabjizol.Interview
              _placeholder.transform.parent == _profileMask.transform.parent);
 
         public void BindPortrait(SelectedApplicantDisplay member, ApplicantVisualCatalog catalog)
-            => BindCharacterPortrait(member == null ? null : member.CharacterId, catalog);
+        {
+            BindCharacterPortrait(member == null ? null : member.CharacterId, catalog);
+            BindSkillStars(member);
+        }
 
         public void BindCharacterPortrait(string characterId, ApplicantVisualCatalog catalog)
         {

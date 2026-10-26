@@ -1,0 +1,8 @@
+## Community 55
+- Community ID: 55
+- Cohesion: 0.50
+- Nodes: 4
+- assets_scripts_interview_ui_interviewquestionview_ohabjizol_interview_interviewquestionview
+- assets_scripts_interview_ui_interviewquestionview_ohabjizol_interview_interviewquestionview_bind
+- assets_scripts_interview_ui_interviewquestionview_ohabjizol_interview_interviewquestionview_button
+- assets_scripts_interview_ui_interviewquestionview_ohabjizol_interview_interviewquestionview_hasauthoredui

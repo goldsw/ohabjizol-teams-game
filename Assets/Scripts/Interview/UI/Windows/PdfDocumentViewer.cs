@@ -24,6 +24,8 @@ namespace Ohabjizol.Interview
         DocumentKind kind;
         PortfolioSpriteCatalog catalog;
         RectTransform portfolioCard;
+        bool portfolioHeightCaptured;
+        float standardPortfolioHeight;
 
         TaskbarQueue queue;
         bool closed;
@@ -130,7 +132,15 @@ namespace Ohabjizol.Interview
             {
                 RectTransform prefab = catalog.GetCard(packet.Role, packet.DisplayState);
                 if (prefab != null)
+                {
                     portfolioCard = UnityEngine.Object.Instantiate(prefab, portfolioHost, false);
+                    var illustrated = portfolioCard.GetComponent<IllustratedPortfolioCard>();
+                    if (illustrated != null)
+                    {
+                        illustrated.FitToHost();
+                        illustrated.ApplyState(packet.DisplayState);
+                    }
+                }
             }
         }
 
@@ -141,7 +151,22 @@ namespace Ohabjizol.Interview
             bool portfolio = packet != null && kind == DocumentKind.Portfolio;
             bool application = kind == DocumentKind.Application;
             bool useForm = applicationForm != null && applicationForm.HasAuthoredUi;
+            RectTransform cardPrefab = portfolio && catalog != null
+                ? catalog.GetCard(packet.Role, packet.DisplayState) : null;
+            bool illustrated = cardPrefab != null && cardPrefab.GetComponent<IllustratedPortfolioCard>() != null;
+            if (portfolioHost && portfolioHost.TryGetComponent<LayoutElement>(out var cardLayout))
+            {
+                if (!portfolioHeightCaptured)
+                {
+                    standardPortfolioHeight = cardLayout.preferredHeight;
+                    portfolioHeightCaptured = true;
+                }
+                cardLayout.preferredHeight = illustrated
+                    ? IllustratedPortfolioCard.PreferredWindowSize.y - ToolbarHeight - 24f
+                    : standardPortfolioHeight;
+            }
             if (HasDocumentAppearance) ApplyDocumentAppearance(application && useForm);
+            if (illustrated) ApplyIllustratedAppearance();
             if (applicationForm != null)
             {
                 applicationForm.gameObject.SetActive(application && useForm);
@@ -159,7 +184,7 @@ namespace Ohabjizol.Interview
                     ? heading : packet.DisplayName + " · " + heading;
             if (bodyText != null)
             {
-                bodyText.gameObject.SetActive(!(application && useForm));
+                bodyText.gameObject.SetActive(!illustrated && !(application && useForm));
                 bodyText.text = packet == null ? string.Empty :
                     kind == DocumentKind.Application ? packet.ApplicationText : packet.PortfolioText;
             }
@@ -190,6 +215,24 @@ namespace Ohabjizol.Interview
             documentViewport.anchorMax = Vector2.one;
             documentViewport.offsetMin = application ? Vector2.zero : new Vector2(16f, 16f);
             documentViewport.offsetMax = application ? Vector2.zero : new Vector2(-16f, -68f);
+        }
+
+        void ApplyIllustratedAppearance()
+        {
+            if (portfolioBackground) portfolioBackground.enabled = false;
+            if (documentTitle) documentTitle.gameObject.SetActive(false);
+            if (windowTitle) windowTitle.gameObject.SetActive(false);
+            var root = (RectTransform)transform;
+            Vector2 size = IllustratedPortfolioCard.PreferredWindowSize;
+            root.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            root.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+            if (documentViewport)
+            {
+                documentViewport.anchorMin = Vector2.zero;
+                documentViewport.anchorMax = Vector2.one;
+                documentViewport.offsetMin = new Vector2(12f, 12f);
+                documentViewport.offsetMax = new Vector2(-12f, -12f);
+            }
         }
 
 #if UNITY_EDITOR

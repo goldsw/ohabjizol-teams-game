@@ -72,6 +72,7 @@ namespace Ohabjizol.Interview
                 {
                     slots[i] = InterviewTeamSlotView.AuthorEditor(_slotLabels[i], team, i, profile);
                     _slotLabels[i] = slots[i].transform.Find("Caption").GetComponent<Text>();
+                    slots[i].BakeSkillStarsEditor(_slotLabels[i].font);
                     AuthorRowLayoutEditor((RectTransform)slots[i].transform);
                 }
                 AuthorTeamLayoutEditor((RectTransform)team);

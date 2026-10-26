@@ -8,16 +8,23 @@ namespace Ohabjizol.Interview
         [SerializeField] Image[] _dayCells;
         [SerializeField] Text[] _dayLabels;
         [SerializeField] Text _stageLabel;
+        [SerializeField] Text _requirementsLabel;
         [SerializeField] Color _productionColor = new Color32(210, 65, 65, 255);
         [SerializeField] Color _neutralColor = new Color32(230, 234, 237, 255);
         StageCalendarState _state;
         string _stageName;
-        public void Bind(StageCalendarState state, string stageName) {
-            _state = state; _stageName = stageName ?? string.Empty; Refresh();
+        GameJamTheme _theme;
+        public void Bind(StageCalendarState state, string stageName, GameJamTheme theme = null) {
+            _state = state; _stageName = stageName ?? string.Empty; _theme = theme; Refresh();
         }
         public override void Refresh()
         {
             if (_stageLabel != null) _stageLabel.text = _stageName;
+            if (_requirementsLabel != null) {
+                var skills = _theme?.RequiredSkills;
+                _requirementsLabel.text = skills == null ? string.Empty
+                    : $"주제: {_theme.DisplayName} · 요구 스탯\n기획 {skills.Planning}  ·  프로그래밍 {skills.Programming}  ·  아트 {skills.Graphics}";
+            }
             for (int i = 0; i < 30; i++) {
                 if (_dayLabels != null && i < _dayLabels.Length && _dayLabels[i] != null) _dayLabels[i].text = (i + 1).ToString();
                 if (_dayCells != null && i < _dayCells.Length && _dayCells[i] != null)
@@ -28,11 +35,11 @@ namespace Ohabjizol.Interview
         {
             _stageLabel = UiKit.Text(info, "StageName", 20, FontStyle.Bold, TextAnchor.MiddleCenter);
             _stageLabel.color = Color.black;
-            UiKit.Place(_stageLabel.rectTransform, .04f, .84f, .96f, .98f);
+            UiKit.Place(_stageLabel.rectTransform, .04f, .86f, .96f, .98f);
             var grid = new GameObject("Days", typeof(RectTransform), typeof(GridLayoutGroup));
             var rect = grid.GetComponent<RectTransform>();
             rect.SetParent(info, false);
-            UiKit.Place(rect, .04f, .04f, .96f, .80f);
+            UiKit.Place(rect, .04f, .22f, .96f, .84f);
             var layout = grid.GetComponent<GridLayoutGroup>();
             layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             layout.constraintCount = 6;
@@ -47,6 +54,10 @@ namespace Ohabjizol.Interview
                 UiKit.Stretch(_dayLabels[i].rectTransform, 0);
                 _dayLabels[i].text = (i + 1).ToString();
             }
+            _requirementsLabel = UiKit.Text(info, "ThemeRequirements", 18, FontStyle.Normal, TextAnchor.MiddleCenter);
+            _requirementsLabel.color = Color.black;
+            _requirementsLabel.raycastTarget = false;
+            UiKit.Place(_requirementsLabel.rectTransform, .04f, .03f, .96f, .18f);
         }
     }
 }

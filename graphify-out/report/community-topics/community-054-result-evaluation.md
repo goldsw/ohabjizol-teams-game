@@ -1,0 +1,8 @@
+## Result Evaluation
+- Community ID: 54
+- Cohesion: 0.83
+- Nodes: 4
+- assets_scripts_interview_rules_resultgraderule_ohabjizol_interview_resultgraderule
+- assets_scripts_interview_rules_resultgraderule_ohabjizol_interview_resultgraderule_evaluate
+- assets_scripts_interview_rules_resultgraderule_ohabjizol_interview_resultgraderule_meets
+- assets_scripts_interview_rules_resultgraderule_ohabjizol_interview_resultgraderule_meetsall

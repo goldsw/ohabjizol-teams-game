@@ -15,16 +15,16 @@ MonoBehaviour:
   entries:
   - Role: 0
     State: 0
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 2191145281309698273, guid: 00995de3c25036e4bae8662df888d8d6, type: 3}
+    Sprite: {fileID: 3177427331158775644, guid: 917279a4f235a344db9d8de7d8672f30, type: 3}
+    CardPrefab: {fileID: 1666902677750412227, guid: e4303c6f2db8e4149b52a8784955928e, type: 3}
   - Role: 0
     State: 1
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 1576822731367068638, guid: dd4e7452d46e2234a9c53765ce85a86c, type: 3}
+    Sprite: {fileID: -6112990279183137636, guid: 2643c9f8e6299034f85e2023c32d83a5, type: 3}
+    CardPrefab: {fileID: 8107546433208503410, guid: ff0d6887a8bfab040bedb1854b4c3367, type: 3}
   - Role: 0
     State: 2
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 7327753489485023279, guid: 22cf799600a9f2c42bb58b278527e7de, type: 3}
+    Sprite: {fileID: 352608960449090193, guid: 2b943b77fd97fc843b4f6f52aaa3a457, type: 3}
+    CardPrefab: {fileID: 7399553932702839226, guid: 5c9c7b0585bec8047a6eb8156140a28d, type: 3}
   - Role: 1
     State: 0
     Sprite: {fileID: 0}

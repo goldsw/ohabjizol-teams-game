@@ -1,0 +1,28 @@
+## Community 15
+- Community ID: 15
+- Cohesion: 0.15
+- Nodes: 24
+- assets_editor_interviewrefresh_documentsuibake
+- assets_editor_interviewrefresh_interviewrefreshbake
+- assets_editor_interviewrefresh_interviewrefreshruntimevalidation
+- assets_editor_interviewrefresh_interviewrefreshvalidation
+- assets_editor_interviewrefresh_portfoliouibake
+- assets_editor_refactoring_desktopappbindingdrawer
+- assets_editor_refactoring_responsibilityrefactorvalidation
+- assets_editor_windowinitialstatesetup
+- assets_editor_windowinitialstatevalidation
+- assets_scripts_interview_diagnostics_interviewrefreshruntimeprobe
+- assets_scripts_interview_result_endingboard
+- assets_scripts_interview_result_resultauthoredui
+- assets_scripts_interview_result_resultboard
+- assets_scripts_interview_ui_interviewexit
+- assets_scripts_presentation_loadingscenecontroller
+- assets_tutorialinfo_scripts_editor_readmeeditor
+- csharp_namespace:b136461026a03d56
+- system_io
+- system_linq
+- system_reflection
+- system_text_regularexpressions
+- unityeditor
+- unityeditor_scenemanagement
+- unityengine_scenemanagement

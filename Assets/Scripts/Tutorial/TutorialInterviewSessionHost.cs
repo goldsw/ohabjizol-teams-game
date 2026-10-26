@@ -14,16 +14,21 @@ namespace Ohabjizol.Tutorial
             _seed = seed;
             _productionDays = Math.Max(1, productionDays);
         }
-        public bool AllowDecisions => false;
+        public bool AllowDecisions => true;
         public bool AllowResultHandoff => false;
         public StageManager CreateStage(InterviewViewReferences views, float fakePortfolioChance = .5f)
         {
             var random = new Random(_seed);
-            var applicant = _profile.Sample(random);
+            var sampled = _profile.Sample(random);
+            // The lesson compares an honest, normal portfolio with its matching answer.
+            // Construct a sandbox copy without changing the shared applicant profile.
+            var applicant = new Applicant(sampled.Name, sampled.PrimaryRole, sampled.DisplayedSkills,
+                sampled.DisplayedSkills, sampled.Documents, ApplicantKind.Normal,
+                PortfolioDisplayState.Normal, characterId: sampled.CharacterId);
             var definition = new StageDefinition(StageId.EntranceGameJam, "튜토리얼",
                 StageCatalog.Get(StageId.EntranceGameJam).Theme, new[] { applicant });
             var context = new StageContext("tutorial-" + Guid.NewGuid().ToString("N"), definition);
-            return new StageManager(context, (runId, result) => { }, _productionDays, random, fakePortfolioChance);
+            return new StageManager(context, (runId, result) => { }, _productionDays, random, 0f);
         }
     }
 }

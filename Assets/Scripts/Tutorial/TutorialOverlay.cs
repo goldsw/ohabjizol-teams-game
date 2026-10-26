@@ -42,6 +42,8 @@ namespace Ohabjizol.Tutorial
         bool _previousNavigation;
         bool _explanation;
         bool _released;
+        bool _continueWithAnyKey;
+        bool _targetInputEnabled = true;
         int _enteredFrame;
         float _supervisorAlpha;
         RectTransform _video;
@@ -89,6 +91,8 @@ namespace Ohabjizol.Tutorial
 
         public void Show(string text, bool explanation, params RectTransform[] targets)
         {
+            _continueWithAnyKey = false;
+            _targetInputEnabled = true;
             _dialogue = text ?? string.Empty;
             _textElements = StringInfo.ParseCombiningCharacters(_dialogue);
             _visibleElements = 0;
@@ -108,6 +112,15 @@ namespace Ohabjizol.Tutorial
             if (continueHint) continueHint.gameObject.SetActive(explanation);
             if (_events) _events.SetSelectedGameObject(null);
         }
+
+        public void SetContinueWithAnyKey(bool enabled)
+        {
+            _continueWithAnyKey = enabled;
+            if (continueHint)
+                continueHint.text = enabled ? "아무 키나 눌러 계속 . . ." : "아무 곳이나 눌러 계속 . . .";
+        }
+
+        public void SetTargetInputEnabled(bool enabled) => _targetInputEnabled = enabled;
 
         /// <summary>Outlines only these rects while the spotlight still reveals every Show target.</summary>
         public void SetEmphasis(params RectTransform[] targets)
@@ -154,7 +167,7 @@ namespace Ohabjizol.Tutorial
 
         public bool IsRaycastLocationValid(Vector2 point, Camera camera)
         {
-            if (!_released || _explanation) return true;
+            if (!_released || _explanation || !_targetInputEnabled) return true;
             foreach (var target in _targets)
                 if (target && target.gameObject.activeInHierarchy && RectTransformUtility.RectangleContainsScreenPoint(target, point, camera))
                     return false;
@@ -192,6 +205,11 @@ namespace Ohabjizol.Tutorial
             UpdateSpeech();
             CaptureEventSystem();
             if (!_released && Time.frameCount > _enteredFrame && !Held()) _released = true;
+            if (_continueWithAnyKey && _released &&
+                ((Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+                || (Gamepad.current != null && (Gamepad.current.buttonSouth.wasPressedThisFrame
+                    || Gamepad.current.startButton.wasPressedThisFrame))))
+                Continue();
             if (_events)
             {
                 _events.sendNavigationEvents = false;

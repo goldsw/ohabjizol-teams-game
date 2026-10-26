@@ -21,6 +21,9 @@ namespace Ohabjizol.Interview
             if (_opened || _screen == null)
                 return;
 
+            if (string.IsNullOrEmpty(_screen.HandoffSceneName))
+                return;
+
             InterviewResult result = _screen.Result;
             if (result == null)
                 return;
