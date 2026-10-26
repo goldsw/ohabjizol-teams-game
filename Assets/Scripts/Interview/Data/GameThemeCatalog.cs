@@ -11,9 +11,9 @@ namespace Ohabjizol.Interview
     {
         public static IReadOnlyList<GameJamTheme> All { get; } = Array.AsReadOnly(new[]
         {
-            new GameJamTheme("미연시", new SkillSet(20, 5, 45), JobRole.Graphics),
-            new GameJamTheme("퍼즐 게임", new SkillSet(35, 20, 15), JobRole.Planning),
-            new GameJamTheme("액션 게임", new SkillSet(15, 45, 10), JobRole.Programming)
+            new GameJamTheme("미연시", new SkillSet(30, 10, 50), JobRole.Graphics),
+            new GameJamTheme("퍼즐 게임", new SkillSet(45, 25, 20), JobRole.Planning),
+            new GameJamTheme("액션 게임", new SkillSet(20, 55, 15), JobRole.Programming)
         });
 
         public static GameJamTheme ForRun(string runId)

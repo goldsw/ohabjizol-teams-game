@@ -81,6 +81,7 @@ namespace Ohabjizol.Tutorial
 
         void OnDisable()
         {
+            Ohabjizol.Presentation.UiSoundPlayer.StopTextBlip();
             CompleteSpeech();
             if (_events)
             {
@@ -91,6 +92,7 @@ namespace Ohabjizol.Tutorial
 
         public void Show(string text, bool explanation, params RectTransform[] targets)
         {
+            Ohabjizol.Presentation.UiSoundPlayer.StopTextBlip();
             _continueWithAnyKey = false;
             _targetInputEnabled = true;
             _dialogue = text ?? string.Empty;
@@ -153,12 +155,21 @@ namespace Ohabjizol.Tutorial
             _speechElapsed += Time.unscaledDeltaTime;
             int count = Mathf.Min(_textElements.Length,
                 Mathf.FloorToInt(_speechElapsed * Mathf.Max(1f, charactersPerSecond)));
-            if (count >= _textElements.Length) { CompleteSpeech(); return; }
             if (count != _visibleElements)
             {
+                int from = _textElements[_visibleElements];
+                int to = count < _textElements.Length ? _textElements[count] : _dialogue.Length;
+                for (int i = from; i < to; i++)
+                    if (!char.IsWhiteSpace(_dialogue, i))
+                    {
+                        Ohabjizol.Presentation.UiSoundPlayer.PlayTextBlip();
+                        break;
+                    }
                 _visibleElements = count;
-                caption.text = _dialogue.Substring(0, _textElements[count]);
+                caption.text = count < _textElements.Length
+                    ? _dialogue.Substring(0, _textElements[count]) : _dialogue;
             }
+            if (count >= _textElements.Length) { CompleteSpeech(); return; }
             if (supervisorPortrait)
                 supervisorPortrait.sprite = _supervisorAlpha > 0 && supervisorTalk &&
                     Mathf.FloorToInt(_speechElapsed / SpeechFrameDuration) % 2 != 0
@@ -186,6 +197,7 @@ namespace Ohabjizol.Tutorial
             if (!_explanation || !_released || Time.frameCount <= _enteredFrame) return;
             if (_typing)
             {
+                Ohabjizol.Presentation.UiSoundPlayer.StopTextBlip();
                 CompleteSpeech();
                 _released = false;
                 _enteredFrame = Time.frameCount;

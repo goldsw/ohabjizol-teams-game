@@ -15,8 +15,8 @@ namespace Ohabjizol.Interview
         [SerializeField] Text pendingText;
         [SerializeField] Text totalStarsText;
         [SerializeField] Button newRunButton;
-        [SerializeField, Range(0, 100)] int goodPercentThreshold = 85;
-        [SerializeField, Range(0, 100)] int normalPercentThreshold = 50;
+        [SerializeField, Range(0f, 5f)] float goodStarsRequired = 3.5f;
+        [SerializeField, Range(0f, 5f)] float normalStarsRequired = 2.5f;
         [SerializeField] bool useFixedKind;
         [SerializeField] EndingKind fixedKind;
         [SerializeField, TextArea] string goodTemplate = "좋음\n함께 만든 프로젝트가 멋진 결실을 맺었습니다.";
@@ -39,7 +39,7 @@ namespace Ohabjizol.Interview
             newRunButton.onClick.AddListener(StartNewRun);
             var run = CampaignRunStore.Load();
             bool complete = run.IsComplete;
-            var ending = useFixedKind ? fixedKind : run.ResolveEnding(goodPercentThreshold, normalPercentThreshold);
+            var ending = useFixedKind ? fixedKind : run.ResolveEnding(goodStarsRequired, normalStarsRequired);
             bool showArtwork = complete || useFixedKind;
             goodPanel.SetActive(showArtwork && ending == EndingKind.Good);
             normalPanel.SetActive(showArtwork && ending == EndingKind.Normal);

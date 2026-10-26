@@ -35,8 +35,11 @@ namespace Ohabjizol.Interview
         }
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left)
-                activate?.Invoke();
+            if (eventData.button == PointerEventData.InputButton.Left && activate != null)
+            {
+                Ohabjizol.Presentation.UiSoundPlayer.PlayClick();
+                activate.Invoke();
+            }
         }
 
         public void Unbind() { activate = null; }

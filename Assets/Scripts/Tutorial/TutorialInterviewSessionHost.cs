@@ -25,8 +25,12 @@ namespace Ohabjizol.Tutorial
             var applicant = new Applicant(sampled.Name, sampled.PrimaryRole, sampled.DisplayedSkills,
                 sampled.DisplayedSkills, sampled.Documents, ApplicantKind.Normal,
                 PortfolioDisplayState.Normal, characterId: sampled.CharacterId);
+            var demoTheme = StageCatalog.Get(StageId.EntranceGameJam).Theme;
+            foreach (var theme in GameThemeCatalog.All)
+                if (string.Equals(theme.DisplayName, demoTheme.DisplayName, StringComparison.Ordinal))
+                { demoTheme = theme; break; }
             var definition = new StageDefinition(StageId.EntranceGameJam, "튜토리얼",
-                StageCatalog.Get(StageId.EntranceGameJam).Theme, new[] { applicant });
+                demoTheme, new[] { applicant });
             var context = new StageContext("tutorial-" + Guid.NewGuid().ToString("N"), definition);
             return new StageManager(context, (runId, result) => { }, _productionDays, random, 0f);
         }

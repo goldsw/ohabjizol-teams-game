@@ -100,6 +100,7 @@ namespace Ohabjizol.Tutorial
             if (!HasStartInput())
                 return;
 
+            Ohabjizol.Presentation.UiSoundPlayer.PlayClick();
             // Keep the raycast shield as well as the public guard through the next frame.
             blockedThroughFrame = Time.frameCount + 1;
             dismissing = true;

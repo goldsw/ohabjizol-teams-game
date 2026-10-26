@@ -46,21 +46,17 @@ namespace Ohabjizol.Interview
                 return sum;
             }
         }
-        // A provisional ending until all active stages are complete. Incomplete stages count as 0%.
+        // A provisional ending until all active stages are complete. Incomplete stages count as zero stars.
         public EndingKind Ending => ResolveEnding();
-        public EndingKind ResolveEnding(int goodPercent = 85, int normalPercent = 50)
+        public EndingKind ResolveEnding(float goodStars = 3.5f, float normalStars = 2.5f)
         {
-            if (normalPercent < 0 || goodPercent < normalPercent || goodPercent > 100)
-                throw new ArgumentOutOfRangeException(nameof(goodPercent));
-            int total = 0;
+            if (float.IsNaN(goodStars) || float.IsNaN(normalStars)
+                || normalStars < 0f || goodStars < normalStars || goodStars > 5f)
+                throw new ArgumentOutOfRangeException(nameof(goodStars));
             var stages = StageExecutionPolicy.ActiveStages;
-            for (int i = 0; i < stages.Count; i++)
-            {
-                int index = (int)stages[i];
-                if (completed[index]) total += percentages[index];
-            }
-            return total >= goodPercent * stages.Count ? EndingKind.Good
-                : total >= normalPercent * stages.Count ? EndingKind.Normal : EndingKind.Bad;
+            int halfStars = TotalHalfStars;
+            return halfStars >= goodStars * 2f * stages.Count ? EndingKind.Good
+                : halfStars >= normalStars * 2f * stages.Count ? EndingKind.Normal : EndingKind.Bad;
         }
         public bool IsCompleted(StageId stage) => completed[Index(stage)];
         internal int Accuracy(StageId stage) => percentages[Index(stage)];

@@ -82,6 +82,8 @@ namespace Ohabjizol.Presentation
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
+            if (Clicked != null || Activated != null)
+                Ohabjizol.Presentation.UiSoundPlayer.PlayClick();
             float now = Time.unscaledTime;
             bool twice = eventData.clickCount >= 2 || now - _lastClick <= DoubleClickSeconds;
             _lastClick = twice ? float.NegativeInfinity : now;

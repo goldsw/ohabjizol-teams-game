@@ -27,25 +27,25 @@ MonoBehaviour:
     CardPrefab: {fileID: 7399553932702839226, guid: 5c9c7b0585bec8047a6eb8156140a28d, type: 3}
   - Role: 1
     State: 0
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 7069254333032917839, guid: 6de6ea399553efd438d66efab559d6d2, type: 3}
+    Sprite: {fileID: -9181555634809656046, guid: 452b05d06a3b0794cb2c3a1a76be4d38, type: 3}
+    CardPrefab: {fileID: 598004402307175065, guid: 95d19d9922fdc2c4887d687930a286ed, type: 3}
   - Role: 1
     State: 1
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 1198709026928490741, guid: 229017aa8bc7d2645b247f4f8a004b96, type: 3}
+    Sprite: {fileID: -2466393855042286110, guid: 73c0eddc3bf1d324b85f4a4d3f20f315, type: 3}
+    CardPrefab: {fileID: 5503061769652045377, guid: 5aab10c80b92c444fa601d78de78c6be, type: 3}
   - Role: 1
     State: 2
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 6934845506844272358, guid: 2c6b8b0b3396a9a4cb4ae9ff92366c3d, type: 3}
+    Sprite: {fileID: 4928844240831583345, guid: 87e0196e2ee9151439b26945756f2e64, type: 3}
+    CardPrefab: {fileID: 9153967150867779736, guid: 70baa2fbce2264541ab00e6d602a22e6, type: 3}
   - Role: 2
     State: 0
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 4106011856228368665, guid: c49d941c4ecc901498df5b3ca3b869f5, type: 3}
+    Sprite: {fileID: -1213684503401924280, guid: 2cf07434a0a6c0b4f9ff5d6cd1baa5da, type: 3}
+    CardPrefab: {fileID: 3248734878880679178, guid: 38d837a6398cc4d46b99739884d17c7b, type: 3}
   - Role: 2
     State: 1
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 4539801378572899499, guid: 530ad7cbd9a7b4b4282d21ae2c5f338a, type: 3}
+    Sprite: {fileID: -4481086435548021174, guid: fd0a771f092e0634f81c576f87c20378, type: 3}
+    CardPrefab: {fileID: 8638500491692155212, guid: 8706be176e5ec744ea9231575900c6c3, type: 3}
   - Role: 2
     State: 2
-    Sprite: {fileID: 0}
-    CardPrefab: {fileID: 1563171193155870782, guid: 550f577b1ac310f4ba929854fa633cba, type: 3}
+    Sprite: {fileID: -1629056934982972186, guid: 2cf9a940e0a82fa4293c390edefe2528, type: 3}
+    CardPrefab: {fileID: 6714218877426543930, guid: 9f70779c77df6b34aa3cc17d34262083, type: 3}

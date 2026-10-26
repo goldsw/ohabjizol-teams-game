@@ -1861,7 +1861,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB3D9\uB8CC \uBA74\uC811\uAD00"
+  m_Text: "\uC9C0\uC6D0\uC790"
 --- !u!1 &229406800259130365
 GameObject:
   m_ObjectHideFlags: 0
@@ -5356,8 +5356,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -16, y: -8}
+  m_AnchoredPosition: {x: 4.0000153, y: -7.7500916}
+  m_SizeDelta: {x: -23.99998, y: -23.499813}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4808505195725379397
 CanvasRenderer:
@@ -5389,7 +5389,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5e963d966ff3ecc4cb82a3640805bb28, type: 3}
-    m_FontSize: 65
+    m_FontSize: 56
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 6
@@ -28842,7 +28842,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 695, y: -100.99997}
+  m_AnchoredPosition: {x: 695, y: -44.99994}
   m_SizeDelta: {x: 208.4999, y: 87.99994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7642117401635348535
@@ -29896,7 +29896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7089974489705497395
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42814,7 +42814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -157.75, y: -101}
+  m_AnchoredPosition: {x: -157.75, y: -45}
   m_SizeDelta: {x: 208.49994, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8748182410607325929
@@ -53562,6 +53562,10 @@ PrefabInstance:
       propertyPath: m_Colors.m_HighlightedColor.r
       value: 0.9411765
       objectReference: {fileID: 0}
+    - target: {fileID: 3765821916501318096, guid: e1aed8faa0b798d4d992a1d4515981c9, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4146423037768465869, guid: e1aed8faa0b798d4d992a1d4515981c9, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -53596,7 +53600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7697393548794030521, guid: e1aed8faa0b798d4d992a1d4515981c9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 16
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
